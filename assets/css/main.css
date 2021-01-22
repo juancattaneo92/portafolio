@@ -3547,7 +3547,7 @@ input, select, textarea {
 		background-image: url('images/technologies/ruby.png');
 		background-position: center;
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: 7em;
 	}
 
 		ul.major-icons li .icon1 {
@@ -3567,7 +3567,7 @@ input, select, textarea {
 		background-image: url('images/technologies/rails.png');
 		background-position: center;
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: 7em;
 	}
 
 		ul.major-icons li .icon2 {
@@ -3587,7 +3587,7 @@ input, select, textarea {
 		background-image: url('images/technologies/javascript.png');
 		background-position: center;
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: 6em;
 	}
 
 		ul.major-icons li .icon3 {
@@ -3607,7 +3607,7 @@ input, select, textarea {
 		background-image: url('images/technologies/react.png');
 		background-position: center;
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: 7em;
 	}
 
 		ul.major-icons li .icon4 {
@@ -3627,7 +3627,7 @@ input, select, textarea {
 		background-image: url('images/technologies/postgresql.png');
 		background-position: center;
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: 7em;
 	}
 
 		ul.major-icons li .icon5 {
@@ -3647,7 +3647,7 @@ input, select, textarea {
 		background-image: url('images/technologies/mongoDB.png');
 		background-position: center;
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: 7em;
 	}
 
 		ul.major-icons li .icon6 {
@@ -3667,7 +3667,7 @@ input, select, textarea {
 		background-image: url('images/technologies/css.png');
 		background-position: center;
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: 4em;
 	}
 
 		ul.major-icons li .icon7 {
@@ -3687,7 +3687,7 @@ input, select, textarea {
 		background-image: url('images/technologies/html5.png');
 		background-position: center;
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: 6.5em;
 	}
 
 		ul.major-icons li .icon8 {
@@ -3707,7 +3707,7 @@ input, select, textarea {
 		background-image: url('images/technologies/aws.png');
 		background-position: center;
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: 7em;
 	}
 
 		ul.major-icons li .icon9 {
@@ -3727,7 +3727,7 @@ input, select, textarea {
 		background-image: url('images/technologies/nodejs.png');
 		background-position: center;
 		background-repeat: no-repeat;
-		background-size: contain;
+		background-size: 7em;
 	}
 
 		ul.major-icons li .icon10 {
