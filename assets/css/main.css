@@ -3029,7 +3029,7 @@ input, select, textarea {
 			#header .actions:after {
 				background: #ffffff;
 				content: '';
-				height: 24vh;
+				height: 20vh;
 				left: 50%;
 				position: absolute;
 				top: 100%;
@@ -3775,3 +3775,11 @@ input, select, textarea {
   transform: rotate(-60deg);
 }
 
+.input[type="submit"], input[type="reset"], input[type="button"], button, .button #header-but{
+	/* line-height: 1em; */
+	min-width: 3em;
+} 
+
+/* input[type="submit"].wide, input[type="reset"].wide, input[type="button"].wide, button.wide, .button.wide #header-but{
+    min-width: 3em;
+}  */
