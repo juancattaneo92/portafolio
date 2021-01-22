@@ -503,9 +503,7 @@ input, select, textarea {
 		}
 
 			.row.gtr-150 > * {
-				padding: 2em;
-				margin: 2em;
-				align-self: center;
+			padding: 3em;
 			}
 
 			.row.gtr-150.gtr-uniform {
@@ -3753,3 +3751,9 @@ input, select, textarea {
 /* input[type="submit"].wide, input[type="reset"].wide, input[type="button"].wide, button.wide, .button.wide #header-but{
     min-width: 3em;
 }  */
+
+	/* .row.gtr-150 .mypic{
+				padding: 3em !important;
+				margin: 2em !important;
+				align-self: center !important;
+			} */
