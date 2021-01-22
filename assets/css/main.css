@@ -3752,8 +3752,10 @@ input, select, textarea {
     min-width: 3em;
 }  */
 
-	/* .row.gtr-150 .mypic{
-				padding: 3em !important;
-				margin: 2em !important;
-				align-self: center !important;
-			} */
+	.row.gtr-151 {
+    margin-left: 0 !important;
+    display: flex;
+    justify-content: center;
+    display: flex;
+    justify-content: center;
+}
