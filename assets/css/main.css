@@ -486,7 +486,7 @@ input, select, textarea {
 		}
 
 			.row > * {
-				padding: 0 0 0 2em;
+				padding: 0 2em 0 2em;
 			}
 
 			.row.gtr-uniform {
@@ -3757,4 +3757,9 @@ input, select, textarea {
     justify-content: center;
     display: flex;
     justify-content: center;
+}
+
+
+.mypic > img{
+	border-radius: 2%;
 }
