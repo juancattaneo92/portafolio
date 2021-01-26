@@ -3752,11 +3752,9 @@ input, select, textarea {
 }  */
 
 	.row.gtr-151 {
-    margin-left: 0 !important;
     display: flex;
     justify-content: center;
-    display: flex;
-    justify-content: center;
+
 }
 
 
