@@ -746,7 +746,7 @@ input, select, textarea {
 				}
 
 					.row.gtr-150 > * {
-						padding: 0 0 0 3em;
+						padding: 0 3em 0 3em;
 					}
 
 					.row.gtr-150.gtr-uniform {
@@ -2397,9 +2397,8 @@ input, select, textarea {
 		}
 
 			.image.fit img {
-				width: 80%;
-				/* border-radius: 10%; */
-			}
+				width: 100%;
+			} 
 
 /* List */
 
