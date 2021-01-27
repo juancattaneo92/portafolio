@@ -970,11 +970,11 @@ input, select, textarea {
 
 				.row {
 					margin-top: 0;
-					margin-left: -2em;
+					/* margin-left: -2em; */
 				}
 
 					.row > * {
-						padding: 0 0 0 2em;
+						padding: 0 2em 0 2em;
 					}
 
 					.row.gtr-uniform {
@@ -1215,11 +1215,11 @@ input, select, textarea {
 
 				.row {
 					margin-top: 0;
-					margin-left: -2em;
+					/* margin-left: -2em; */
 				}
 
 					.row > * {
-						padding: 0 0 0 2em;
+						padding: 0 2em 0 2em;
 					}
 
 					.row.gtr-uniform {
@@ -1460,11 +1460,11 @@ input, select, textarea {
 
 				.row {
 					margin-top: 0;
-					margin-left: -2em;
+					/* margin-left: -2em; */
 				}
 
 					.row > * {
-						padding: 0 0 0 2em;
+						padding: 0 2em 0 2em;
 					}
 
 					.row.gtr-uniform {
@@ -1705,11 +1705,11 @@ input, select, textarea {
 
 				.row {
 					margin-top: 0;
-					margin-left: -2em;
+					/* margin-left: -2em; */
 				}
 
 					.row > * {
-						padding: 0 0 0 2em;
+						padding: 0 2em 0 2em;
 					}
 
 					.row.gtr-uniform {
@@ -1950,11 +1950,11 @@ input, select, textarea {
 
 				.row {
 					margin-top: 0;
-					margin-left: -2em;
+					/* margin-left: -2em; */
 				}
 
 					.row > * {
-						padding: 0 0 0 2em;
+						padding: 0 2em 0 2em;
 					}
 
 					.row.gtr-uniform {
@@ -3755,7 +3755,7 @@ input, select, textarea {
     display: inline-flex;
 		justify-content: center;
 		align-items: center;
-		margin: 1em 1em 1em 1em;
+		margin: 2em 1em 2em 1em;
 }
 
 
