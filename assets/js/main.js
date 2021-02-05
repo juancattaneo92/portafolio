@@ -30,3 +30,16 @@
 		$('.scrolly').scrolly();
 
 })(jQuery);
+
+
+window.onscroll = function () { scrollFunction() };
+
+function scrollFunction() {
+	if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
+		document.getElementById("myPic").style.borderRadius = "50%";
+	} else {
+		document.getElementById("myPic").style.borderRadius = "0%";
+	}
+}
+
+
