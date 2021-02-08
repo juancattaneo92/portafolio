@@ -2393,6 +2393,16 @@ input, select, textarea {
     justify-content: center;
     width: 100%;
     /* top: -10px; */
+	}
+	
+	.pos-image {
+		background-image: url(/images/POSTrain.png);
+    display: flex;
+    justify-content: center;
+    width: 17em;
+		height: 7em;
+		background-size: auto;
+    /* top: -10px; */
 
 		}
 
