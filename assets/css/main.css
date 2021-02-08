@@ -2520,6 +2520,12 @@ input, select, textarea {
 
 		@media screen and (max-width: 480px) {
 
+				.image.fit .cat{
+					display: flex;
+					justify-content: center;
+					width: 100%;
+					height: 6em;
+			}
 			ul.actions:not(.fixed) {
 				-moz-flex-direction: column;
 				-webkit-flex-direction: column;
