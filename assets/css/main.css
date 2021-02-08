@@ -1517,7 +1517,7 @@ input, select, textarea {
 				display: flex;
 				flex-wrap: wrap;
 				box-sizing: border-box;
-				align-items: stretch;
+				/* align-items: stretch; */
 			}
 
 				.row > * {
