@@ -1999,6 +1999,13 @@ input, select, textarea {
 							padding-top: 4em;
 						}
 
+				.image.fit.cat{
+					display: flex;
+					justify-content: center;
+					width: 100%;
+					height: 6em;
+			}
+
 		}
 
 /* Section/Article */
@@ -2395,11 +2402,11 @@ input, select, textarea {
     /* top: -10px; */
 	}
 	
-	.image.fit .cat{
+	.image.fit.cat{
     display: flex;
     justify-content: center;
 		width: 100%;
-		height: 10em;
+		height: 150px;
 		}
 
 			.image.fit img {
@@ -2520,12 +2527,7 @@ input, select, textarea {
 
 		@media screen and (max-width: 480px) {
 
-				.image.fit .cat{
-					display: flex;
-					justify-content: center;
-					width: 100%;
-					height: 6em;
-			}
+
 			ul.actions:not(.fixed) {
 				-moz-flex-direction: column;
 				-webkit-flex-direction: column;
@@ -2572,6 +2574,13 @@ input, select, textarea {
 						ul.actions:not(.fixed) li .button.icon:before {
 							margin-left: -0.5em;
 						}
+
+					.image.fit .cat{
+					display: flex;
+					justify-content: center;
+					width: 100%;
+					height: 6em;
+			}
 
 		}
 
@@ -3446,6 +3455,12 @@ input, select, textarea {
 
 	@media screen and (max-width: 480px) {
 
+				.image.fit .cat{
+					display: flex;
+					justify-content: center;
+					width: 100%;
+					height: 6em;
+			}
 		/* Button */
 
 			input[type="submit"],
@@ -3520,6 +3535,13 @@ input, select, textarea {
 
 			#footer {
 				padding: 2em 1em 2em 1em ;
+			}
+
+			.image.fit .cat{
+					display: flex;
+					justify-content: center;
+					width: 100%;
+					height: 6em;
 			}
 
 	}
