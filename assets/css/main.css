@@ -2395,18 +2395,12 @@ input, select, textarea {
     /* top: -10px; */
 	}
 	
-	/* .image.fit .cat-image {
-		background-image: url(images/catzilla.png);
+	.image.fit .cat{
     display: flex;
     justify-content: center;
 		width: 100%;
-		min-height: 8em;
-		max-height: min-content;
-		background-size: cover;
-		background-position: center;
-
-
-		} */
+		min-height: 10em;
+		}
 
 			.image.fit img {
 				width: 100%;
