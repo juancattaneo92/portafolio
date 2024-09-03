@@ -3146,7 +3146,7 @@ input, select, textarea {
 		}
 
 			#footer a:hover {
-				color: #ffffff;
+				color: #1900ff;
 			}
 
 		#footer h1, #footer h2, #footer h3, #footer h4, #footer h5, #footer h6, #footer strong, #footer b {
@@ -3654,16 +3654,18 @@ input, select, textarea {
 		width: 7em;
 	}
 
-			.icon5 {
+
+
+	.icon11 {
 		border-bottom: none;
 		position: relative;
-		background-image: url('images/technologies/postgresql.png');
+		background-image: url('images/technologies/Csharp-logo.png');
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: 7em;
 	}
 
-		ul.major-icons li .icon5 {
+		ul.major-icons li .icon11 {
 		background-color: rgba(255, 255, 255, 0.548);
 		border-radius: 100%;
 		display: inline-block;
@@ -3674,16 +3676,16 @@ input, select, textarea {
 		width: 7em;
 	}
 
-			.icon6 {
+	.icon12 {
 		border-bottom: none;
 		position: relative;
-		background-image: url('images/technologies/mongoDB.png');
+		background-image: url('images/technologies/cpp-logo.png');
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: 7em;
 	}
 
-		ul.major-icons li .icon6 {
+		ul.major-icons li .icon12 {
 		background-color: rgba(255, 255, 255, 0.548);
 		border-radius: 100%;
 		display: inline-block;
@@ -3694,56 +3696,16 @@ input, select, textarea {
 		width: 7em;
 	}
 
-			.icon7 {
+	.icon13 {
 		border-bottom: none;
 		position: relative;
-		background-image: url('images/technologies/css.png');
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: 4em;
-	}
-
-		ul.major-icons li .icon7 {
-		background-color: rgba(255, 255, 255, 0.548);
-		border-radius: 100%;
-		display: inline-block;
-		height: 7em;
-		line-height: 7em;
-		margin: 0;
-		text-align: center;
-		width: 7em;
-	}
-
-			.icon8 {
-		border-bottom: none;
-		position: relative;
-		background-image: url('images/technologies/html5.png');
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: 6.5em;
-	}
-
-		ul.major-icons li .icon8 {
-		background-color: rgba(255, 255, 255, 0.548);
-		border-radius: 100%;
-		display: inline-block;
-		height: 7em;
-		line-height: 7em;
-		margin: 0;
-		text-align: center;
-		width: 7em;
-	}
-
-			.icon9 {
-		border-bottom: none;
-		position: relative;
-		background-image: url('images/technologies/aws.png');
+		background-image: url('images/technologies/python-logo.png');
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: 7em;
 	}
 
-		ul.major-icons li .icon9 {
+		ul.major-icons li .icon13 {
 		background-color: rgba(255, 255, 255, 0.548);
 		border-radius: 100%;
 		display: inline-block;
@@ -3754,16 +3716,16 @@ input, select, textarea {
 		width: 7em;
 	}
 
-			.icon10 {
+	.icon14 {
 		border-bottom: none;
 		position: relative;
-		background-image: url('images/technologies/nodejs.png');
+		background-image: url('images/technologies/net-logo.png');
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: 7em;
 	}
 
-		ul.major-icons li .icon10 {
+		ul.major-icons li .icon14 {
 		background-color: rgba(255, 255, 255, 0.548);
 		border-radius: 100%;
 		display: inline-block;
@@ -3773,7 +3735,6 @@ input, select, textarea {
 		text-align: center;
 		width: 7em;
 	}
-
 
 
 .input[type="submit"], input[type="reset"], input[type="button"], button, .button #header-but{
