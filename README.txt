@@ -1,2 +1,1 @@
-Jc's Personal Website 
-Inspired by Photon by HTML5 UP
+JC's Personal Website: https://juancattaneo92.github.io/portafolio/
