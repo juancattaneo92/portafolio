@@ -287,8 +287,34 @@
     </div>
   </section>
 
+  <!-- Game -->
+  <section id="game" class="section section-alt">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label">Just for fun</span>
+        <h2>Debug Mode <span class="gradient-text">🐛</span></h2>
+        <p class="section-sub">Catch the bugs before they hit production.</p>
+      </div>
+      <div class="game-wrapper reveal">
+        <div class="game-hud">
+          <span class="game-stat">Score <strong id="game-score">0</strong></span>
+          <span class="game-stat" id="game-lives">♥ ♥ ♥</span>
+        </div>
+        <canvas id="game-canvas"></canvas>
+        <div class="game-footer">
+          <span class="game-hint" id="game-hint">Press <kbd>Space</kbd> to start</span>
+          <span class="game-controls-hint">← → or A D to move</span>
+        </div>
+        <div class="game-mobile-btns">
+          <button class="game-btn" id="btn-left"><i class="fas fa-arrow-left"></i></button>
+          <button class="game-btn" id="btn-right"><i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Resume -->
-  <section id="resume" class="section section-alt">
+  <section id="resume" class="section">
     <div class="container">
       <div class="resume-header reveal">
         <div>
@@ -390,7 +416,7 @@
   </section>
 
   <!-- Contact -->
-  <section id="contact" class="section">
+  <section id="contact" class="section section-alt">
     <div class="container container-narrow">
       <div class="reveal">
         <span class="section-label">Get in touch</span>
@@ -444,5 +470,6 @@
   </footer>
 
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/game.js"></script>
 </body>
 </html>

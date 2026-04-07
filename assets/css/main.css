@@ -601,6 +601,118 @@ h2 {
 }
 
 /* ===========================
+   Game
+=========================== */
+.game-wrapper {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.game-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: var(--radius) var(--radius) 0 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.game-stat strong {
+  color: var(--accent-light);
+  margin-left: 6px;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 640 / 300;
+  background: var(--bg);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.game-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+
+.game-hint {
+  font-size: 0.8rem;
+  color: var(--accent-light);
+  font-weight: 500;
+}
+
+.game-hint kbd {
+  background: var(--surface);
+  border: 1px solid var(--border-hover);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.75rem;
+  font-family: var(--font);
+}
+
+.game-controls-hint {
+  font-size: 0.75rem;
+  color: var(--text-subtle);
+}
+
+.game-mobile-btns {
+  display: none;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.game-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--t) var(--ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-btn:active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+@media (hover: none), (max-width: 768px) {
+  .game-mobile-btns {
+    display: flex;
+  }
+
+  .game-controls-hint {
+    display: none;
+  }
+
+  .game-btn {
+    width: 68px;
+    height: 68px;
+    font-size: 1.2rem;
+  }
+}
+
+/* ===========================
    Resume
 =========================== */
 .resume-header {
