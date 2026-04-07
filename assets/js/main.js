@@ -4,25 +4,38 @@ window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 50);
 }, { passive: true });
 
-// Hamburger toggle
-const hamburger = document.getElementById('nav-hamburger');
+// Hamburger + mobile menu
+const hamburger   = document.getElementById('nav-hamburger');
+const mobileMenu  = document.getElementById('mobile-menu');
+let scrollY = 0;
 
 function openMenu() {
+  scrollY = window.scrollY;
+  document.body.style.position = 'fixed';
+  document.body.style.top      = `-${scrollY}px`;
+  document.body.style.width    = '100%';
   nav.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  mobileMenu.classList.add('open');
 }
 
 function closeMenu() {
+  document.body.style.position = '';
+  document.body.style.top      = '';
+  document.body.style.width    = '';
+  window.scrollTo(0, scrollY);
   nav.classList.remove('open');
-  document.body.style.overflow = '';
+  mobileMenu.classList.remove('open');
 }
 
 hamburger.addEventListener('click', () => {
   nav.classList.contains('open') ? closeMenu() : openMenu();
 });
 
-// Close menu when a nav link is clicked
-document.querySelectorAll('.nav-links a').forEach(link => {
+// Close button
+document.getElementById('mobile-menu-close').addEventListener('click', closeMenu);
+
+// Close when a mobile menu link is clicked
+document.querySelectorAll('.mobile-menu-links a').forEach(link => {
   link.addEventListener('click', closeMenu);
 });
 
