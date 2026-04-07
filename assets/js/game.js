@@ -34,6 +34,15 @@
   let totalCaught = 0;
   const effects = [];
 
+  function resultMessage(n) {
+    if (n === 0)  return `Zero bugs caught. The bugs won this round. 😬`;
+    if (n < 5)    return `<strong>${n} bug${n > 1 ? 's' : ''} caught.</strong> Not bad for a first run. Try again?`;
+    if (n < 15)   return `<strong>${n} bugs caught.</strong> Solid. Can you beat it? 👀`;
+    if (n < 30)   return `<strong>${n} bugs caught.</strong> Nice work. One more round? 🔥`;
+    if (n < 50)   return `<strong>${n} bugs caught.</strong> You're on a roll — keep going! 🚀`;
+    return        `<strong>${n} bugs caught.</strong> Okay you're just showing off now. 🏆`;
+  }
+
   const cta = '— <em>drop me a message and let me know your score!</em>';
 
   function bugMessages(n) {
@@ -141,6 +150,8 @@
     setScore(0);
     setLives(3);
     document.getElementById('game-hint').style.visibility = 'hidden';
+    const resultEl = document.getElementById('game-result');
+    if (resultEl) resultEl.classList.remove('visible');
     if (animId) cancelAnimationFrame(animId);
     loop();
   }
@@ -282,6 +293,18 @@
     const hint = document.getElementById('game-hint');
     hint.textContent = restartMsg;
     hint.style.visibility = 'visible';
+
+    // Show result banner
+    const resultEl = document.getElementById('game-result');
+    if (resultEl) {
+      const tryAgain = isTouchDevice ? 'Tap to try again' : 'Press Space';
+      resultEl.innerHTML = `
+        <span class="game-result-text">${resultMessage(score)}</span>
+        <button class="game-result-replay" id="game-result-btn">${tryAgain} ↺</button>
+      `;
+      resultEl.classList.add('visible');
+      document.getElementById('game-result-btn').addEventListener('click', startGame);
+    }
   }
 
   function drawOverlay(title, sub) {

@@ -6,13 +6,24 @@ window.addEventListener('scroll', () => {
 
 // Hamburger toggle
 const hamburger = document.getElementById('nav-hamburger');
+
+function openMenu() {
+  nav.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMenu() {
+  nav.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
 hamburger.addEventListener('click', () => {
-  nav.classList.toggle('open');
+  nav.classList.contains('open') ? closeMenu() : openMenu();
 });
 
 // Close menu when a nav link is clicked
 document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', () => nav.classList.remove('open'));
+  link.addEventListener('click', closeMenu);
 });
 
 // Scroll reveal with IntersectionObserver

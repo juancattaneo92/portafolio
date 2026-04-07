@@ -702,6 +702,48 @@ h2 {
   color: var(--text-subtle);
 }
 
+.game-result {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  border-top: none;
+  font-size: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.game-result.visible {
+  display: flex;
+}
+
+.game-result-text {
+  color: var(--text-muted);
+}
+
+.game-result-text strong {
+  color: var(--accent-light);
+}
+
+.game-result-replay {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 999px;
+  padding: 5px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--t) var(--ease);
+}
+
+.game-result-replay:hover {
+  background: rgba(124, 58, 237, 0.25);
+}
+
 .game-mobile-btns {
   display: none;
   gap: 8px;
@@ -1096,22 +1138,34 @@ h2 {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(8, 8, 8, 0.97);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(8, 8, 8, 0.98);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 36px;
+    gap: 40px;
     z-index: 99;
+    /* prevent any scroll bleed-through */
+    overflow: hidden;
+    touch-action: none;
   }
 
   #nav.open .nav-links {
     display: flex;
   }
 
+  /* Force solid background on nav when menu is open, regardless of scroll position */
+  #nav.open {
+    background: rgba(8, 8, 8, 0.98);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+    z-index: 101;
+  }
+
   .nav-links a {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 600;
     color: var(--text);
   }
