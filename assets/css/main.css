@@ -259,6 +259,40 @@ h2 {
   width: 100%;
 }
 
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 101;
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all var(--t) var(--ease);
+  transform-origin: center;
+}
+
+/* Animate to X when open */
+#nav.open .nav-hamburger span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+#nav.open .nav-hamburger span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+#nav.open .nav-hamburger span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* ===========================
    Hero
 =========================== */
@@ -670,32 +704,33 @@ h2 {
 
 .game-mobile-btns {
   display: none;
-  gap: 4px;
-  margin-top: 4px;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .game-btn {
   flex: 1;
-  height: 72px;
+  height: 90px;
   border-radius: var(--radius);
   background: var(--card);
-  border: 1px solid var(--border);
-  color: var(--text-muted);
-  font-size: 1.4rem;
+  border: 1px solid var(--border-hover);
+  color: var(--text);
+  font-size: 2rem;
   cursor: pointer;
-  transition: all var(--t) var(--ease);
+  transition: background var(--t) var(--ease), border-color var(--t) var(--ease);
   display: flex;
   align-items: center;
   justify-content: center;
   user-select: none;
   -webkit-user-select: none;
+  touch-action: none;
 }
 
-.game-btn:active {
+.game-btn:active,
+.game-btn.pressed {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
-  transform: scale(0.97);
 }
 
 @media (hover: none), (max-width: 768px) {
@@ -830,6 +865,76 @@ h2 {
   justify-content: center;
   flex-wrap: wrap;
   margin-top: 8px;
+}
+
+/* ===========================
+   Bug Score (Contact)
+=========================== */
+.bug-score {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin-top: 36px;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  transition: border-color var(--t) var(--ease);
+}
+
+.bug-score.has-score {
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+.bug-score-emoji {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.bug-score-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.bug-score-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.bug-score-text strong {
+  color: var(--accent-light);
+}
+
+.bug-score-text em {
+  color: var(--text-muted);
+  font-style: normal;
+}
+
+.bug-score-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-light);
+  background: rgba(124, 58, 237, 0.1);
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  border-radius: 999px;
+  padding: 5px 14px;
+  white-space: nowrap;
+  transition: all var(--t) var(--ease);
+  flex-shrink: 0;
+}
+
+.bug-score-btn:hover {
+  background: rgba(124, 58, 237, 0.2);
+  border-color: rgba(124, 58, 237, 0.5);
 }
 
 /* ===========================
@@ -971,7 +1076,7 @@ h2 {
 /* ===========================
    Responsive — Mobile
 =========================== */
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   #nav {
     padding: 14px 20px;
   }
@@ -980,12 +1085,39 @@ h2 {
     padding: 12px 20px;
   }
 
+  .nav-hamburger {
+    display: flex;
+  }
+
   .nav-links {
-    gap: 20px;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(8, 8, 8, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+    z-index: 99;
+  }
+
+  #nav.open .nav-links {
+    display: flex;
   }
 
   .nav-links a {
-    font-size: 0.8rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .nav-links a::after {
+    display: none;
   }
 
   .section {

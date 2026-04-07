@@ -38,10 +38,16 @@
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
+      <li><a href="#game">Game</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#resume">Resume</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
   <!-- Hero -->
@@ -131,8 +137,34 @@
     </div>
   </section>
 
+  <!-- Game -->
+  <section id="game" class="section">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label">Just for fun</span>
+        <h2>Debug Mode <span class="gradient-text">🐛</span></h2>
+        <p class="section-sub">Catch the bugs before they hit production.</p>
+      </div>
+      <div class="game-wrapper reveal">
+        <div class="game-hud">
+          <span class="game-stat">Score <strong id="game-score">0</strong></span>
+          <span class="game-stat" id="game-lives">♥ ♥ ♥</span>
+        </div>
+        <canvas id="game-canvas"></canvas>
+        <div class="game-footer">
+          <span class="game-hint" id="game-hint">Press <kbd>Space</kbd> to start</span>
+          <span class="game-controls-hint">← → or A D to move</span>
+        </div>
+        <div class="game-mobile-btns">
+          <button class="game-btn" id="btn-left"><i class="fas fa-chevron-left"></i></button>
+          <button class="game-btn" id="btn-right"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Projects -->
-  <section id="projects" class="section">
+  <section id="projects" class="section section-alt">
     <div class="container">
       <div class="reveal">
         <span class="section-label">Work</span>
@@ -287,32 +319,6 @@
     </div>
   </section>
 
-  <!-- Game -->
-  <section id="game" class="section section-alt">
-    <div class="container">
-      <div class="reveal">
-        <span class="section-label">Just for fun</span>
-        <h2>Debug Mode <span class="gradient-text">🐛</span></h2>
-        <p class="section-sub">Catch the bugs before they hit production.</p>
-      </div>
-      <div class="game-wrapper reveal">
-        <div class="game-hud">
-          <span class="game-stat">Score <strong id="game-score">0</strong></span>
-          <span class="game-stat" id="game-lives">♥ ♥ ♥</span>
-        </div>
-        <canvas id="game-canvas"></canvas>
-        <div class="game-footer">
-          <span class="game-hint" id="game-hint">Press <kbd>Space</kbd> to start</span>
-          <span class="game-controls-hint">← → or A D to move</span>
-        </div>
-        <div class="game-mobile-btns">
-          <button class="game-btn" id="btn-left"><i class="fas fa-arrow-left"></i></button>
-          <button class="game-btn" id="btn-right"><i class="fas fa-arrow-right"></i></button>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Resume -->
   <section id="resume" class="section">
     <div class="container">
@@ -423,6 +429,7 @@
         <h2>Let's Connect</h2>
         <p class="section-sub">Open to opportunities, collaborations, or just a good conversation.</p>
       </div>
+    
       <div class="contact-actions reveal">
         <a href="https://mail.google.com/mail/u/0/?view=cm&fs=1&to=juancattaneo92@gmail.com&tf=1" class="btn btn-primary" target="_blank">
           <i class="far fa-envelope"></i> Email me
@@ -433,6 +440,13 @@
         <a href="sms:4152400924" class="btn btn-outline">
           <i class="fas fa-comment"></i> Text
         </a>
+      </div>
+      <div class="bug-score reveal" id="bug-score-card">
+        <span class="bug-score-emoji">🐛</span>
+        <div class="bug-score-body">
+          <span class="bug-score-text" id="bug-score-text">Haven't played yet? Go catch some bugs —<br>Come back and let me know your score!</span>
+          <a href="#game" class="bug-score-btn" id="bug-score-btn">Play now ↑</a>
+        </div>
       </div>
     </div>
   </section>
