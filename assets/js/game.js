@@ -48,8 +48,9 @@
   bindBtn('btn-left',  'left');
   bindBtn('btn-right', 'right');
 
-  // Also tap canvas to start
-  canvas.addEventListener('click', () => { if (state !== 'playing') startGame(); });
+  // Tap or click canvas to start
+  canvas.addEventListener('click',    () => { if (state !== 'playing') startGame(); });
+  canvas.addEventListener('touchend', e => { e.preventDefault(); if (state !== 'playing') startGame(); }, { passive: false });
 
   function startGame() {
     score = 0;
