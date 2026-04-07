@@ -15,7 +15,7 @@
     canvas.height = H;
 
     // Scale all game elements to canvas size
-    bugFont     = Math.max(28, Math.floor(W * 0.055));
+    bugFont     = Math.max(36, Math.floor(W * 0.07));
     playerW     = Math.max(70, Math.floor(W * 0.18));
     playerH     = Math.max(10, Math.floor(H * 0.042));
     playerSpeed = Math.max(6,  Math.floor(W * 0.018));
@@ -64,6 +64,13 @@
 
   // Initial size
   resizeCanvas();
+
+  // Set hint text based on device type
+  const isTouchDevice = window.matchMedia('(hover: none)').matches;
+  const hintEl = document.getElementById('game-hint');
+  if (isTouchDevice && hintEl) {
+    hintEl.textContent = 'Tap to start';
+  }
 
   // Re-size on window resize
   window.addEventListener('resize', () => {
@@ -267,12 +274,13 @@
     ctx.font = `${subSize * 1.1}px Inter, sans-serif`;
     ctx.fillText(`Bugs caught: ${score}`, W / 2, H / 2 + subSize * 0.2);
 
+    const restartMsg = isTouchDevice ? 'Tap to try again' : 'Press Space to try again';
     ctx.fillStyle = '#666';
     ctx.font = `${subSize}px Inter, sans-serif`;
-    ctx.fillText('Tap or press Space to try again', W / 2, H / 2 + subSize * 2.2);
+    ctx.fillText(restartMsg, W / 2, H / 2 + subSize * 2.2);
 
     const hint = document.getElementById('game-hint');
-    hint.textContent = 'Press Space to try again';
+    hint.textContent = restartMsg;
     hint.style.visibility = 'visible';
   }
 
