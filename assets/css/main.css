@@ -968,6 +968,35 @@ h2 {
   background: var(--accent-light);
 }
 
+.resume-skills {
+  margin-top: 48px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+
+.resume-skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.resume-skill-row {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 16px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.resume-skill-row strong {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.resume-skill-row span {
+  color: var(--text-muted);
+}
+
 /* ===========================
    Contact
 =========================== */
