@@ -14,16 +14,17 @@
   --border:        rgba(255, 255, 255, 0.07);
   --border-hover:  rgba(255, 255, 255, 0.14);
 
-  --accent:        #7c3aed;
-  --accent-light:  #a78bfa;
-  --accent-2:      #06b6d4;
-  --gradient:      linear-gradient(135deg, #7c3aed 0%, #06b6d4 100%);
+  --accent:        #0d9488;
+  --accent-light:  #2dd4bf;
+  --accent-2:      #f59e0b;
+  --gradient:      linear-gradient(135deg, #0d9488 0%, #f59e0b 100%);
 
   --text:          #f0f0f0;
   --text-muted:    #888;
   --text-subtle:   #444;
 
-  --font:          'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font:          'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display:  'Plus Jakarta Sans', sans-serif;
 
   --radius:        12px;
   --radius-lg:     20px;
@@ -31,7 +32,7 @@
 
   --shadow:        0 4px 24px rgba(0, 0, 0, 0.5);
   --shadow-lg:     0 12px 48px rgba(0, 0, 0, 0.7);
-  --glow:          0 0 48px rgba(124, 58, 237, 0.18);
+  --glow:          0 0 48px rgba(13, 148, 136, 0.18);
 
   --ease:          cubic-bezier(0.4, 0, 0.2, 1);
   --t:             0.3s;
@@ -101,6 +102,10 @@ ul {
 /* ===========================
    Typography
 =========================== */
+h1, h2 {
+  font-family: var(--font-display);
+}
+
 .section-label {
   display: inline-block;
   font-size: 0.72rem;
@@ -165,7 +170,7 @@ h2 {
 .btn-primary:hover {
   opacity: 0.82;
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(124, 58, 237, 0.38);
+  box-shadow: 0 8px 28px rgba(13, 148, 136, 0.38);
 }
 
 .btn-ghost {
@@ -218,6 +223,7 @@ h2 {
 }
 
 .nav-logo {
+  font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -393,7 +399,7 @@ h2 {
 .blob-1 {
   width: 650px;
   height: 650px;
-  background: radial-gradient(circle, #7c3aed 0%, transparent 70%);
+  background: radial-gradient(circle, #0d9488 0%, transparent 70%);
   top: -150px;
   left: -100px;
   animation: drift-1 14s ease-in-out infinite alternate;
@@ -402,7 +408,7 @@ h2 {
 .blob-2 {
   width: 550px;
   height: 550px;
-  background: radial-gradient(circle, #06b6d4 0%, transparent 70%);
+  background: radial-gradient(circle, #f59e0b 0%, transparent 70%);
   bottom: -120px;
   right: -80px;
   animation: drift-2 16s ease-in-out infinite alternate;
@@ -561,9 +567,9 @@ h2 {
 
 .skill-card:hover {
   background: var(--card-hover);
-  border-color: rgba(124, 58, 237, 0.3);
+  border-color: rgba(13, 148, 136, 0.3);
   transform: translateY(-5px);
-  box-shadow: var(--shadow), 0 0 24px rgba(124, 58, 237, 0.1);
+  box-shadow: var(--shadow), 0 0 24px rgba(13, 148, 136, 0.1);
 }
 
 .skill-card i {
@@ -602,9 +608,9 @@ h2 {
 }
 
 .project-card:hover {
-  border-color: rgba(124, 58, 237, 0.35);
+  border-color: rgba(13, 148, 136, 0.35);
   transform: translateY(-7px);
-  box-shadow: var(--shadow), 0 0 32px rgba(124, 58, 237, 0.12);
+  box-shadow: var(--shadow), 0 0 32px rgba(13, 148, 136, 0.12);
 }
 
 .project-img {
@@ -626,7 +632,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.12), rgba(6, 182, 212, 0.08));
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.12), rgba(245, 158, 11, 0.08));
   border-bottom: 1px solid var(--border);
 }
 
@@ -676,9 +682,9 @@ h2 {
   font-weight: 600;
   padding: 3px 10px;
   border-radius: 999px;
-  background: rgba(124, 58, 237, 0.1);
+  background: rgba(13, 148, 136, 0.1);
   color: var(--accent-light);
-  border: 1px solid rgba(124, 58, 237, 0.2);
+  border: 1px solid rgba(13, 148, 136, 0.2);
   letter-spacing: 0.01em;
 }
 
@@ -778,8 +784,8 @@ h2 {
   justify-content: space-between;
   gap: 12px;
   padding: 14px 20px;
-  background: rgba(124, 58, 237, 0.08);
-  border: 1px solid rgba(124, 58, 237, 0.25);
+  background: rgba(13, 148, 136, 0.08);
+  border: 1px solid rgba(13, 148, 136, 0.25);
   border-top: none;
   font-size: 0.875rem;
   flex-wrap: wrap;
@@ -801,8 +807,8 @@ h2 {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--accent-light);
-  background: rgba(124, 58, 237, 0.12);
-  border: 1px solid rgba(124, 58, 237, 0.3);
+  background: rgba(13, 148, 136, 0.12);
+  border: 1px solid rgba(13, 148, 136, 0.3);
   border-radius: 999px;
   padding: 5px 14px;
   cursor: pointer;
@@ -811,7 +817,7 @@ h2 {
 }
 
 .game-result-replay:hover {
-  background: rgba(124, 58, 237, 0.25);
+  background: rgba(13, 148, 136, 0.25);
 }
 
 .game-mobile-btns {
@@ -1026,7 +1032,7 @@ h2 {
 }
 
 .bug-score.has-score {
-  border-color: rgba(124, 58, 237, 0.3);
+  border-color: rgba(13, 148, 136, 0.3);
 }
 
 .bug-score-emoji {
@@ -1064,8 +1070,8 @@ h2 {
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--accent-light);
-  background: rgba(124, 58, 237, 0.1);
-  border: 1px solid rgba(124, 58, 237, 0.25);
+  background: rgba(13, 148, 136, 0.1);
+  border: 1px solid rgba(13, 148, 136, 0.25);
   border-radius: 999px;
   padding: 5px 14px;
   white-space: nowrap;
@@ -1074,8 +1080,8 @@ h2 {
 }
 
 .bug-score-btn:hover {
-  background: rgba(124, 58, 237, 0.2);
-  border-color: rgba(124, 58, 237, 0.5);
+  background: rgba(13, 148, 136, 0.2);
+  border-color: rgba(13, 148, 136, 0.5);
 }
 
 /* ===========================
@@ -1096,6 +1102,7 @@ h2 {
 }
 
 .footer-logo {
+  font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 800;
   background: var(--gradient);
@@ -1128,7 +1135,7 @@ h2 {
   border-color: var(--accent);
   color: #fff;
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+  box-shadow: 0 6px 20px rgba(13, 148, 136, 0.35);
 }
 
 .footer-copy {
