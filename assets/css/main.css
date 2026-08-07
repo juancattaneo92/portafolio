@@ -758,8 +758,8 @@ h2 {
   justify-content: space-between;
   gap: 12px;
   padding: 14px 20px;
-  background: rgba(13, 148, 136, 0.08);
-  border: 1px solid rgba(13, 148, 136, 0.25);
+  background: rgba(193, 80, 46, 0.08);
+  border: 1px solid rgba(193, 80, 46, 0.3);
   border-top: none;
   font-size: 0.875rem;
   flex-wrap: wrap;
@@ -780,9 +780,9 @@ h2 {
 .game-result-replay {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--accent-light);
-  background: rgba(13, 148, 136, 0.12);
-  border: 1px solid rgba(13, 148, 136, 0.3);
+  color: var(--accent);
+  background: rgba(193, 80, 46, 0.12);
+  border: 1px solid rgba(193, 80, 46, 0.3);
   border-radius: 999px;
   padding: 5px 14px;
   cursor: pointer;
@@ -791,7 +791,7 @@ h2 {
 }
 
 .game-result-replay:hover {
-  background: rgba(13, 148, 136, 0.25);
+  background: rgba(193, 80, 46, 0.25);
 }
 
 .game-mobile-btns {
