@@ -488,8 +488,8 @@ h2 {
   border-radius: var(--radius-xl);
   overflow: hidden;
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg), var(--glow);
   flex-shrink: 0;
+  position: relative;
 }
 
 .photo-wrapper img {
@@ -502,6 +502,23 @@ h2 {
 
 .photo-wrapper:hover img {
   transform: scale(1.04);
+}
+
+/* Shared film-grain overlay used by the headshot and project screenshots */
+.photo-wrapper::after,
+.project-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  mix-blend-mode: multiply;
+  opacity: 0.08;
+}
+
+.project-img::after {
+  opacity: 0.04;
 }
 
 /* ===========================
