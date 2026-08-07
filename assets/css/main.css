@@ -7,32 +7,32 @@
    Custom Properties
 =========================== */
 :root {
-  --bg:            #080808;
-  --surface:       #101010;
-  --card:          #161616;
-  --card-hover:    #1d1d1d;
-  --border:        rgba(255, 255, 255, 0.07);
-  --border-hover:  rgba(255, 255, 255, 0.14);
+  --bg:            #f5f4f1;
+  --surface:       #ece9e3;
+  --card:          #f5f4f1;
+  --card-hover:    #ece9e3;
+  --border:        rgba(23, 20, 15, 0.12);
+  --border-hover:  rgba(23, 20, 15, 0.22);
 
-  --accent:        #0d9488;
-  --accent-light:  #2dd4bf;
-  --accent-2:      #f59e0b;
-  --gradient:      linear-gradient(135deg, #0d9488 0%, #f59e0b 100%);
+  --accent:        #c1502e;
+  --accent-light:  #c1502e;
+  --accent-2:      #c1502e;
+  --gradient:      #c1502e;
 
-  --text:          #f0f0f0;
-  --text-muted:    #888;
-  --text-subtle:   #444;
+  --text:          #17140f;
+  --text-muted:    #6b6459;
+  --text-subtle:   #948c7e;
 
-  --font:          'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-display:  'Plus Jakarta Sans', sans-serif;
+  --font:          'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display:  'Cinzel', serif;
 
-  --radius:        12px;
-  --radius-lg:     20px;
-  --radius-xl:     28px;
+  --radius:        2px;
+  --radius-lg:     4px;
+  --radius-xl:     6px;
 
-  --shadow:        0 4px 24px rgba(0, 0, 0, 0.5);
-  --shadow-lg:     0 12px 48px rgba(0, 0, 0, 0.7);
-  --glow:          0 0 48px rgba(13, 148, 136, 0.18);
+  --shadow:        none;
+  --shadow-lg:     none;
+  --glow:          none;
 
   --ease:          cubic-bezier(0.4, 0, 0.2, 1);
   --t:             0.3s;
