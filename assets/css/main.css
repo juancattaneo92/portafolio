@@ -545,17 +545,13 @@ h2 {
 
 .skill-card:hover {
   background: var(--card-hover);
-  border-color: rgba(13, 148, 136, 0.3);
+  border-color: var(--text);
   transform: translateY(-5px);
-  box-shadow: var(--shadow), 0 0 24px rgba(13, 148, 136, 0.1);
 }
 
 .skill-card i {
   font-size: 1.7rem;
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent);
 }
 
 .skill-card span {
