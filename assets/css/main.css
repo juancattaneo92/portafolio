@@ -999,7 +999,7 @@ h2 {
 }
 
 .bug-score.has-score {
-  border-color: rgba(13, 148, 136, 0.3);
+  border-color: rgba(193, 80, 46, 0.35);
 }
 
 .bug-score-emoji {
@@ -1022,7 +1022,7 @@ h2 {
 }
 
 .bug-score-text strong {
-  color: var(--accent-light);
+  color: var(--accent);
 }
 
 .bug-score-text em {
@@ -1036,9 +1036,9 @@ h2 {
   gap: 6px;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--accent-light);
-  background: rgba(13, 148, 136, 0.1);
-  border: 1px solid rgba(13, 148, 136, 0.25);
+  color: var(--accent);
+  background: rgba(193, 80, 46, 0.1);
+  border: 1px solid rgba(193, 80, 46, 0.3);
   border-radius: 999px;
   padding: 5px 14px;
   white-space: nowrap;
@@ -1047,8 +1047,8 @@ h2 {
 }
 
 .bug-score-btn:hover {
-  background: rgba(13, 148, 136, 0.2);
-  border-color: rgba(13, 148, 136, 0.5);
+  background: rgba(193, 80, 46, 0.22);
+  border-color: var(--accent);
 }
 
 /* ===========================
