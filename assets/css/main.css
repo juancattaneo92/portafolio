@@ -377,6 +377,35 @@ h2 {
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.hero-text {
+  flex: 1 1 480px;
+  min-width: 0;
+}
+
+.hero-photo {
+  flex-shrink: 0;
+}
+
+.hero-photo-wrapper {
+  width: clamp(220px, 26vw, 380px);
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+}
+
+.hero-photo-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 70% 40%;
 }
 
 .hero-eyebrow {
@@ -393,7 +422,7 @@ h2 {
 .hero-name {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(3rem, 12vw, 9rem);
+  font-size: clamp(2.6rem, 6.5vw, 5.5rem);
   letter-spacing: 0.01em;
   line-height: 0.98;
   text-transform: uppercase;
@@ -506,7 +535,8 @@ h2 {
 
 /* Shared film-grain overlay used by the headshot and project screenshots */
 .photo-wrapper::after,
-.project-img::after {
+.project-img::after,
+.hero-photo-wrapper::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -1241,6 +1271,13 @@ h2 {
     padding: 120px 24px 60px;
   }
 
+  .hero-content {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 36px;
+  }
+
   .hero-name {
     font-size: clamp(2.2rem, 12.5vw, 5rem);
     letter-spacing: 0;
@@ -1249,5 +1286,13 @@ h2 {
   .hero-meta {
     flex-wrap: wrap;
     gap: 8px;
+  }
+
+  .hero-photo {
+    align-self: center;
+  }
+
+  .hero-photo-wrapper {
+    width: min(70vw, 320px);
   }
 }
