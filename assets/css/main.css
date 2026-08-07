@@ -137,13 +137,6 @@ h2 {
   margin-right: auto;
 }
 
-.gradient-text {
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 /* ===========================
    Buttons
 =========================== */
@@ -151,11 +144,13 @@ h2 {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 13px 26px;
+  padding: 14px 28px;
   border-radius: var(--radius);
   font-family: var(--font);
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   cursor: pointer;
   transition: all var(--t) var(--ease);
   border: 1px solid transparent;
@@ -163,14 +158,13 @@ h2 {
 }
 
 .btn-primary {
-  background: var(--gradient);
-  color: #fff;
+  background: var(--text);
+  color: var(--bg);
 }
 
 .btn-primary:hover {
-  opacity: 0.82;
+  background: var(--accent);
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(13, 148, 136, 0.38);
 }
 
 .btn-ghost {
@@ -180,9 +174,8 @@ h2 {
 }
 
 .btn-ghost:hover {
-  background: var(--card);
   color: var(--text);
-  border-color: var(--border-hover);
+  border-color: var(--text);
   transform: translateY(-2px);
 }
 
@@ -193,8 +186,7 @@ h2 {
 }
 
 .btn-outline:hover {
-  background: var(--card);
-  border-color: var(--border-hover);
+  border-color: var(--text);
   transform: translateY(-2px);
 }
 
@@ -370,99 +362,70 @@ h2 {
 .mobile-menu-close span:nth-child(2) { transform: rotate(-45deg); }
 
 /* ===========================
-   Hero
+   Hero / Masthead
 =========================== */
 #hero {
   position: relative;
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  padding: 140px 40px 80px;
   overflow: hidden;
 }
 
-/* Aurora background */
-.aurora {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.aurora-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.22;
-}
-
-.blob-1 {
-  width: 650px;
-  height: 650px;
-  background: radial-gradient(circle, #0d9488 0%, transparent 70%);
-  top: -150px;
-  left: -100px;
-  animation: drift-1 14s ease-in-out infinite alternate;
-}
-
-.blob-2 {
-  width: 550px;
-  height: 550px;
-  background: radial-gradient(circle, #f59e0b 0%, transparent 70%);
-  bottom: -120px;
-  right: -80px;
-  animation: drift-2 16s ease-in-out infinite alternate;
-}
-
-@keyframes drift-1 {
-  0%   { transform: translate(0px, 0px) scale(1); }
-  100% { transform: translate(70px, 50px) scale(1.12); }
-}
-
-@keyframes drift-2 {
-  0%   { transform: translate(0px, 0px) scale(1); }
-  100% { transform: translate(-60px, -40px) scale(1.08); }
-}
-
-/* Hero content */
 .hero-content {
   position: relative;
   z-index: 1;
-  text-align: center;
-  padding: 0 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-.hero-greeting {
-  font-size: 1rem;
-  font-weight: 500;
+.hero-eyebrow {
+  font-family: var(--font);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--text-muted);
-  letter-spacing: 0.06em;
-  margin-bottom: 14px;
+  margin-bottom: 20px;
   animation: fade-up 0.9s 0.1s var(--ease) both;
 }
 
 .hero-name {
-  font-size: clamp(2.8rem, 9vw, 6.5rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.04;
-  margin-bottom: 20px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(3.4rem, 13vw, 10.5rem);
+  letter-spacing: 0.01em;
+  line-height: 0.98;
+  text-transform: uppercase;
+  margin-bottom: 32px;
   animation: fade-up 0.9s 0.2s var(--ease) both;
 }
 
-.hero-title {
-  font-size: clamp(1rem, 2.5vw, 1.3rem);
-  font-weight: 400;
+.hero-name-accent {
+  color: var(--accent);
+}
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font);
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
   color: var(--text-muted);
-  margin-bottom: 44px;
-  letter-spacing: 0.015em;
+  letter-spacing: 0.01em;
+  margin-bottom: 48px;
   animation: fade-up 0.9s 0.3s var(--ease) both;
+}
+
+.hero-meta-sep {
+  color: var(--accent);
 }
 
 .hero-actions {
   display: flex;
   gap: 12px;
-  justify-content: center;
   flex-wrap: wrap;
   animation: fade-up 0.9s 0.4s var(--ease) both;
 }
