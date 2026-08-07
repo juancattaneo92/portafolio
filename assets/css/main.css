@@ -1237,13 +1237,17 @@ h2 {
     gap: 16px;
   }
 
-  .blob-1 {
-    width: 360px;
-    height: 360px;
+  #hero {
+    padding: 120px 24px 60px;
   }
 
-  .blob-2 {
-    width: 300px;
-    height: 300px;
+  .hero-name {
+    font-size: clamp(2.2rem, 12.5vw, 5rem);
+    letter-spacing: 0;
+  }
+
+  .hero-meta {
+    flex-wrap: wrap;
+    gap: 8px;
   }
 }
