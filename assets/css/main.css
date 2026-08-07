@@ -865,10 +865,7 @@ h2 {
 }
 
 .resume-col-title i {
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent);
 }
 
 .resume-item {
@@ -900,7 +897,7 @@ h2 {
 
 .resume-company {
   font-size: 0.82rem;
-  color: var(--accent-light);
+  color: var(--accent);
   font-weight: 500;
 }
 
@@ -941,7 +938,7 @@ h2 {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--accent-light);
+  background: var(--accent);
 }
 
 .resume-skills {
