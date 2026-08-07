@@ -582,9 +582,8 @@ h2 {
 }
 
 .project-card:hover {
-  border-color: rgba(13, 148, 136, 0.35);
+  border-color: var(--text);
   transform: translateY(-7px);
-  box-shadow: var(--shadow), 0 0 32px rgba(13, 148, 136, 0.12);
 }
 
 .project-img {
@@ -592,6 +591,7 @@ h2 {
   height: 178px;
   overflow: hidden;
   background: var(--surface);
+  position: relative;
 }
 
 .project-img img {
@@ -606,16 +606,13 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(13, 148, 136, 0.12), rgba(245, 158, 11, 0.08));
+  background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
 
 .project-img--icon i {
   font-size: 3rem;
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent);
 }
 
 .project-card:hover .project-img img {
@@ -654,18 +651,17 @@ h2 {
 .project-tags span {
   font-size: 0.68rem;
   font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 999px;
-  background: rgba(13, 148, 136, 0.1);
-  color: var(--accent-light);
-  border: 1px solid rgba(13, 148, 136, 0.2);
-  letter-spacing: 0.01em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--accent);
+  color: var(--accent);
 }
 
 .project-link {
   font-size: 0.83rem;
   font-weight: 600;
-  color: var(--accent-light);
+  color: var(--accent);
   display: inline-flex;
   align-items: center;
   gap: 6px;
