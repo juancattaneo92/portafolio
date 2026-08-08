@@ -208,6 +208,7 @@ h2 {
   align-items: center;
   justify-content: space-between;
   padding: 20px 40px;
+  background: linear-gradient(to bottom, rgba(245, 244, 241, 0.6), rgba(245, 244, 241, 0));
   transition: all var(--t) var(--ease);
 }
 
@@ -384,28 +385,35 @@ h2 {
 }
 
 .hero-text {
-  flex: 1 1 480px;
-  min-width: 0;
+  max-width: 640px;
 }
 
-.hero-photo {
-  flex-shrink: 0;
-}
-
-.hero-photo-wrapper {
-  width: clamp(220px, 26vw, 380px);
-  aspect-ratio: 4 / 5;
-  border-radius: var(--radius-xl);
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   overflow: hidden;
-  border: 1px solid var(--border);
-  position: relative;
 }
 
-.hero-photo-wrapper img {
+.hero-bg img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 70% 40%;
+  object-position: 68% 38%;
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    var(--bg) 0%,
+    var(--bg) 34%,
+    rgba(245, 244, 241, 0.9) 44%,
+    rgba(245, 244, 241, 0.45) 58%,
+    rgba(245, 244, 241, 0) 74%
+  );
 }
 
 .hero-eyebrow {
@@ -536,7 +544,7 @@ h2 {
 /* Shared film-grain overlay used by the headshot and project screenshots */
 .photo-wrapper::after,
 .project-img::after,
-.hero-photo-wrapper::after {
+.hero-bg::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -1268,6 +1276,7 @@ h2 {
   }
 
   #hero {
+    align-items: flex-start;
     padding: 120px 24px 60px;
   }
 
@@ -1288,11 +1297,22 @@ h2 {
     gap: 8px;
   }
 
-  .hero-photo {
-    align-self: center;
+  .hero-text {
+    max-width: none;
   }
 
-  .hero-photo-wrapper {
-    width: min(70vw, 320px);
+  .hero-bg::after {
+    background: linear-gradient(
+      180deg,
+      var(--bg) 0%,
+      var(--bg) 48%,
+      rgba(245, 244, 241, 0.9) 60%,
+      rgba(245, 244, 241, 0.5) 74%,
+      rgba(245, 244, 241, 0) 92%
+    );
+  }
+
+  .hero-bg img {
+    object-position: 79% 30%;
   }
 }
