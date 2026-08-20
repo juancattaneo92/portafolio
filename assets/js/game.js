@@ -242,12 +242,9 @@
 
     // Player bar
     ctx.save();
-    ctx.shadowColor = '#7c3aed';
+    ctx.shadowColor = 'rgba(193, 80, 46, 0.55)';
     ctx.shadowBlur  = Math.floor(playerW * 0.2);
-    const grad = ctx.createLinearGradient(player.x - player.w / 2, 0, player.x + player.w / 2, 0);
-    grad.addColorStop(0, '#7c3aed');
-    grad.addColorStop(1, '#06b6d4');
-    ctx.fillStyle = grad;
+    ctx.fillStyle = '#c1502e';
     roundRect(ctx, player.x - player.w / 2, player.y, player.w, player.h, player.h / 2);
     ctx.fill();
     ctx.restore();

@@ -504,6 +504,12 @@ h2 {
   align-items: center;
 }
 
+@media (min-width: 961px) {
+  .about-photo {
+    margin-top: 40px;
+  }
+}
+
 .about-text h2 {
   margin-bottom: 24px;
 }
@@ -520,11 +526,10 @@ h2 {
 }
 
 .photo-wrapper {
-  width: 260px;
-  height: 310px;
+  width: 340px;
+  height: 440px;
   border-radius: var(--radius-xl);
   overflow: hidden;
-  border: 1px solid var(--border);
   flex-shrink: 0;
   position: relative;
 }
@@ -539,6 +544,21 @@ h2 {
 
 .photo-wrapper:hover img {
   transform: scale(1.04);
+}
+
+/* Fade the photo's inner edge into the page background, echoing the hero treatment */
+.photo-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    var(--bg) 0%,
+    rgba(245, 244, 241, 0.75) 10%,
+    rgba(245, 244, 241, 0) 34%
+  );
 }
 
 /* Shared film-grain overlay used by the headshot and project screenshots */
@@ -1209,7 +1229,18 @@ h2 {
   .about-photo {
     display: flex;
     justify-content: center;
-    order: -1;
+    order: 0;
+  }
+
+  /* Stacked layout: fade the top edge instead of the side, so the photo settles
+     into the page rather than butting against the nav */
+  .photo-wrapper::before {
+    background: linear-gradient(
+      180deg,
+      var(--bg) 0%,
+      rgba(245, 244, 241, 0.75) 10%,
+      rgba(245, 244, 241, 0) 34%
+    );
   }
 
   .about-text {
@@ -1264,8 +1295,8 @@ h2 {
   }
 
   .photo-wrapper {
-    width: 220px;
-    height: 260px;
+    width: 340px;
+    height: 480px;
   }
 
   .footer-inner {
