@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Postrain. JC Cattaneo</title>
-  <meta name="description" content="A point-of-sale training game that helps new employees build speed before their first shift." />
+  <title>Casita Hub. JC Cattaneo</title>
+  <meta name="description" content="A household hub PWA for shared shopping lists, to-dos, a weekly planner, and family stats." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,21 +73,27 @@
     <header class="pd-hero reveal">
       <div class="container">
         <a href="../index.html#projects" class="pd-breadcrumb"><i class="fas fa-arrow-left"></i> All projects</a>
-        <span class="section-label"><span class="label-num">/</span> Training game</span>
-        <h1>Postrain</h1>
-        <p class="pd-tagline">A point-of-sale training game that helps new employees build speed before their first shift.</p>
+        <span class="section-label"><span class="label-num">/</span> Household PWA</span>
+        <h1>Casita Hub</h1>
+        <p class="pd-tagline">A household hub PWA for shared shopping lists, to-dos, a weekly planner, and family stats.</p>
         <div class="pd-tags">
-          <span>JavaScript</span>
-          <span>CSS Animations</span>
+          <span>React 19</span>
+          <span>Next.js 16</span>
+          <span>TypeScript</span>
+          <span>Tanstack Query</span>
+          <span>Flask</span>
+          <span>SQLite</span>
+          <span>PWA</span>
         </div>
         <div class="pd-actions">
-          <span class="btn btn-ghost pd-btn-disabled"><i class="fas fa-lock"></i> Source is private</span>
+          <a href="https://casita-hub-demo.netlify.app/" class="btn btn-primary" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Open live site</a>
+          <a href="https://casita-hub-demo.netlify.app/app" class="btn btn-ghost" target="_blank" rel="noopener"><i class="fas fa-table-columns"></i> Open the demo</a>
         </div>
       </div>
     </header>
 
     <div class="pd-shot container reveal">
-      <img src="../images/posTrain.png" alt="Postrain screenshot" />
+      <img src="../images/casita-hub.png" alt="Casita Hub screenshot" />
     </div>
 
     <section class="pd-section reveal">
@@ -95,17 +101,16 @@
         <div class="pd-grid">
           <div class="pd-block">
             <h2>What I built &amp; why</h2>
-            <!-- PLACEHOLDER: replace with the real story. -->
-            <p>New hires lose time learning where things are on a POS screen while a line builds. Postrain is a game that drills that muscle memory - orders come in, you ring them up, and it scores you on speed and accuracy.</p>
-            <p>It mirrors a real POS layout closely enough that the practice transfers, with CSS animations giving the feedback that keeps it feeling like a game rather than a quiz.</p>
+            <p>Running a household means juggling shopping, chores, and plans across more than one person, usually spread over texts and sticky notes. Casita Hub puts all of it in one installable app that works on phone and desktop.</p>
+            <p>It has shared shopping lists with categorized items, drag-to-reorder, and price-history tracking; shared to-do lists with due dates and per-person assignment; a weekly planner board; and a cross-module stats dashboard with both personal and family charts.</p>
           </div>
           <aside class="pd-block pd-facts">
             <h3>At a glance</h3>
             <!-- PLACEHOLDER: fill in real values. -->
             <dl>
-              <div><dt>Role</dt><dd>Solo build</dd></div>
-              <div><dt>Timeline</dt><dd>PLACEHOLDER</dd></div>
-              <div><dt>Status</dt><dd>PLACEHOLDER</dd></div>
+              <div><dt>Role</dt><dd>Solo - design & build</dd></div>
+              <div><dt>Timeline</dt><dd>5 days</dd></div>
+              <div><dt>Value</dt><dd>Personal project</dd></div>
             </dl>
           </aside>
         </div>
@@ -115,10 +120,12 @@
     <section class="pd-section reveal">
       <div class="container">
         <h2>Why this stack</h2>
-        <!-- PLACEHOLDER: tighten each reason to what actually drove the choice. -->
         <ul class="pd-stack">
-          <li><span class="pd-stack-name">JavaScript</span><span class="pd-stack-why">Zero build step - it runs anywhere a browser does, which is the whole point of a quick demo.</span></li>
-          <li><span class="pd-stack-name">CSS Animations</span><span class="pd-stack-why">Hardware-accelerated transitions kept the interface lively while staying lightweight.</span></li>
+          <li><span class="pd-stack-name">React 19 + Next.js 16</span><span class="pd-stack-why">App Router and server components for a fast first paint on the phone, where this app mostly lives.</span></li>
+          <li><span class="pd-stack-name">TypeScript</span><span class="pd-stack-why">Shared types across lists, tasks, and planner keep the cross-module stats dashboard honest.</span></li>
+          <li><span class="pd-stack-name">TanStack Query</span><span class="pd-stack-why">Optimistic updates and cache invalidation make drag-to-reorder and shared edits feel instant.</span></li>
+          <li><span class="pd-stack-name">Flask + SQLite</span><span class="pd-stack-why">A small, self-hostable API and a zero-ops database, right-sized for a single household.</span></li>
+          <li><span class="pd-stack-name">PWA</span><span class="pd-stack-why">Installs to the home screen and keeps working offline, so it behaves like a native app without a store.</span></li>
         </ul>
       </div>
     </section>
@@ -126,17 +133,14 @@
     <section class="pd-section reveal">
       <div class="container">
         <h2>Live demo</h2>
-        <!-- PLACEHOLDER: paste a YouTube / Loom embed <iframe> here, or drop in a <video> tag. -->
-        <div class="pd-frame pd-frame--placeholder">
-          <div class="pd-placeholder">
-            <i class="fas fa-circle-play"></i>
-            <span>Demo video coming soon</span>
-          </div>
+        <div class="pd-frame">
+          <iframe src="https://casita-hub.netlify.app/app" title="Casita Hub demo site" loading="lazy"></iframe>
         </div>
-        <p class="pd-demo-note">Walkthrough video is on the way. Screenshot below in the meantime.</p>
-        <img class="pd-demo-shot" src="../images/posTrain.png" alt="Postrain screenshot" />
+        <p class="pd-demo-note">Embedded preview of the live demo site.
+          <a href="https://casita-hub.netlify.app/" target="_blank" rel="noopener">Open it in a new tab</a> if it doesn't load here.</p>
       </div>
     </section>
+
 
     <div class="pd-back container">
       <a href="../index.html#projects" class="btn btn-ghost"><i class="fas fa-arrow-left"></i> Back to all projects</a>

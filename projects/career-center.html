@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ToadToken. JC Cattaneo</title>
-  <meta name="description" content="A responsive informational site for a token-based blockchain project." />
+  <title>Career Center App. JC Cattaneo</title>
+  <meta name="description" content="A phone-friendly web app for running mock interviews with a voiced AI interviewer and rubric-based feedback." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,22 +73,25 @@
     <header class="pd-hero reveal">
       <div class="container">
         <a href="../index.html#projects" class="pd-breadcrumb"><i class="fas fa-arrow-left"></i> All projects</a>
-        <span class="section-label"><span class="label-num">/</span> Landing page</span>
-        <h1>ToadToken</h1>
-        <p class="pd-tagline">A responsive informational site for a token-based blockchain project.</p>
+        <span class="section-label"><span class="label-num">/</span> Interview practice</span>
+        <h1>Career Center App</h1>
+        <p class="pd-tagline">A phone-friendly web app for running mock interviews with a voiced AI interviewer and rubric-based feedback.</p>
         <div class="pd-tags">
-          <span>JavaScript</span>
-          <span>CSS3</span>
-          <span>HTML5</span>
+          <span>Python FastAPI</span>
+          <span>Anthropic Claude / Ollama</span>
+          <span>RAG</span>
+          <span>Custom Eval Harness</span>
+          <span>Docker</span>
         </div>
         <div class="pd-actions">
-          <a href="https://github.com/juancattaneo92/ToadToken" class="btn btn-ghost" target="_blank" rel="noopener"><i class="fab fa-github"></i> View repo</a>
+          <a href="https://career-center-app.netlify.app/" class="btn btn-primary" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Open live site</a>
+          <a href="https://career-center-app.netlify.app/app" class="btn btn-ghost" target="_blank" rel="noopener"><i class="fas fa-table-columns"></i> Open the demo</a>
         </div>
       </div>
     </header>
 
     <div class="pd-shot container reveal">
-      <img src="../images/toadToken.png" alt="ToadToken screenshot" />
+      <img src="../images/careerCenter.png" alt="Career Center App screenshot" />
     </div>
 
     <section class="pd-section reveal">
@@ -96,17 +99,16 @@
         <div class="pd-grid">
           <div class="pd-block">
             <h2>What I built &amp; why</h2>
-            <!-- PLACEHOLDER: replace with the real story. -->
-            <p>An informational one-pager for a token project - what it is, how it works, how to get it - built to look right on any screen size.</p>
-            <p>It is a deliberate exercise in doing a polished, fully responsive layout with just HTML, CSS, and a little JavaScript, no framework and no build step.</p>
+            <p>Interview prep usually means either paying for a coach or rehearsing alone with no feedback. This app runs a full mock interview with a voiced AI interviewer (Piper TTS) you can do from your phone, then grades the session against a rubric.</p>
+            <p>Questions come from a curated bank, never invented by the model, so every run is predictable and fair. Grading is deterministic-first: a validity gate rejects non-answers with no model call, then one comparative LLM call runs per rubric criterion. It is local-first on Ollama with Claude as an optional upgrade, and a framework-free eval harness gates CI on junk-leak and mode-violation rates.</p>
           </div>
           <aside class="pd-block pd-facts">
             <h3>At a glance</h3>
             <!-- PLACEHOLDER: fill in real values. -->
             <dl>
-              <div><dt>Role</dt><dd>Solo build</dd></div>
-              <div><dt>Timeline</dt><dd>PLACEHOLDER</dd></div>
-              <div><dt>Status</dt><dd>PLACEHOLDER</dd></div>
+              <div><dt>Role</dt><dd>Solo - design &build</dd></div>
+              <div><dt>Timeline</dt><dd>5 days</dd></div>
+              <div><dt>Value</dt><dd>Personal Project</dd></div>
             </dl>
           </aside>
         </div>
@@ -116,11 +118,12 @@
     <section class="pd-section reveal">
       <div class="container">
         <h2>Why this stack</h2>
-        <!-- PLACEHOLDER: tighten each reason to what actually drove the choice. -->
         <ul class="pd-stack">
-          <li><span class="pd-stack-name">JavaScript</span><span class="pd-stack-why">Zero build step - it runs anywhere a browser does, which is the whole point of a quick demo.</span></li>
-          <li><span class="pd-stack-name">CSS3</span><span class="pd-stack-why">Modern layout and animation primitives covered everything the design needed without JavaScript.</span></li>
-          <li><span class="pd-stack-name">HTML5</span><span class="pd-stack-why">Semantic structure that stays accessible and readable without a framework in the way.</span></li>
+          <li><span class="pd-stack-name">Python FastAPI</span><span class="pd-stack-why">Async endpoints and clean schemas for the interview, grading, and TTS service boundaries.</span></li>
+          <li><span class="pd-stack-name">Anthropic Claude / Ollama</span><span class="pd-stack-why">Local-first on Ollama keeps it free to run; Claude is a drop-in upgrade when higher-quality grading matters.</span></li>
+          <li><span class="pd-stack-name">RAG</span><span class="pd-stack-why">Pulls questions from a curated bank so the model never invents prompts or drifts off-topic.</span></li>
+          <li><span class="pd-stack-name">Custom Eval Harness</span><span class="pd-stack-why">Framework-free, so CI can fail the build on junk-leak and mode-violation rates instead of vibes.</span></li>
+          <li><span class="pd-stack-name">Docker</span><span class="pd-stack-why">One command brings up the API, model runtime, and voice pipeline together.</span></li>
         </ul>
       </div>
     </section>
@@ -128,15 +131,11 @@
     <section class="pd-section reveal">
       <div class="container">
         <h2>Live demo</h2>
-        <!-- PLACEHOLDER: paste a YouTube / Loom embed <iframe> here, or drop in a <video> tag. -->
-        <div class="pd-frame pd-frame--placeholder">
-          <div class="pd-placeholder">
-            <i class="fas fa-circle-play"></i>
-            <span>Demo video coming soon</span>
-          </div>
+        <div class="pd-frame">
+          <iframe src="https://career-center-app.netlify.app/app" title="Career Center App demo site" loading="lazy"></iframe>
         </div>
-        <p class="pd-demo-note">Walkthrough video is on the way. Screenshot below in the meantime.</p>
-        <img class="pd-demo-shot" src="../images/toadToken.png" alt="ToadToken screenshot" />
+        <p class="pd-demo-note">Embedded preview of the live demo site.
+          <a href="https://career-center-app.netlify.app/" target="_blank" rel="noopener">Open it in a new tab</a> if it doesn't load here.</p>
       </div>
     </section>
 

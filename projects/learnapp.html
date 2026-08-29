@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Penalty Kicker. JC Cattaneo</title>
-  <meta name="description" content="A 2D penalty shootout that speeds up every time you score." />
+  <title>LearnApp. JC Cattaneo</title>
+  <meta name="description" content="A Duolingo-style personal learning app for technical topics - source-grounded AI curriculum, full-screen lessons, XP, streaks, and spaced repetition." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,21 +73,29 @@
     <header class="pd-hero reveal">
       <div class="container">
         <a href="../index.html#projects" class="pd-breadcrumb"><i class="fas fa-arrow-left"></i> All projects</a>
-        <span class="section-label"><span class="label-num">/</span> Browser game</span>
-        <h1>Penalty Kicker</h1>
-        <p class="pd-tagline">A 2D penalty shootout that speeds up every time you score.</p>
+        <span class="section-label"><span class="label-num">/</span> Learning app</span>
+        <h1>LearnApp</h1>
+        <p class="pd-tagline">A Duolingo-style personal learning app for technical topics, with a source-grounded AI curriculum, full-screen lessons, XP, streaks, and spaced repetition.</p>
         <div class="pd-tags">
-          <span>JavaScript</span>
-          <span>Canvas API</span>
+          <span>Next.js 16</span>
+          <span>React 19</span>
+          <span>TypeScript</span>
+          <span>Tailwind CSS v4</span>
+          <span>Drizzle ORM</span>
+          <span>Ollama</span>
+          <span>Brave Search API</span>
+          <span>Vitest</span>
         </div>
         <div class="pd-actions">
-          <a href="https://github.com/juancattaneo92/PenaltyKicker" class="btn btn-ghost" target="_blank" rel="noopener"><i class="fab fa-github"></i> View repo</a>
+        <div class="pd-actions">
+          <a href="https://learn-app-demo.netlify.app/" class="btn btn-primary" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Open live site</a>
+          <a href="https://learn-app-demo.netlify.app/app" class="btn btn-ghost" target="_blank" rel="noopener"><i class="fas fa-table-columns"></i> Open the demo</a>
         </div>
       </div>
     </header>
 
     <div class="pd-shot container reveal">
-      <img src="../images/penaltyKicker.png" alt="Penalty Kicker screenshot" />
+      <img src="../images/learnapp.png" alt="LearnApp screenshot" />
     </div>
 
     <section class="pd-section reveal">
@@ -95,17 +103,16 @@
         <div class="pd-grid">
           <div class="pd-block">
             <h2>What I built &amp; why</h2>
-            <!-- PLACEHOLDER: replace with the real story. -->
-            <p>A quick arcade game: aim, shoot, and beat a goalie that gets faster with every goal you score. It is built to be picked up in five seconds and played in a browser tab.</p>
-            <p>Everything is drawn on a single canvas with a hand-rolled game loop - input, physics, collision, and rendering all in plain JavaScript, no engine.</p>
+            <p>Self-teaching a technical topic usually means bouncing between tabs with no structure and nothing to keep you coming back. LearnApp turns that into a guided, gamified path.</p>
+            <p>You pick something you want to learn and answer a couple of quick familiarity questions. The app searches the web for authoritative documentation and lets you approve or reject each source, then an AI generates a source-grounded curriculum, modules and lessons, that you can edit before approving. Each lesson is a distraction-free full-screen player: a short teaching passage followed by mixed exercises, multiple choice, fill-in-the-blank, flashcards, scenario write-ups, and timed true/false speed rounds. Mastering lessons earns XP, builds a daily streak, raises your level, unlocks the next lesson on a vertical path, and schedules the lesson for spaced-repetition review later.</p>
           </div>
           <aside class="pd-block pd-facts">
             <h3>At a glance</h3>
             <!-- PLACEHOLDER: fill in real values. -->
             <dl>
-              <div><dt>Role</dt><dd>Solo build</dd></div>
-              <div><dt>Timeline</dt><dd>PLACEHOLDER</dd></div>
-              <div><dt>Status</dt><dd>PLACEHOLDER</dd></div>
+              <div><dt>Role</dt><dd>Solo - design & build</dd></div>
+              <div><dt>Timeline</dt><dd>4 days</dd></div>
+              <div><dt>Value</dt><dd>Personal Project</dd></div>
             </dl>
           </aside>
         </div>
@@ -115,10 +122,14 @@
     <section class="pd-section reveal">
       <div class="container">
         <h2>Why this stack</h2>
-        <!-- PLACEHOLDER: tighten each reason to what actually drove the choice. -->
         <ul class="pd-stack">
-          <li><span class="pd-stack-name">JavaScript</span><span class="pd-stack-why">Zero build step - it runs anywhere a browser does, which is the whole point of a quick demo.</span></li>
-          <li><span class="pd-stack-name">Canvas API</span><span class="pd-stack-why">Direct pixel control for smooth 60fps animation without pulling in a game engine.</span></li>
+          <li><span class="pd-stack-name">Next.js 16 + React 19</span><span class="pd-stack-why">Server Components and route handlers for the generation pipeline, with a snappy client for the lesson player.</span></li>
+          <li><span class="pd-stack-name">TypeScript</span><span class="pd-stack-why">The curriculum tree, exercise types, and progress model all share one schema end to end.</span></li>
+          <li><span class="pd-stack-name">Tailwind CSS v4</span><span class="pd-stack-why">Drives the custom Duolingo-ish theme with Baloo 2, Nunito, and IBM Plex Mono.</span></li>
+          <li><span class="pd-stack-name">SQLite + Drizzle ORM</span><span class="pd-stack-why">better-sqlite3 for zero-ops local storage; Drizzle for typed queries and migrations. bcryptjs handles 6-digit PIN auth with a session cookie.</span></li>
+          <li><span class="pd-stack-name">Ollama</span><span class="pd-stack-why">llama3.1:8b generates curriculum, lessons, and exercises and grades answers; nomic-embed-text powers retrieval, all running locally.</span></li>
+          <li><span class="pd-stack-name">Brave Search API</span><span class="pd-stack-why">Finds candidate sources; @mozilla/readability, jsdom, and turndown extract clean page content to ground the curriculum.</span></li>
+          <li><span class="pd-stack-name">Vitest + Testing Library</span><span class="pd-stack-why">Covers the exercise logic and progression rules where regressions would be easy to miss.</span></li>
         </ul>
       </div>
     </section>
@@ -126,15 +137,11 @@
     <section class="pd-section reveal">
       <div class="container">
         <h2>Live demo</h2>
-        <!-- PLACEHOLDER: paste a YouTube / Loom embed <iframe> here, or drop in a <video> tag. -->
-        <div class="pd-frame pd-frame--placeholder">
-          <div class="pd-placeholder">
-            <i class="fas fa-circle-play"></i>
-            <span>Demo video coming soon</span>
-          </div>
+        <div class="pd-frame">
+          <iframe src="https://learn-app-demo.netlify.app/app" title="Career Center App demo site" loading="lazy"></iframe>
         </div>
-        <p class="pd-demo-note">Walkthrough video is on the way. Screenshot below in the meantime.</p>
-        <img class="pd-demo-shot" src="../images/penaltyKicker.png" alt="Penalty Kicker screenshot" />
+        <p class="pd-demo-note">Embedded preview of the live demo site.
+          <a href="https://learn-app-demo.netlify.app/" target="_blank" rel="noopener">Open it in a new tab</a> if it doesn't load here.</p>
       </div>
     </section>
 

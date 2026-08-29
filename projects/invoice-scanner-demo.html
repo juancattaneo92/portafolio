@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Invoice Scanner AI — Demo</title>
+<meta name="description" content="A headless microservices pipeline that turns an invoice image into structured data. Follow one document through OCR, an LLM, and storage — four services that never talk to a screen." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke='%235cb92e' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M4 11V6a2 2 0 0 1 2-2h5'/%3E%3Cpath d='M21 4h5a2 2 0 0 1 2 2v5'/%3E%3Cpath d='M28 21v5a2 2 0 0 1-2 2h-5'/%3E%3Cpath d='M11 28H6a2 2 0 0 1-2-2v-5'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='3.6' fill='%23f5c518'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --green:      #5cb92e;
+    --green-deep: #3f9e1f;
+    --green-tint: #eaf6e3;
+    --blue:       #29a9e0;
+    --blue-deep:  #1c8fc4;
+    --blue-tint:  #e2f3fb;
+    --yellow:     #f5c518;
+    --navy:       #14283d;
+
+    --bg:      #ffffff;
+    --bg-soft: #f4f8f3;
+    --card:    #ffffff;
+    --ink:     #14283d;
+    --ink-soft:#516170;
+    --line:    #e5ece3;
+
+    --shadow: 0 4px 22px rgba(20, 40, 61, .07), 0 1px 3px rgba(20, 40, 61, .05);
+    --shadow-lg: 0 14px 44px rgba(20, 40, 61, .12);
+
+    --display: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    --body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --green-tint: #17321a;
+      --blue-tint:  #10303f;
+      --bg:      #0b1a29;
+      --bg-soft: #0e2130;
+      --card:    #122a3d;
+      --ink:     #e9f1ea;
+      --ink-soft:#9db0b9;
+      --line:    #21394b;
+      --shadow: 0 4px 22px rgba(0, 0, 0, .28), 0 1px 3px rgba(0, 0, 0, .3);
+      --shadow-lg: 0 16px 46px rgba(0, 0, 0, .4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --green-tint: #17321a;
+    --blue-tint:  #10303f;
+    --bg:      #0b1a29;
+    --bg-soft: #0e2130;
+    --card:    #122a3d;
+    --ink:     #e9f1ea;
+    --ink-soft:#9db0b9;
+    --line:    #21394b;
+    --shadow: 0 4px 22px rgba(0, 0, 0, .28), 0 1px 3px rgba(0, 0, 0, .3);
+    --shadow-lg: 0 16px 46px rgba(0, 0, 0, .4);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  section { padding: clamp(44px, 8vw, 90px) 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: 0; }
+
+  /* ---- scanner-bracket eyebrow ---- */
+  .eyebrow {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--blue-deep);
+    margin: 0 0 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 16px; height: 16px;
+    border: 2.5px solid var(--green);
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-top-left-radius: 5px;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(33px, 6.6vw, 62px);
+    line-height: 1.02;
+    letter-spacing: -.025em;
+    margin: 0 0 24px;
+    color: var(--navy);
+  }
+  :root[data-theme="dark"] h1,
+  :root:not([data-theme="light"]) h1 { color: var(--ink); }
+  h1 .ai { color: var(--green); }
+
+  .thesis {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(19px, 3vw, 27px);
+    line-height: 1.4;
+    letter-spacing: -.01em;
+    max-width: 22ch;
+    margin: 0 0 28px;
+  }
+  .thesis em { font-style: normal; color: var(--blue-deep); }
+
+  .lede { max-width: 60ch; color: var(--ink-soft); margin: 0 0 28px; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+  .tags li {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  .hero-logo {
+    display: block;
+    width: fit-content;
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 18px 26px;
+    box-shadow: var(--shadow);
+    margin-bottom: 34px;
+    max-width: 100%;
+  }
+  .hero-logo img { display: block; width: 340px; max-width: 100%; height: auto; }
+
+  h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(22px, 3.8vw, 32px);
+    letter-spacing: -.015em;
+    margin: 0 0 8px;
+    color: var(--navy);
+  }
+  :root[data-theme="dark"] h2,
+  :root:not([data-theme="light"]) h2 { color: var(--ink); }
+
+  .section-note {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 0 0 34px;
+  }
+  .section-note code { color: var(--blue-deep); }
+
+  /* ================= PIPELINE MAP ================= */
+  .run-bar {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 34px;
+  }
+  .run-btn {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: .04em;
+    color: #fff;
+    background: var(--green);
+    border: 0;
+    border-radius: 999px;
+    padding: 13px 24px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(92, 185, 46, .28);
+    transition: background .15s ease, transform .1s ease, box-shadow .15s ease;
+  }
+  .run-btn:hover { background: var(--green-deep); box-shadow: 0 8px 22px rgba(92, 185, 46, .34); }
+  .run-btn:active { transform: translateY(1px); }
+  .run-btn:disabled { opacity: .55; cursor: default; box-shadow: none; }
+  .run-btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  .run-status { font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft); }
+  .run-status b { color: var(--green-deep); font-weight: 600; }
+
+  .map {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(20px, 4vw, 34px);
+    margin-bottom: 30px;
+  }
+  .map svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .map .lbl { font-family: var(--mono); font-size: 11px; fill: var(--ink-soft); }
+  .map .lbl-svc { font-family: var(--display); font-weight: 700; font-size: 12px; fill: var(--navy); }
+  :root[data-theme="dark"] .map .lbl-svc,
+  :root:not([data-theme="light"]) .map .lbl-svc { fill: var(--ink); }
+  .map .node-ring { fill: var(--card); stroke: var(--line); stroke-width: 2.5; transition: stroke .35s ease, fill .35s ease; }
+  .map .node.on .node-ring { stroke: var(--blue); }
+  .map .node.on .node-ico { stroke: var(--blue-deep); }
+  .map .node-ico { stroke: var(--ink-soft); transition: stroke .35s ease; }
+  .map .conn { stroke: var(--line); stroke-width: 2.5; transition: stroke .35s ease; }
+  .map .conn.on { stroke: var(--green); }
+  .map .doc-frame { stroke: var(--green); stroke-width: 2.5; fill: none; stroke-linecap: round; }
+  .map .doc-body { fill: var(--green-tint); stroke: var(--green); stroke-width: 2; }
+  .map .scan-dot { fill: var(--yellow); opacity: 0; }
+  .map .scan-dot.on { opacity: 1; }
+
+  /* ================= STAGE CARDS ================= */
+  .stages { display: flex; flex-direction: column; gap: 16px; }
+  .stage {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px clamp(18px, 3vw, 28px) 24px;
+    box-shadow: var(--shadow);
+    transition: opacity .4s ease, transform .4s ease;
+  }
+  /* during a run, spotlight the reached stages and dim the rest */
+  .stages.revealed .stage { opacity: .32; }
+  .stages.revealed .stage.on { opacity: 1; }
+
+  /* scanner corner brackets on each card */
+  .stage::before, .stage::after,
+  .stage .br-bl, .stage .br-br {
+    content: "";
+    position: absolute;
+    width: 16px; height: 16px;
+    border: 2.5px solid var(--green);
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+  .stage::before { top: 10px; left: 10px; border-right: 0; border-bottom: 0; border-top-left-radius: 6px; }
+  .stage::after  { top: 10px; right: 10px; border-left: 0; border-bottom: 0; border-top-right-radius: 6px; }
+  .stage .br-bl { bottom: 10px; left: 10px; border-right: 0; border-top: 0; border-bottom-left-radius: 6px; }
+  .stage .br-br { bottom: 10px; right: 10px; border-left: 0; border-top: 0; border-bottom-right-radius: 6px; }
+  .stages.revealed .stage.on::before,
+  .stages.revealed .stage.on::after,
+  .stages.revealed .stage.on .br-bl,
+  .stages.revealed .stage.on .br-br { opacity: .9; }
+
+  .st-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 3px; }
+  .st-badge {
+    width: 34px; height: 34px; flex-shrink: 0;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--blue-tint);
+    border: 2px solid var(--blue);
+  }
+  .st-badge svg { width: 17px; height: 17px; stroke: var(--blue-deep); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .st-no { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
+  .st-name { font-family: var(--display); font-weight: 700; font-size: 16px; color: var(--navy); }
+  :root[data-theme="dark"] .st-name,
+  :root:not([data-theme="light"]) .st-name { color: var(--ink); }
+  .st-call { font-family: var(--mono); font-size: 12px; color: var(--blue-deep); }
+  .st-time {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--green-deep);
+    background: var(--green-tint);
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .st-sub { font-family: var(--body); font-size: 14px; color: var(--ink-soft); margin: 4px 0 14px; }
+
+  .payload {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--ink);
+  }
+  .payload .k { color: var(--blue-deep); }
+  .payload .s { color: var(--green-deep); }
+  .payload .c { color: var(--ink-soft); }
+
+  .invoice-doc {
+    width: 250px; max-width: 100%;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: #fcfdfb;
+    color: #23241d;
+    padding: 16px;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    line-height: 1.55;
+    box-shadow: var(--shadow);
+  }
+  .invoice-doc .id-name { font-family: var(--display); font-weight: 800; font-size: 12px; color: #2c4a17; }
+  .invoice-doc .id-amt { color: #1c8fc4; }
+  .invoice-doc hr { border: 0; border-top: 1px solid #e2e2d4; margin: 7px 0; }
+  .invoice-doc .row { display: flex; justify-content: space-between; gap: 8px; }
+  .invoice-doc .tot { font-weight: 600; border-top: 1.5px solid #2c4a17; margin-top: 5px; padding-top: 4px; }
+
+  /* ================= TOPOLOGY ================= */
+  .topo-wrap {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(20px, 4vw, 30px);
+  }
+  .topo { width: 100%; height: auto; display: block; overflow: visible; }
+  .topo text { font-family: var(--mono); }
+  .topo .svc-name { font-family: var(--display); font-weight: 700; }
+
+  .topo-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .topo-legend div {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 15px 16px;
+    font-family: var(--body);
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    box-shadow: var(--shadow);
+  }
+  .topo-legend b {
+    font-family: var(--display);
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 13px;
+    display: block;
+    margin-bottom: 4px;
+  }
+  :root[data-theme="dark"] .topo-legend b,
+  :root:not([data-theme="light"]) .topo-legend b { color: var(--ink); }
+  .topo-legend .port {
+    font-family: var(--mono);
+    color: var(--blue-deep);
+    font-size: 11.5px;
+    margin-left: 6px;
+  }
+
+  /* ================= CONTRACT ================= */
+  .table-scroll { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--line); }
+  table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px; background: var(--card); }
+  th, td { text-align: left; padding: 13px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    background: var(--bg-soft);
+  }
+  td .m {
+    display: inline-block; min-width: 46px;
+    color: var(--green-deep); font-weight: 600;
+  }
+  td code { color: var(--blue-deep); }
+  .td-desc { font-family: var(--body); font-size: 14.5px; color: var(--ink); }
+  tr:last-child td { border-bottom: 0; }
+
+  /* ================= WHY ================= */
+  .notes { display: grid; gap: 14px; }
+  .note-item {
+    display: grid; grid-template-columns: 34px 1fr; gap: 15px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+  }
+  .note-key {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--green-tint);
+    color: var(--green-deep);
+    font-family: var(--display); font-weight: 700; font-size: 14px;
+  }
+  .note-item h3 {
+    font-family: var(--display);
+    font-weight: 700; font-size: 15px;
+    margin: 4px 0 5px;
+    color: var(--navy);
+  }
+  :root[data-theme="dark"] .note-item h3,
+  :root:not([data-theme="light"]) .note-item h3 { color: var(--ink); }
+  .note-item p { margin: 0; font-size: 15px; color: var(--ink-soft); }
+  .note-item code { font-family: var(--mono); font-size: 12.5px; color: var(--blue-deep); }
+
+  .tradeoff {
+    margin-top: 22px;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--yellow);
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    padding: 18px 22px;
+    font-size: 15px;
+    color: var(--ink-soft);
+    box-shadow: var(--shadow);
+  }
+  .tradeoff b {
+    font-family: var(--display);
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--navy);
+    display: block;
+    margin-bottom: 6px;
+  }
+  :root[data-theme="dark"] .tradeoff b,
+  :root:not([data-theme="light"]) .tradeoff b { color: var(--ink); }
+
+  /* ================= FOOTER ================= */
+  footer { padding: clamp(44px, 8vw, 72px) 0 90px; }
+  .foot-row { display: flex; flex-wrap: wrap; gap: 14px 26px; align-items: center; }
+  .repo-link {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 13px;
+    color: #fff;
+    background: var(--navy);
+    border-radius: 999px;
+    padding: 12px 22px;
+    text-decoration: none;
+    transition: background .15s ease;
+  }
+  :root[data-theme="dark"] .repo-link,
+  :root:not([data-theme="light"]) .repo-link { background: var(--green); }
+  .repo-link:hover { background: var(--green-deep); }
+  .repo-link:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  .foot-stack { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
+  .disclaimer {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    line-height: 1.75;
+    margin-top: 26px;
+    max-width: 62ch;
+  }
+
+  .theme-toggle {
+    position: fixed;
+    top: 14px; right: 14px;
+    z-index: 20;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .06em;
+    background: var(--card);
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 13px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+  .theme-toggle:hover { color: var(--ink); }
+  .theme-toggle:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+
+  @media (max-width: 560px) {
+    .st-time { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">light / dark</button>
+
+<div class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <section>
+    <span class="hero-logo"><img src="/images/invoicescanner.png" alt="Invoice Scanner AI" width="340" /></span>
+    <p class="eyebrow">Headless service · no UI by design</p>
+    <h1>Invoice&nbsp;Scanner&nbsp;<span class="ai">AI</span></h1>
+    <p class="thesis">A document goes in. Structured data comes out. <em>Four services that never talk to a screen.</em></p>
+    <p class="lede">There's no front end here &mdash; the project exists to practice the shape of a production system, not to be looked at. So this page does the one thing a screenshot can't: it follows a single invoice through the pipeline, one hop at a time, and shows what each service hands to the next.</p>
+    <ul class="tags">
+      <li>Python 3.12</li>
+      <li>FastAPI</li>
+      <li>PaddleOCR</li>
+      <li>Llama 2 · Ollama</li>
+      <li>SQLAlchemy · SQLite</li>
+      <li>httpx</li>
+    </ul>
+  </section>
+
+  <!-- ============ THE SCAN ============ -->
+  <section>
+    <h2>Trace one scan</h2>
+    <p class="section-note">A mock upload &mdash; <code>northwind-INV-2024-0912.png</code> &mdash; followed end to end. Timings are typical for a local run.</p>
+
+    <div class="run-bar">
+      <button class="run-btn" id="runBtn">Run the pipeline</button>
+      <span class="run-status" id="runStatus">Idle &mdash; press run to trace the request.</span>
+    </div>
+
+    <!-- pipeline map: document + 3 nodes, echoing the logo -->
+    <div class="map">
+      <svg viewBox="0 0 620 250" role="img" aria-label="Pipeline map: an invoice document feeds into three connected services — OCR, LLM, and storage.">
+        <!-- doc -->
+        <g>
+          <rect class="doc-body" x="272" y="14" width="76" height="92" rx="6" />
+          <line x1="286" y1="36" x2="326" y2="36" stroke="var(--green-deep)" stroke-width="3" stroke-linecap="round" />
+          <line x1="286" y1="50" x2="334" y2="50" stroke="var(--green-deep)" stroke-width="3" stroke-linecap="round" />
+          <line x1="286" y1="64" x2="320" y2="64" stroke="var(--green-deep)" stroke-width="3" stroke-linecap="round" />
+          <!-- scan brackets around doc -->
+          <path class="doc-frame" d="M258 30 v-14 h14" />
+          <path class="doc-frame" d="M362 30 v-14 h-14" />
+          <path class="doc-frame" d="M258 90 v14 h14" />
+          <path class="doc-frame" d="M362 90 v14 h-14" />
+          <text class="lbl" x="310" y="126" text-anchor="middle">POST /upload · :8000</text>
+        </g>
+
+        <!-- connectors -->
+        <path id="c1" class="conn" d="M310 132 V162 H110 V186" fill="none" />
+        <path id="c2" class="conn" d="M310 132 V186" fill="none" />
+        <path id="c3" class="conn" d="M310 132 V162 H510 V186" fill="none" />
+
+        <!-- nodes -->
+        <g class="node" id="n1" transform="translate(110 210)">
+          <circle class="node-ring" r="26" />
+          <path class="node-ico" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
+                d="M-6 -5 -12 1 -6 7 M6 -5 12 1 6 7 M2 -8 -2 10" />
+          <text class="lbl-svc" y="46" text-anchor="middle">OCR</text>
+          <text class="lbl" y="60" text-anchor="middle">:8001</text>
+        </g>
+        <g class="node" id="n2" transform="translate(310 210)">
+          <circle class="node-ring" r="26" />
+          <path class="node-ico" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+                d="M0 -11 v4 M0 7 v4 M-11 0 h4 M7 0 h4 M-7.8 -7.8 l2.8 2.8 M5 5 l2.8 2.8 M7.8 -7.8 l-2.8 2.8 M-5 5 l-2.8 2.8" />
+          <circle class="node-ico" r="5.5" fill="none" stroke-width="2.2" />
+          <circle r="2.4" fill="var(--yellow)" stroke="none" />
+          <text class="lbl-svc" y="46" text-anchor="middle">LLM</text>
+          <text class="lbl" y="60" text-anchor="middle">:8002</text>
+        </g>
+        <g class="node" id="n3" transform="translate(510 210)">
+          <circle class="node-ring" r="26" />
+          <g class="node-ico" fill="none" stroke-width="2.2" stroke-linecap="round">
+            <ellipse cx="0" cy="-7" rx="10" ry="4" />
+            <path d="M-10 -7 V7 a10 4 0 0 0 20 0 V-7" />
+            <path d="M-10 0 a10 4 0 0 0 20 0" />
+          </g>
+          <text class="lbl-svc" y="46" text-anchor="middle">Storage</text>
+          <text class="lbl" y="60" text-anchor="middle">:8003</text>
+        </g>
+
+        <!-- travelling dot -->
+        <circle class="scan-dot" id="scanDot" r="5" cx="310" cy="132" />
+      </svg>
+    </div>
+
+    <div class="stages" id="stages">
+
+      <!-- 1 -->
+      <div class="stage" data-step="0">
+        <span class="br-bl"></span><span class="br-br"></span>
+        <div class="st-head">
+          <span class="st-badge"><svg viewBox="0 0 24 24"><path d="M4 4h13l3 3v13H4z" /><path d="M9 12h6M9 16h6M12 8h3" /></svg></span>
+          <span class="st-no">01</span>
+          <span class="st-name">API Gateway</span>
+          <span class="st-call">POST /upload</span>
+          <span class="st-time">+0.05s</span>
+        </div>
+        <p class="st-sub">:8000 &mdash; the only public surface. Validates the file, then orchestrates the three internal calls.</p>
+        <div class="invoice-doc" aria-label="Mock invoice image">
+          <div class="id-name">NORTHWIND TRADERS</div>
+          1420 Kettle Creek Rd, Suite 200<br />Portland, OR 97204
+          <hr />
+          INVOICE&nbsp;&nbsp;INV-2024-0912<br />
+          Date 2024-09-12 · Due 2024-10-12<br />
+          Bill to: Juniper Labs LLC
+          <hr />
+          <div class="row"><span>Managed hosting — Sept 2024</span><span class="id-amt">1,200.00</span></div>
+          <div class="row"><span>Overage bandwidth (320 GB)</span><span class="id-amt">400.00</span></div>
+          <div class="row"><span>SSL certificate renewal</span><span class="id-amt">240.00</span></div>
+          <hr />
+          <div class="row"><span>Subtotal</span><span>1,840.00</span></div>
+          <div class="row"><span>Tax (8.5%)</span><span>156.40</span></div>
+          <div class="row tot"><span>Total</span><span>1,996.40</span></div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="stage" data-step="1">
+        <span class="br-bl"></span><span class="br-br"></span>
+        <div class="st-head">
+          <span class="st-badge"><svg viewBox="0 0 24 24"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4M13 5l-2 14" /></svg></span>
+          <span class="st-no">02</span>
+          <span class="st-name">OCR Service</span>
+          <span class="st-call">POST /extract</span>
+          <span class="st-time">+1.87s</span>
+        </div>
+        <p class="st-sub">:8001 &mdash; PaddleOCR reads the pixels. Returns raw text, a confidence score, and page count.</p>
+<div class="payload">NORTHWIND TRADERS
+1420 Kettle Creek Rd, Suite 200
+Portland, OR 97204
+
+INVOICE                 INV-2024-0912
+Date: 2024-09-12    Due: 2024-10-12
+Bill to: Juniper Labs LLC
+
+Description              Qty   Unit      Amount
+Managed hosting Sept 2024  1  1,200.00  1,200.00
+Overage bandwidth 320GB  320      1.25    400.00
+SSL certificate renewal    1    240.00    240.00
+
+              Subtotal              1,840.00
+              Tax (8.5%)              156.40
+              Total                 1,996.40
+
+<span class="c">-> { "confidence": 0.94, "pages": 1 }</span></div>
+      </div>
+
+      <!-- 3 -->
+      <div class="stage" data-step="2">
+        <span class="br-bl"></span><span class="br-br"></span>
+        <div class="st-head">
+          <span class="st-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" /><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.5 5.5l2 2M16.5 16.5l2 2M18.5 5.5l-2 2M7.5 16.5l-2 2" /></svg></span>
+          <span class="st-no">03</span>
+          <span class="st-name">LLM Service</span>
+          <span class="st-call">POST /structure</span>
+          <span class="st-time">+2.42s</span>
+        </div>
+        <p class="st-sub">:8002 &mdash; a local Llama 2 model turns the loose text into JSON that matches the shared schema. The response is parsed and validated before it leaves.</p>
+<div class="payload"><span class="c">// prompt: "Extract vendor_name, invoice_date, invoice_number,</span>
+<span class="c">// total_amount, tax_amount, subtotal_amount, line_items..."</span>
+
+{
+  <span class="k">"vendor_name"</span>:     <span class="s">"Northwind Traders"</span>,
+  <span class="k">"invoice_date"</span>:    <span class="s">"2024-09-12"</span>,
+  <span class="k">"invoice_number"</span>:  <span class="s">"INV-2024-0912"</span>,
+  <span class="k">"total_amount"</span>:    1996.40,
+  <span class="k">"tax_amount"</span>:      156.40,
+  <span class="k">"subtotal_amount"</span>: 1840.00,
+  <span class="k">"line_items"</span>: [
+    { <span class="k">"description"</span>: <span class="s">"Managed hosting — Sept 2024"</span>,
+      <span class="k">"quantity"</span>: 1,   <span class="k">"unit_price"</span>: 1200.00, <span class="k">"line_total"</span>: 1200.00 },
+    { <span class="k">"description"</span>: <span class="s">"Overage bandwidth (320 GB)"</span>,
+      <span class="k">"quantity"</span>: 320, <span class="k">"unit_price"</span>: 1.25,    <span class="k">"line_total"</span>: 400.00 },
+    { <span class="k">"description"</span>: <span class="s">"SSL certificate renewal"</span>,
+      <span class="k">"quantity"</span>: 1,   <span class="k">"unit_price"</span>: 240.00,  <span class="k">"line_total"</span>: 240.00 }
+  ]
+}</div>
+      </div>
+
+      <!-- 4 -->
+      <div class="stage" data-step="3">
+        <span class="br-bl"></span><span class="br-br"></span>
+        <div class="st-head">
+          <span class="st-badge"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3" /><path d="M5 6v12a7 3 0 0 0 14 0V6M5 12a7 3 0 0 0 14 0" /></svg></span>
+          <span class="st-no">04</span>
+          <span class="st-name">Storage Service</span>
+          <span class="st-call">POST /save</span>
+          <span class="st-time">+0.04s</span>
+        </div>
+        <p class="st-sub">:8003 &mdash; writes the invoice and its line items through SQLAlchemy, returns the new id. The gateway then answers the original caller.</p>
+<div class="payload"><span class="c">INSERT INTO invoices   -> id 1</span>
+<span class="c">INSERT INTO line_items -> 3 rows</span>
+
+<span class="c">// 200 response from POST /upload, ~4.38s total</span>
+{
+  <span class="k">"status"</span>:      <span class="s">"success"</span>,
+  <span class="k">"invoice_id"</span>:  1,
+  <span class="k">"filename"</span>:    <span class="s">"northwind-INV-2024-0912.png"</span>,
+  <span class="k">"vendor"</span>:      <span class="s">"Northwind Traders"</span>,
+  <span class="k">"date"</span>:        <span class="s">"2024-09-12"</span>,
+  <span class="k">"total"</span>:       1996.40,
+  <span class="k">"tax"</span>:         156.40,
+  <span class="k">"line_items"</span>:  [ <span class="c">/* 3 items */</span> ]
+}</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ TOPOLOGY ============ -->
+  <section>
+    <h2>Service topology</h2>
+    <p class="section-note">Five processes. One public port. Each service owns its dependencies and can fail without taking the others down.</p>
+
+    <div class="topo-wrap">
+      <svg class="topo" viewBox="0 0 720 300" role="img" aria-label="Diagram: a client calls the API gateway on port 8000, which calls the OCR service on 8001, the LLM service on 8002, and the storage service on 8003. The LLM service calls a local Ollama runtime.">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--ink-soft)" />
+          </marker>
+        </defs>
+
+        <text class="lbl" x="12" y="148" font-size="12" fill="var(--ink-soft)">client</text>
+        <text class="lbl" x="12" y="164" font-size="11" fill="var(--ink-soft)">curl / script</text>
+        <line x1="86" y1="150" x2="150" y2="150" stroke="var(--ink-soft)" stroke-width="1.6" marker-end="url(#arrow)" />
+
+        <rect x="152" y="118" width="150" height="64" rx="12" fill="var(--card)" stroke="var(--green)" stroke-width="2.5" />
+        <text class="svc-name" x="172" y="146" font-size="13" fill="var(--ink)">API GATEWAY</text>
+        <text class="lbl" x="172" y="166" font-size="11" fill="var(--blue-deep)">:8000 · public</text>
+
+        <line x1="302" y1="140" x2="470" y2="62"  stroke="var(--ink-soft)" stroke-width="1.6" marker-end="url(#arrow)" />
+        <line x1="302" y1="150" x2="470" y2="150" stroke="var(--ink-soft)" stroke-width="1.6" marker-end="url(#arrow)" />
+        <line x1="302" y1="160" x2="470" y2="238" stroke="var(--ink-soft)" stroke-width="1.6" marker-end="url(#arrow)" />
+
+        <rect x="472" y="36" width="150" height="54" rx="12" fill="var(--card)" stroke="var(--blue)" stroke-width="2.5" />
+        <text class="svc-name" x="490" y="59" font-size="12" fill="var(--ink)">OCR SERVICE</text>
+        <text class="lbl" x="490" y="77" font-size="11" fill="var(--blue-deep)">:8001 · PaddleOCR</text>
+
+        <rect x="472" y="123" width="150" height="54" rx="12" fill="var(--card)" stroke="var(--blue)" stroke-width="2.5" />
+        <text class="svc-name" x="490" y="146" font-size="12" fill="var(--ink)">LLM SERVICE</text>
+        <text class="lbl" x="490" y="164" font-size="11" fill="var(--blue-deep)">:8002 · Llama 2</text>
+
+        <rect x="472" y="210" width="150" height="54" rx="12" fill="var(--card)" stroke="var(--blue)" stroke-width="2.5" />
+        <text class="svc-name" x="490" y="233" font-size="12" fill="var(--ink)">STORAGE SVC</text>
+        <text class="lbl" x="490" y="251" font-size="11" fill="var(--blue-deep)">:8003 · SQLite</text>
+
+        <line x1="622" y1="150" x2="668" y2="150" stroke="var(--ink-soft)" stroke-width="1.6" stroke-dasharray="3 3" marker-end="url(#arrow)" />
+        <text class="lbl" x="636" y="140" font-size="10" fill="var(--ink-soft)">ollama</text>
+        <text class="lbl" x="636" y="176" font-size="10" fill="var(--ink-soft)">runtime</text>
+      </svg>
+    </div>
+
+    <div class="topo-legend">
+      <div><b>API Gateway<span class="port">:8000</span></b>Validates uploads, sequences the three calls, shapes the final response. Nothing else is exposed.</div>
+      <div><b>OCR Service<span class="port">:8001</span></b>Pixels to text with PaddleOCR. ~200&nbsp;MB of models, CPU-bound, slow to start.</div>
+      <div><b>LLM Service<span class="port">:8002</span></b>Text to schema-shaped JSON via a local model. Memory-hungry, the slowest hop.</div>
+      <div><b>Storage Service<span class="port">:8003</span></b>SQLAlchemy over SQLite. Invoices and line items, plus read endpoints.</div>
+    </div>
+  </section>
+
+  <!-- ============ CONTRACT ============ -->
+  <section>
+    <h2>The contract</h2>
+    <p class="section-note">Everything the outside world can call. All through the gateway on <code>:8000</code>.</p>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>Route</th><th>Does</th><th>Returns</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="m">POST</span><code>/upload</code></td>
+            <td class="td-desc">Send an invoice file. Runs the full OCR &rarr; LLM &rarr; storage pipeline.</td>
+            <td>invoice id + extracted fields + line items</td>
+          </tr>
+          <tr>
+            <td><span class="m">GET</span><code>/status/{id}</code></td>
+            <td class="td-desc">Look up one processed invoice.</td>
+            <td>vendor, date, total, status</td>
+          </tr>
+          <tr>
+            <td><span class="m">GET</span><code>/invoices</code></td>
+            <td class="td-desc">List everything filed so far.</td>
+            <td>array of invoice records</td>
+          </tr>
+          <tr>
+            <td><span class="m">GET</span><code>/health</code></td>
+            <td class="td-desc">Ping all three internal services.</td>
+            <td><code>{ ocr, llm, storage }</code> booleans</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="section-note" style="margin-top:18px;">Each service also serves its own <code>/docs</code> (FastAPI's OpenAPI UI) and <code>/health</code> on its own port.</p>
+  </section>
+
+  <!-- ============ WHY ============ -->
+  <section>
+    <h2>Why four services</h2>
+    <p class="section-note">A single script could do this. Splitting it was the exercise &mdash; and it buys real things.</p>
+
+    <div class="notes">
+      <div class="note-item">
+        <span class="note-key">A</span>
+        <div>
+          <h3>The stages don't look alike</h3>
+          <p>OCR is CPU-bound and carries hundreds of megabytes of models. The LLM step is memory-hungry and slow. Storage is a few milliseconds. As separate processes, each can be scaled, restarted, or moved to its own box without touching the rest.</p>
+        </div>
+      </div>
+      <div class="note-item">
+        <span class="note-key">B</span>
+        <div>
+          <h3>The model is swappable</h3>
+          <p>The LLM service is an HTTP contract, not a library import. Llama 2 today, a hosted model tomorrow &mdash; the OCR and storage services never notice.</p>
+        </div>
+      </div>
+      <div class="note-item">
+        <span class="note-key">C</span>
+        <div>
+          <h3>One door</h3>
+          <p>Only the gateway is public. The internal services bind to localhost and speak a private contract, so there's a single place to handle auth, validation, and rate limiting.</p>
+        </div>
+      </div>
+      <div class="note-item">
+        <span class="note-key">D</span>
+        <div>
+          <h3>Failure stays local</h3>
+          <p>If OCR falls over, <code>/health</code> reports it and <code>/upload</code> returns a clean 4xx &mdash; the LLM and storage services keep serving their read endpoints.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="tradeoff">
+      <b>The honest tradeoff</b>
+      For one user on one machine this is more moving parts than the job needs: five processes to start, network hops between them, and no shared transaction across the write. The point wasn't the smallest thing that works &mdash; it was building it the way a system that has to grow gets built.
+    </p>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="foot-row">
+      <a class="repo-link" href="https://github.com/juancattaneo92/invoice-scanner">View the repository &#8599;</a>
+      <span class="foot-stack">Python · FastAPI · PaddleOCR · Ollama · SQLAlchemy</span>
+    </div>
+    <p class="disclaimer">
+      The traced run on this page is a mock example. The payloads, field names, and response shapes follow the project's Pydantic schemas and the real extraction prompt; the timings are typical for a local run on a laptop. No live services are called.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+  var toggle = document.getElementById("themeToggle");
+  var stored = null;
+  try { stored = localStorage.getItem("is-demo-theme"); } catch (e) {}
+  if (stored === "dark" || stored === "light") root.setAttribute("data-theme", stored);
+
+  toggle.addEventListener("click", function () {
+    var current = root.getAttribute("data-theme");
+    if (!current) {
+      var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      current = prefersDark ? "dark" : "light";
+    }
+    var next = current === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("is-demo-theme", next); } catch (e) {}
+  });
+
+  // ---- pipeline run ----
+  var stagesWrap = document.getElementById("stages");
+  var btn = document.getElementById("runBtn");
+  var status = document.getElementById("runStatus");
+  var stages = Array.prototype.slice.call(stagesWrap.querySelectorAll(".stage"));
+  var nodes = ["n1", "n2", "n3"].map(function (id) { return document.getElementById(id); });
+  var conns = ["c1", "c2", "c3"].map(function (id) { return document.getElementById(id); });
+  var scanDot = document.getElementById("scanDot");
+
+  var labels = [
+    "Gateway received the upload.",
+    "OCR extracted the text (conf 0.94).",
+    "LLM structured the data.",
+    "Storage filed invoice #1. Done in ~4.38s."
+  ];
+  // map stage index -> pipeline node index (stage 0 is the gateway/doc, has no node)
+  var nodeForStage = [-1, 0, 1, 2];
+
+  var reduceMotion = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var timers = [];
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+  function reset() {
+    clearTimers();
+    stagesWrap.classList.remove("revealed");
+    stages.forEach(function (s) { s.classList.remove("on"); });
+    nodes.forEach(function (n) { n.classList.remove("on"); });
+    conns.forEach(function (c) { c.classList.remove("on"); });
+    scanDot.classList.remove("on");
+  }
+
+  function reveal(i) {
+    stages[i].classList.add("on");
+    var ni = nodeForStage[i];
+    if (ni >= 0) {
+      nodes[ni].classList.add("on");
+      conns[ni].classList.add("on");
+    }
+    status.innerHTML = "<b>" + (i + 1) + "/4</b> &nbsp; " + labels[i];
+  }
+
+  function run() {
+    reset();
+    btn.disabled = true;
+    stagesWrap.classList.add("revealed");
+
+    if (reduceMotion) {
+      stages.forEach(function (s) { s.classList.add("on"); });
+      nodes.forEach(function (n) { n.classList.add("on"); });
+      conns.forEach(function (c) { c.classList.add("on"); });
+      status.innerHTML = "<b>4/4</b> &nbsp; " + labels[3];
+      btn.disabled = false;
+      btn.textContent = "Run again";
+      return;
+    }
+
+    scanDot.classList.add("on");
+    var delays = [150, 1150, 2450, 3650, 4250];
+    labels.forEach(function (_, i) {
+      timers.push(setTimeout(function () { reveal(i); }, delays[i]));
+    });
+    timers.push(setTimeout(function () {
+      scanDot.classList.remove("on");
+      btn.disabled = false;
+      btn.textContent = "Run again";
+    }, delays[4]));
+  }
+
+  btn.addEventListener("click", run);
+})();
+</script>
+</body>
+</html>

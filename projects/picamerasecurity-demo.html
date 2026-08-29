@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PiCam Security</title>
+<meta name="description" content="A .NET Raspberry Pi security-camera stack — motion alerts, capture pipeline, and architecture, demoed with mock data.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='10' width='88' height='84' rx='24' fill='%23181214'/%3E%3Ccircle cx='50' cy='54' r='33' fill='%23fff'/%3E%3Ccircle cx='50' cy='54' r='26' fill='%23e13a5c'/%3E%3Ccircle cx='44' cy='49' r='13' fill='%23181214'/%3E%3Ccircle cx='39' cy='43' r='4.5' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { color-scheme: light dark; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #f4f0ef;
+    --surface: #ffffff;
+    --surface-2: #faf6f5;
+    --line: #e6dcd9;
+    --ink: #1b1512;
+    --muted: #6b5f5b;
+    --accent: #c62f4d;
+    --accent-soft: rgba(198, 47, 77, 0.11);
+    --accent-ink: #ffffff;
+    --brand-red: #e13a5c;
+    --alert: #b0680f;
+    --pass: #4f7d1f;
+    --info: #3f5a72;
+    --shadow: 0 1px 2px rgba(40, 20, 24, 0.06), 0 10px 30px rgba(40, 20, 24, 0.07);
+
+    --font-display: "Baloo 2", "Trebuchet MS", "Segoe UI", sans-serif;
+    --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    --radius: 16px;
+    --maxw: 940px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #16110f;
+      --surface: #201814;
+      --surface-2: #29201b;
+      --line: #3a2c25;
+      --ink: #ede4e0;
+      --muted: #9c8b83;
+      --accent: #ef5474;
+      --accent-soft: rgba(239, 84, 116, 0.14);
+      --accent-ink: #2a0d13;
+      --brand-red: #e13a5c;
+      --alert: #f0a44a;
+      --pass: #9ccb50;
+      --info: #7d99b4;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.44), 0 12px 36px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #16110f;
+    --surface: #201814;
+    --surface-2: #29201b;
+    --line: #3a2c25;
+    --ink: #ede4e0;
+    --muted: #9c8b83;
+    --accent: #ef5474;
+    --accent-soft: rgba(239, 84, 116, 0.14);
+    --accent-ink: #2a0d13;
+    --brand-red: #e13a5c;
+    --alert: #f0a44a;
+    --pass: #9ccb50;
+    --info: #7d99b4;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.44), 0 12px 36px rgba(0, 0, 0, 0.4);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); text-underline-offset: 3px; }
+
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
+
+  /* ---- masthead ---- */
+  .masthead {
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .masthead .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 54px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    text-decoration: none;
+  }
+  .brand-mark { width: 30px; height: 30px; flex: none; display: block; }
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .brand-name b { color: var(--brand-red); font-weight: 700; }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 var(--accent-soft); }
+    70% { box-shadow: 0 0 0 6px transparent; }
+    100% { box-shadow: 0 0 0 0 transparent; }
+  }
+  .theme-toggle {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+  .theme-toggle:hover { color: var(--ink); border-color: var(--accent); }
+
+  /* ---- section scaffolding ---- */
+  main { padding: 30px 0 12px; }
+  section { margin: 40px 0; }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 12px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.9rem, 1.2rem + 2.6vw, 2.9rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin: 0 0 16px;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.55rem);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 10px;
+  }
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0 0 4px;
+  }
+  .lede {
+    font-size: clamp(1.02rem, 0.96rem + 0.4vw, 1.16rem);
+    color: var(--ink);
+    max-width: 62ch;
+    margin: 0 0 22px;
+  }
+  .section-intro { color: var(--muted); max-width: 64ch; margin: 0 0 22px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  /* ---- hero ---- */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 26px; padding: 0; list-style: none; }
+  .chips li {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 11px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 0 0 28px;
+  }
+  .stats div { background: var(--surface); padding: 14px 16px; }
+  .stats .n {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .stats .k {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  @media (max-width: 620px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ---- terminal ---- */
+  .terminal { overflow: hidden; }
+  .term-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface-2);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .term-bar .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+  .term-bar .dot.live {
+    background: var(--accent);
+    animation: pulse 2.4s ease-out infinite;
+  }
+  .term-bar span { margin-left: auto; }
+  .term-body {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.75;
+    padding: 16px 18px;
+    height: 360px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    background: var(--surface);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .term-body::-webkit-scrollbar { display: none; }
+  .tl { color: var(--ink); }
+  .tl.cmd { color: var(--accent); }
+  .tl.dim { color: var(--muted); }
+  .tl.alert { color: var(--alert); }
+  .tl.pass { color: var(--pass); }
+  .tl.rule { color: var(--muted); }
+  .caret::after {
+    content: "▋";
+    color: var(--accent);
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ---- diagram: service view ---- */
+  .diagram-scroll { overflow-x: auto; padding: 8px 0; }
+  svg.diagram { display: block; min-width: 560px; width: 100%; height: auto; }
+  svg.diagram .box { fill: var(--surface-2); stroke: var(--line); stroke-width: 1.5; }
+  svg.diagram .hub { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
+  svg.diagram .link { stroke: var(--muted); stroke-width: 1.4; stroke-dasharray: 4 4; }
+  svg.diagram text { fill: var(--ink); font-family: var(--font-mono); font-size: 12px; }
+  svg.diagram text.sub { fill: var(--muted); font-size: 10px; }
+  svg.diagram text.hub-t { fill: var(--ink); }
+
+  .roadmap-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--alert);
+    border: 1px solid var(--alert);
+    border-radius: 5px;
+    padding: 2px 7px;
+    margin-left: 8px;
+    vertical-align: 2px;
+  }
+
+  /* ---- layer stack ---- */
+  .stack { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+  .layer {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 13px 16px;
+  }
+  .layer .lname {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .layer .lbody { font-size: 14px; color: var(--ink); }
+  .layer .lbody code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 6px;
+    white-space: nowrap;
+  }
+  .arrow { text-align: center; color: var(--muted); font-size: 13px; line-height: 1.9; }
+  .layer.tests {
+    border-style: dashed;
+    border-color: var(--accent);
+  }
+
+  /* ---- capabilities ---- */
+  .modes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .mode { padding: 16px 17px; }
+  .mode .idx {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .mode p { margin: 6px 0 0; font-size: 13.5px; color: var(--muted); }
+
+  /* ---- mock output ---- */
+  .frames { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .frame { padding: 12px; }
+  .frame canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 7px;
+    border: 1px solid var(--line);
+    background: #000;
+  }
+  .frame .meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 9px;
+    line-height: 1.5;
+  }
+  .frame .meta b { color: var(--ink); font-weight: 500; }
+  .verdict { color: var(--pass); }
+
+  /* ---- code + demonstrates ---- */
+  .split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 22px; align-items: start; }
+  @media (max-width: 760px) { .split { grid-template-columns: 1fr; } }
+  pre.code {
+    margin: 0;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+  }
+  pre.code .kw { color: var(--accent); }
+  pre.code .typ { color: var(--ink); font-weight: 600; }
+  pre.code .str { color: var(--pass); }
+  pre.code .com { color: var(--muted); font-style: italic; }
+  pre.code .num { color: var(--alert); }
+  pre.code .fn { color: var(--ink); }
+
+  ul.points { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+  ul.points li { padding-left: 20px; position: relative; font-size: 14px; }
+  ul.points li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 9px;
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  ul.points b { font-weight: 600; }
+
+  /* ---- footer ---- */
+  footer {
+    border-top: 1px solid var(--line);
+    margin-top: 56px;
+    padding: 26px 0 46px;
+    background: var(--surface);
+  }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 26px; align-items: baseline; }
+  footer .fmeta {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+  }
+  footer .fmeta b { color: var(--ink); font-weight: 500; }
+
+  .note {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    border-left: 2px solid var(--line);
+    padding-left: 12px;
+    margin-top: 16px;
+    line-height: 1.6;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .term-bar .dot.live, .caret::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="#hero">
+      <svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <rect x="6" y="10" width="88" height="84" rx="24" fill="#181214"></rect>
+        <path d="M74 8c4 3 6 8 5 13-5 1-10-1-13-5 3-4 8-6 8-8z" fill="#7bb026"></path>
+        <path d="M88 14c1 4 0 9-4 12-3-3-4-8-2-12 3-1 5-1 6 0z" fill="#a5d65b"></path>
+        <circle cx="50" cy="54" r="33" fill="#ffffff"></circle>
+        <circle cx="50" cy="54" r="26" fill="#e13a5c"></circle>
+        <circle cx="44" cy="49" r="13" fill="#181214"></circle>
+        <circle cx="39" cy="43" r="4.5" fill="#ffffff"></circle>
+        <path d="M58 66c5-2 8-7 8-13" fill="none" stroke="#3f5a72" stroke-width="4" stroke-linecap="round"></path>
+      </svg>
+      <span class="brand-name"><b>PiCam</b> Security</span>
+    </a>
+    <button class="theme-toggle" id="themeToggle" type="button">Theme</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="hero">
+    <p class="eyebrow">Home security &nbsp;·&nbsp; Raspberry Pi &nbsp;·&nbsp; C# / .NET</p>
+    <h1>A Raspberry Pi security camera that runs without the Raspberry Pi.</h1>
+    <p class="lede">
+      PiCam Security turns a Pi and a camera module into a surveillance node &mdash; continuous
+      capture, timelapse, OpenCV filtering, and frame-diff <b>motion alerts</b>. The whole
+      pipeline sits behind a small set of interfaces, so it develops, tests, and demos on any
+      laptop against a synthetic <b>mock camera</b> &mdash; no hardware in the loop.
+    </p>
+
+    <ul class="chips">
+      <li>C# / .NET 9</li>
+      <li>netstandard2.1 core</li>
+      <li>OpenCvSharp 4.13</li>
+      <li>NUnit + Moq</li>
+      <li>Raspberry Pi / Linux</li>
+    </ul>
+
+    <div class="stats">
+      <div><div class="n">3</div><div class="k">projects &middot; core / app / tests</div></div>
+      <div><div class="n">14</div><div class="k">unit tests</div></div>
+      <div><div class="n">5</div><div class="k">capture modes</div></div>
+      <div><div class="n">2</div><div class="k">camera backends</div></div>
+    </div>
+
+    <div class="card terminal">
+      <div class="term-bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot live"></span>
+        dotnet run &nbsp;&mdash;&nbsp; RpiCamera.Functionality
+        <span id="termState">mock feed</span>
+      </div>
+      <div class="term-body" id="termBody" aria-label="Recorded console session"></div>
+    </div>
+    <p class="note">
+      Recorded session, mock camera mode. Every log line and prompt is the program's real output.
+    </p>
+  </section>
+
+  <section id="service">
+    <p class="eyebrow">Architecture &mdash; service view <span class="roadmap-tag">roadmap</span></p>
+    <h2>Module boundaries drawn for extraction into services.</h2>
+    <p class="section-intro">
+      Today it runs as one .NET process. The seams are deliberate: each capability owns its
+      logic behind an interface, so it can be lifted into an independently deployable service
+      that talks over a broker &mdash; a natural fit for the intermittent, event-driven traffic
+      of a camera node (a frame captured, motion detected, an image stored).
+    </p>
+    <div class="card" style="padding:16px">
+      <div class="diagram-scroll">
+        <svg class="diagram" viewBox="0 0 720 300" role="img" aria-label="Hub-and-spoke diagram: capture, processing, motion, and gallery services around a message broker">
+          <line class="link" x1="360" y1="150" x2="150" y2="55"></line>
+          <line class="link" x1="360" y1="150" x2="570" y2="55"></line>
+          <line class="link" x1="360" y1="150" x2="150" y2="245"></line>
+          <line class="link" x1="360" y1="150" x2="570" y2="245"></line>
+
+          <rect class="hub" x="255" y="120" width="210" height="60" rx="16"></rect>
+          <text class="hub-t" x="285" y="146">Message broker</text>
+          <text class="sub" x="285" y="164">MQTT / RabbitMQ</text>
+
+          <rect class="box" x="40" y="25" width="220" height="60" rx="16"></rect>
+          <text x="58" y="51">Capture Service</text>
+          <text class="sub" x="58" y="69">ICamera &middot; settings &middot; framing</text>
+
+          <rect class="box" x="460" y="25" width="220" height="60" rx="16"></rect>
+          <text x="478" y="51">Processing Service</text>
+          <text class="sub" x="478" y="69">OpenCV filters &middot; grayscale &middot; edges</text>
+
+          <rect class="box" x="40" y="215" width="220" height="60" rx="16"></rect>
+          <text x="58" y="241">Motion Service</text>
+          <text class="sub" x="58" y="259">frame diff &middot; threshold &middot; events</text>
+
+          <rect class="box" x="460" y="215" width="220" height="60" rx="16"></rect>
+          <text x="478" y="241">Gallery API</text>
+          <text class="sub" x="478" y="259">REST &middot; storage &middot; retrieval</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section id="layers">
+    <p class="eyebrow">Architecture &mdash; what runs today</p>
+    <h2>Dependencies point inward, at interfaces.</h2>
+    <p class="section-intro">
+      Consumers depend on <code>ICamera</code>, <code>ICameraController</code>, and
+      <code>IImageProcessor</code> &mdash; never on a concrete class. Swapping hardware for the
+      mock, or adding a service host on top, touches nothing in the middle.
+    </p>
+    <div class="stack">
+      <div class="layer">
+        <div class="lname">Consumers</div>
+        <div class="lbody">Console app &mdash; 5 demo modes &nbsp;·&nbsp; <span style="color:var(--muted)">future: REST / gRPC host</span></div>
+      </div>
+      <div class="arrow" aria-hidden="true">&#9660; depends on</div>
+      <div class="layer">
+        <div class="lname">Abstractions &middot; RpiCamera.Core/Interfaces</div>
+        <div class="lbody"><code>ICamera</code> &nbsp; <code>ICameraController</code> &nbsp; <code>IImageProcessor</code></div>
+      </div>
+      <div class="arrow" aria-hidden="true">&#9650; implemented by</div>
+      <div class="layer">
+        <div class="lname">Implementations &middot; RpiCamera.Core/Implementations</div>
+        <div class="lbody"><code>MockCamera</code> &nbsp; <code>RpiCamera</code> &nbsp; <code>CameraController</code> &nbsp; <code>ImageProcessor</code> &nbsp; <code>CameraFactory</code></div>
+      </div>
+      <div class="arrow" aria-hidden="true">&#9660; built on</div>
+      <div class="layer">
+        <div class="lname">Platform</div>
+        <div class="lbody">OpenCvSharp (OpenCV) &nbsp;·&nbsp; .NET / netstandard2.1 &nbsp;·&nbsp; runs on Linux (Pi) and Windows</div>
+      </div>
+      <div class="arrow" aria-hidden="true">&nbsp;</div>
+      <div class="layer tests">
+        <div class="lname">RpiCamera.Tests &middot; NUnit + Moq</div>
+        <div class="lbody">14 tests against the mock and the controller &mdash; no camera, no filesystem assumptions, CI-safe.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="modes">
+    <p class="eyebrow">Capabilities</p>
+    <h2>Five capture modes, one controller.</h2>
+    <p class="section-intro">
+      Each is a thin entry point over <code style="font-family:var(--font-mono);font-size:12.5px">CameraController</code> and
+      <code style="font-family:var(--font-mono);font-size:12.5px">ImageProcessor</code>. Selectable from the menu at runtime.
+    </p>
+    <div class="modes">
+      <div class="card mode">
+        <div class="idx">01</div><h3>Basic Capture</h3>
+        <p>Single frame, encoded to JPEG at a configurable quality, written to disk with size and timestamp logged.</p>
+      </div>
+      <div class="card mode">
+        <div class="idx">02</div><h3>Sequence Capture</h3>
+        <p>Burst of N frames with a fixed inter-shot delay; returns the list of saved paths.</p>
+      </div>
+      <div class="card mode">
+        <div class="idx">03</div><h3>Timelapse</h3>
+        <p>Background task on a <code style="font-size:11.5px;font-family:var(--font-mono)">CancellationToken</code>, capturing on an interval until stopped.</p>
+      </div>
+      <div class="card mode">
+        <div class="idx">04</div><h3>Image Processing</h3>
+        <p>OpenCV pipeline &mdash; grayscale, Gaussian blur, Canny edge detection, resize, timestamp overlay.</p>
+      </div>
+      <div class="card mode" style="border-color:var(--accent)">
+        <div class="idx" style="color:var(--accent)">05 &middot; core feature</div><h3>Motion Detection</h3>
+        <p>Absolute frame difference, binary threshold, changed-pixel ratio against a tunable threshold; saves the frame and raises an event on every trigger.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="output">
+    <p class="eyebrow">Mock camera output</p>
+    <h2>Synthetic frames, real algorithms.</h2>
+    <p class="section-intro">
+      <code>MockCamera</code> paints a random background, drops a handful of coloured shapes, and
+      burns in a frame counter and device string &mdash; the same <code>Mat</code> shape a real
+      capture returns. Below, the actual motion-detection routine runs on two of them.
+    </p>
+    <div class="frames">
+      <div class="card frame">
+        <canvas id="f1" width="360" height="270"></canvas>
+        <div class="meta"><b>frame 07</b> &nbsp;·&nbsp; 640&times;480 &nbsp;·&nbsp; Q85 &nbsp;·&nbsp; CV_8UC3</div>
+      </div>
+      <div class="card frame">
+        <canvas id="f2" width="360" height="270"></canvas>
+        <div class="meta"><b>frame 08</b> &nbsp;·&nbsp; 640&times;480 &nbsp;·&nbsp; Q85 &nbsp;·&nbsp; CV_8UC3</div>
+      </div>
+      <div class="card frame">
+        <canvas id="fdiff" width="360" height="270"></canvas>
+        <div class="meta">
+          <b>Absdiff &rarr; threshold(25)</b><br>
+          changed pixels <span id="ratioOut">&mdash;</span> &nbsp;vs&nbsp; threshold <b>5.0%</b><br>
+          <span class="verdict" id="verdictOut">&mdash;</span>
+        </div>
+      </div>
+      <div class="card frame">
+        <canvas id="fedge" width="360" height="270"></canvas>
+        <div class="meta"><b>Canny edge detection</b> &nbsp;·&nbsp; grayscale &rarr; blur &rarr; edges</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="code">
+    <p class="eyebrow">The seam</p>
+    <h2>One interface, two implementations &mdash; the pipeline never knows which.</h2>
+    <div class="split">
+      <pre class="code" aria-label="C# source excerpt"><span class="com">// RpiCamera.Core/Interfaces/ICamera.cs</span>
+<span class="kw">public interface</span> <span class="typ">ICamera</span> : <span class="typ">IDisposable</span>
+{
+    <span class="kw">bool</span> <span class="fn">Initialize</span>();
+    <span class="kw">byte</span>[] <span class="fn">CaptureImage</span>();
+    <span class="typ">Mat</span>  <span class="fn">CaptureFrame</span>();
+    <span class="kw">bool</span> IsReady { <span class="kw">get</span>; }
+    <span class="typ">CameraSettings</span> Settings { <span class="kw">get</span>; }
+}
+
+<span class="com">// Startup picks the implementation once.</span>
+<span class="typ">ICamera</span> camera = <span class="typ">CameraFactory</span>.CreateCamera(settings, isMock: <span class="kw">true</span>);
+<span class="kw">var</span> controller = <span class="kw">new</span> <span class="typ">CameraController</span>(camera, <span class="kw">new</span> <span class="typ">ImageProcessor</span>());
+
+<span class="com">// Everything downstream is identical for mock and hardware.</span>
+controller.CaptureAndSave(<span class="str">"CapturedImages-Basic/frame_001.jpg"</span>);
+controller.CaptureSequence(count: <span class="num">10</span>, delayMS: <span class="num">200</span>, outputDir);</pre>
+
+      <ul class="points">
+        <li><b>Hardware abstraction.</b> Real Pi camera and synthetic mock implement the same <code style="font-size:12px;font-family:var(--font-mono)">ICamera</code>; the choice is a boolean at startup.</li>
+        <li><b>Dependency inversion.</b> Controllers and demos are constructed with interfaces, so implementations are injected and mocked.</li>
+        <li><b>Testable without hardware.</b> 14 NUnit tests, Moq for collaborators, deterministic, runs in CI on any OS.</li>
+        <li><b>Computer vision.</b> OpenCV via OpenCvSharp &mdash; grayscale, Gaussian blur, Canny, resize, frame-diff motion.</li>
+        <li><b>Cross-platform .NET.</b> <code style="font-size:12px;font-family:var(--font-mono)">netstandard2.1</code> core library; Linux runtime for the Pi, Windows for dev.</li>
+        <li><b>Focused modules.</b> Core / Functionality / Tests, each with a single responsibility and a clear public surface.</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="fmeta"><b>PiCam Security</b> &mdash; portfolio project</span>
+    <span class="fmeta">.NET 9 &middot; netstandard2.1 &middot; OpenCvSharp 4.13 &middot; NUnit 4 &middot; Moq</span>
+    <span class="fmeta"><b>14</b> unit tests &middot; <b>5</b> capture modes &middot; <b>2</b> camera backends</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- theme toggle ---------- */
+  var root = document.documentElement;
+  var btn = document.getElementById("themeToggle");
+  function stored() { try { return localStorage.getItem("picam-theme"); } catch (e) { return null; } }
+  function apply(t) { if (t === "dark" || t === "light") root.setAttribute("data-theme", t); }
+  apply(stored());
+  btn.addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    if (!cur) {
+      var sysDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      cur = sysDark ? "dark" : "light";
+    }
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("picam-theme", next); } catch (e) {}
+    draw();
+  });
+
+  /* ---------- terminal replay ---------- */
+  var SCRIPT = [
+    { t: "$ dotnet run --project RpiCamera.Functionality", c: "cmd" },
+    { t: "===============================================================", c: "rule" },
+    { t: "Raspberry Pi Camera Abstraction - Camera Application" },
+    { t: "===============================================================", c: "rule" },
+    { t: "Use Mock Camera? (y/n): ", type: "y" },
+    { t: "" },
+    { t: "Select an option to run:", c: "dim" },
+    { t: " 1. Basic Capture Demo", c: "dim" },
+    { t: " 2. Sequence Capture Demo", c: "dim" },
+    { t: " 3. Timelapse Demo", c: "dim" },
+    { t: " 4. ImageProcessing Demo", c: "dim" },
+    { t: " 5. Motion Detection Demo", c: "dim" },
+    { t: "Enter your choice: ", type: "5" },
+    { t: "" },
+    { t: "=== Motion Detection ====" },
+    { t: "Initializing Camera: Mock Camera" },
+    { t: "[MockCamera][Initialize] Initializing ...", c: "dim" },
+    { t: "[MockCamera][Initialize] Settings: Resolution: 640x480, FPS: 30, Quality: 85", c: "dim" },
+    { t: "[MockCamera][Initialize] Initialization successful.", c: "pass" },
+    { t: "Starting Motion Detection" },
+    { t: "Press any key to stop ...", c: "dim" },
+    { t: "Motion Detected. Saved: motion_20260829_142233_674.jpg", c: "alert" },
+    { t: "Motion Detected. Saved: motion_20260829_142235_182.jpg", c: "alert" },
+    { t: "" },
+    { t: "Motion detection stopped" },
+    { t: "Frames Processed: 34" },
+    { t: "Motion Events: 12" },
+    { t: "[MockCamera][Release] Resources released.", c: "dim" }
+  ];
+
+  var body = document.getElementById("termBody");
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+
+  function renderStatic() {
+    body.innerHTML = "";
+    SCRIPT.forEach(function (ln) {
+      var d = document.createElement("div");
+      d.className = "tl " + (ln.c || "");
+      d.textContent = ln.t + (ln.type || "");
+      body.appendChild(d);
+    });
+  }
+
+  async function replay() {
+    while (true) {
+      body.innerHTML = "";
+      for (var i = 0; i < SCRIPT.length; i++) {
+        var ln = SCRIPT[i];
+        var d = document.createElement("div");
+        d.className = "tl " + (ln.c || "");
+        d.textContent = ln.t;
+        body.appendChild(d);
+        if (ln.type) {
+          d.classList.add("caret");
+          await sleep(320);
+          for (var j = 0; j < ln.type.length; j++) {
+            d.textContent = ln.t + ln.type.slice(0, j + 1);
+            await sleep(90);
+          }
+          d.classList.remove("caret");
+          await sleep(360);
+        } else {
+          await sleep(70 + Math.random() * 90);
+        }
+        body.scrollTop = body.scrollHeight;
+      }
+      await sleep(4200);
+    }
+  }
+
+  if (reduce) { renderStatic(); } else { replay(); }
+
+  /* ---------- mock frame rendering ---------- */
+  function rng(seed) {
+    return function () {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  function css(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  // Draw a MockCamera-style frame onto ctx of size w x h. Returns circle list.
+  function paintFrame(ctx, w, h, seed, frameNo) {
+    var r = rng(seed);
+    var b1 = 50 + Math.floor(r() * 50), b2 = 50 + Math.floor(r() * 50), b3 = 50 + Math.floor(r() * 50);
+    ctx.fillStyle = "rgb(" + b1 + "," + b2 + "," + b3 + ")";
+    ctx.fillRect(0, 0, w, h);
+    var n = 3 + Math.floor(r() * 5);
+    var s = w / 640;
+    for (var i = 0; i < n; i++) {
+      var cx = (50 + r() * 540) * s;
+      var cy = (50 + r() * 380) * s;
+      var rad = (10 + r() * 40) * s;
+      ctx.fillStyle = "rgb(" + Math.floor(r() * 255) + "," + Math.floor(r() * 255) + "," + Math.floor(r() * 255) + ")";
+      ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.fillStyle = "#fff";
+    ctx.font = Math.round(13 * s) + "px 'IBM Plex Mono', monospace";
+    ctx.fillText("Frame: " + frameNo + ", Time: 2026-08-29 14:22:" + (30 + frameNo), 10 * s, 22 * s);
+    ctx.font = Math.round(11 * s) + "px 'IBM Plex Mono', monospace";
+    ctx.fillText("Device: MockCamera - 640x480", 10 * s, 40 * s);
+  }
+
+  function offscreen(w, h) {
+    var c = document.createElement("canvas"); c.width = w; c.height = h; return c;
+  }
+
+  function draw() {
+    var W = 360, H = 270;
+
+    var c1 = document.getElementById("f1");
+    var c2 = document.getElementById("f2");
+    paintFrame(c1.getContext("2d"), W, H, 70701, 7);
+    paintFrame(c2.getContext("2d"), W, H, 99811, 8);
+
+    // motion diff — the real DetectMotion algorithm
+    var a = offscreen(W, H), b = offscreen(W, H);
+    paintFrame(a.getContext("2d"), W, H, 70701, 7);
+    paintFrame(b.getContext("2d"), W, H, 99811, 8);
+    var da = a.getContext("2d").getImageData(0, 0, W, H).data;
+    var db = b.getContext("2d").getImageData(0, 0, W, H).data;
+
+    var diff = document.getElementById("fdiff").getContext("2d");
+    var out = diff.createImageData(W, H);
+    var changed = 0, minx = W, miny = H, maxx = 0, maxy = 0;
+    var fg = css("--accent") || "#46cabd";
+    for (var p = 0; p < W * H; p++) {
+      var k = p * 4;
+      var ga = 0.299 * da[k] + 0.587 * da[k + 1] + 0.114 * da[k + 2];
+      var gb = 0.299 * db[k] + 0.587 * db[k + 1] + 0.114 * db[k + 2];
+      var moved = Math.abs(ga - gb) > 25;
+      var v = moved ? 235 : 14;
+      out.data[k] = v; out.data[k + 1] = v; out.data[k + 2] = v; out.data[k + 3] = 255;
+      if (moved) {
+        changed++;
+        var x = p % W, y = (p / W) | 0;
+        if (x < minx) minx = x; if (x > maxx) maxx = x;
+        if (y < miny) miny = y; if (y > maxy) maxy = y;
+      }
+    }
+    diff.putImageData(out, 0, 0);
+    if (changed > 0) {
+      diff.strokeStyle = fg; diff.lineWidth = 2;
+      diff.strokeRect(minx, miny, maxx - minx, maxy - miny);
+    }
+    var ratio = (changed / (W * H)) * 100;
+    document.getElementById("ratioOut").textContent = ratio.toFixed(1) + "%";
+    document.getElementById("verdictOut").textContent =
+      ratio > 5 ? "ratio > threshold  →  MOTION EVENT, frame saved"
+                : "ratio < threshold  →  no event";
+
+    // edge detection sketch — strokes on black
+    var e = document.getElementById("fedge").getContext("2d");
+    e.fillStyle = "#0a0a0a"; e.fillRect(0, 0, W, H);
+    var re = rng(70701), s = W / 640;
+    e.strokeStyle = "#eaeaea"; e.lineWidth = 1;
+    for (var q = 0; q < 6; q++) {
+      var ex = (50 + re() * 540) * s, ey = (50 + re() * 380) * s, er = (10 + re() * 40) * s;
+      e.beginPath(); e.arc(ex, ey, er, 0, Math.PI * 2); e.stroke();
+    }
+    e.strokeStyle = "#9a9a9a";
+    e.strokeText("edges: 2026-08-29 14:22:37", 10 * s, 22 * s);
+  }
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(draw);
+  }
+  draw();
+})();
+</script>
+
+</body>
+</html>

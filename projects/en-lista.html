@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pooch. JC Cattaneo</title>
-  <meta name="description" content="A MERN app that matches dog owners and helps them set up playdates." />
+  <title>En Lista. JC Cattaneo</title>
+  <meta name="description" content="A restaurant waitlist app - guests join from their phone and watch their spot in real time, staff run the queue from a tablet." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,22 +73,27 @@
     <header class="pd-hero reveal">
       <div class="container">
         <a href="../index.html#projects" class="pd-breadcrumb"><i class="fas fa-arrow-left"></i> All projects</a>
-        <span class="section-label"><span class="label-num">/</span> Social app</span>
-        <h1>Pooch</h1>
-        <p class="pd-tagline">A MERN app that matches dog owners and helps them set up playdates.</p>
+        <span class="section-label"><span class="label-num">/</span> Restaurant waitlist app</span>
+        <h1>En Lista</h1>
+        <p class="pd-tagline">Guests join the restaurant waitlist from their phone and watch their spot move up in real time; staff run the whole queue from a tablet.</p>
         <div class="pd-tags">
-          <span>MongoDB</span>
-          <span>React</span>
-          <span>Node.js</span>
+          <span>Next.js 16</span>
+          <span>React 19</span>
+          <span>TypeScript</span>
+          <span>Supabase</span>
+          <span>Tailwind CSS v4</span>
+          <span>bcryptjs</span>
+          <span>web-push</span>
         </div>
         <div class="pd-actions">
-          <a href="https://github.com/paulobocanegra/Pooch-MERN-project" class="btn btn-ghost" target="_blank" rel="noopener"><i class="fab fa-github"></i> View repo</a>
+          <a href="https://enlista-waitlist-demo.netlify.app/" class="btn btn-primary" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Open live site</a>
+          <a href="https://enlista-waitlist-demo.netlify.app/app" class="btn btn-ghost" target="_blank" rel="noopener"><i class="fas fa-table-columns"></i> Open the demo</a>
         </div>
       </div>
     </header>
 
     <div class="pd-shot container reveal">
-      <img src="../images/pooch.png" alt="Pooch screenshot" />
+      <img src="../images/enlista.png" alt="En Lista screenshot" />
     </div>
 
     <section class="pd-section reveal">
@@ -96,17 +101,17 @@
         <div class="pd-grid">
           <div class="pd-block">
             <h2>What I built &amp; why</h2>
-            <!-- PLACEHOLDER: replace with the real story. -->
-            <p>Pooch pairs up dog owners nearby and helps them arrange meetups for their dogs. Profiles cover the dog as much as the person - size, energy, temperament - so matches actually make sense.</p>
-            <p>Built as a MERN app with a small team: React on the front end, Express and MongoDB behind it. My focus was the matching flow and the profile data model.</p>
+            <p>EnLista Restaurant waitlist app. Guests join from their phone, pick a party size, and watch their spot move up the line in real time, with a push notification the moment their table is ready. Staff run the whole queue from a tablet: notify, check in, seat, no-show, with a live table count, a service-pace control, daily history and CSV export.</p>
+<!-- <            <p>Paper waitlists and buzzers keep guests tethered to the host stand and give staff no real picture of the queue. En Lista moves the whole thing onto phones and a tablet.</p>
+            <p>A guest joins from their phone, picks a party size, and watches their spot move up the line in real time, with a push notification the moment their table is ready. Staff run the queue from a tablet: notify, check in, seat, and mark no-shows, with a live table count, a service-pace control, daily history, and CSV export.</p>> -->
           </div>
           <aside class="pd-block pd-facts">
             <h3>At a glance</h3>
             <!-- PLACEHOLDER: fill in real values. -->
             <dl>
-              <div><dt>Role</dt><dd>Group project</dd></div>
-              <div><dt>Timeline</dt><dd>PLACEHOLDER</dd></div>
-              <div><dt>Status</dt><dd>PLACEHOLDER</dd></div>
+              <div><dt>Role</dt><dd>Solo - designed & built</dd></div>
+              <div><dt>Timeline</dt><dd>4 days</dd></div>
+              <div><dt>Value</dt><dd>Personal Project</dd></div>
             </dl>
           </aside>
         </div>
@@ -116,27 +121,25 @@
     <section class="pd-section reveal">
       <div class="container">
         <h2>Why this stack</h2>
-        <!-- PLACEHOLDER: tighten each reason to what actually drove the choice. -->
         <ul class="pd-stack">
-          <li><span class="pd-stack-name">MongoDB</span><span class="pd-stack-why">A flexible document model fit the evolving shape of profiles and match data during rapid iteration.</span></li>
-          <li><span class="pd-stack-name">React</span><span class="pd-stack-why">The component model keeps each piece - menu, event list, gallery - isolated and easy to restyle.</span></li>
-          <li><span class="pd-stack-name">Node.js</span><span class="pd-stack-why">One language across client and server cut context switching and let helpers be shared.</span></li>
+          <li><span class="pd-stack-name">Next.js 16 + React 19</span><span class="pd-stack-why">App Router route handlers for the queue API and a fast, phone-first UI for guests and staff.</span></li>
+          <li><span class="pd-stack-name">TypeScript</span><span class="pd-stack-why">One shared model for parties, states, and the tablet dashboard keeps the queue logic consistent.</span></li>
+          <li><span class="pd-stack-name">Supabase</span><span class="pd-stack-why">Postgres plus realtime subscriptions push line-position changes to every device instantly.</span></li>
+          <li><span class="pd-stack-name">Tailwind CSS v4</span><span class="pd-stack-why">Rapid, consistent styling across the guest phone view and the denser staff tablet layout.</span></li>
+          <li><span class="pd-stack-name">bcryptjs</span><span class="pd-stack-why">Hashes staff passwords so the tablet console has real, low-friction auth.</span></li>
+          <li><span class="pd-stack-name">web-push</span><span class="pd-stack-why">Sends the "your table is ready" notification even when the guest has closed the tab.</span></li>
         </ul>
       </div>
-    </section>
-
+    </section> 
+    
     <section class="pd-section reveal">
       <div class="container">
         <h2>Live demo</h2>
-        <!-- PLACEHOLDER: paste a YouTube / Loom embed <iframe> here, or drop in a <video> tag. -->
-        <div class="pd-frame pd-frame--placeholder">
-          <div class="pd-placeholder">
-            <i class="fas fa-circle-play"></i>
-            <span>Demo video coming soon</span>
-          </div>
+        <div class="pd-frame">
+          <iframe src="https://enlista-waitlist-demo.netlify.app/app" title="EnLista Waitlist live site" loading="lazy"></iframe>
         </div>
-        <p class="pd-demo-note">Walkthrough video is on the way. Screenshot below in the meantime.</p>
-        <img class="pd-demo-shot" src="../images/pooch.png" alt="Pooch screenshot" />
+        <p class="pd-demo-note">Embedded preview of the EnLista Waitlist site.
+          <a href="https://enlista-waitlist-demo.netlify.app/app" target="_blank" rel="noopener">Open the interactive demo waitlist app</a> for the full app with sample data.</p>
       </div>
     </section>
 
