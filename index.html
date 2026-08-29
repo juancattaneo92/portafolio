@@ -40,9 +40,9 @@
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
-      <li><a href="#game">Game</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#resume">Resume</a></li>
+      <li><a href="#game">Game</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
@@ -61,9 +61,9 @@
     <ul class="mobile-menu-links">
       <li><a href="#about">About</a></li>
       <li><a href="#skills">Skills</a></li>
-      <li><a href="#game">Game</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#resume">Resume</a></li>
+      <li><a href="#game">Game</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
@@ -104,7 +104,7 @@
           <h2>Who am I?</h2>
           <p>I'm a Software Engineer based in the Bay Area with 5+ years of experience building backend systems, platform APIs, and hardware-software integration solutions for medical devices. I currently lead mobile app development at Carl Zeiss Meditec, architecting cross-platform React Native solutions and driving algorithmic innovation for medical imaging hardware.</p>
           <p>My work lives mostly in the backend, designing abstraction layers, API interfaces, and scalable platform libraries, but I'm comfortable across the full stack, from C#, Rust, and Python to React Native, React, and Next.js. I love solving problems and care about writing clean, well-tested code and building things that other engineers can rely on.</p>
-          <p>Outside of work I enjoy watching sports, eating or/and cooking good food, playing sports, reading books, learning new things, and traveling.</p>
+          <p>Outside of work I enjoy watching sports, eating or/and cooking good food, building/breaking things, playing sports, reading books, learning new things, and traveling.</p>
         </div>
         <div class="about-photo reveal">
           <div class="photo-wrapper">
@@ -124,90 +124,166 @@
         <p class="section-sub">These are some tools I've used for most this past year, not a checklist of things I've mastered. I don't get attached to any one stack; what keeps me engaged is the team I'm on and the challenge in front of us.</p>
       </div>
       <div class="skills-grid reveal">
-        <div class="skill-card">
-          <i class="fab fa-microsoft"></i>
-          <span>C#</span>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fab fa-microsoft"></i>
+              <span>C#</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">C#</span>
+              <a class="skill-btn skill-btn--primary" href="https://learn.microsoft.com/en-us/dotnet/csharp/" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+              <a class="skill-btn" href="projects/camera-project.html">Camera Project <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <i class="fab fa-rust"></i>
-          <span>Rust</span>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fab fa-rust"></i>
+              <span>Rust</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">Rust</span>
+              <a class="skill-btn skill-btn--primary" href="https://doc.rust-lang.org/book/" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <i class="fab fa-python"></i>
-          <span>Python</span>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fab fa-python"></i>
+              <span>Python</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">Python</span>
+              <a class="skill-btn skill-btn--primary" href="https://docs.python.org/3/" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+              <a class="skill-btn" href="projects/invoice-scanner.html">Invoice Scanner <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <i class="fas fa-memory"></i>
-          <span>C++</span>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fas fa-memory"></i>
+              <span>C++</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">C++</span>
+              <a class="skill-btn skill-btn--primary" href="https://en.cppreference.com/w/" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <i class="fab fa-js"></i>
-          <span>JavaScript / TypeScript</span>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fab fa-js"></i>
+              <span>JavaScript / TypeScript</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">JavaScript / TypeScript</span>
+              <a class="skill-btn skill-btn--primary" href="https://www.typescriptlang.org/docs/" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+              <a class="skill-btn" href="projects/calibrate.html">Calibrate Tool <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <i class="fas fa-mobile-screen-button"></i>
-          <span>React Native</span>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fas fa-mobile-screen-button"></i>
+              <span>React Native</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">React Native</span>
+              <a class="skill-btn skill-btn--primary" href="https://reactnative.dev/docs/getting-started" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <i class="fab fa-react"></i>
-          <span>React / Next.js</span>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fab fa-react"></i>
+              <span>React / Next.js</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">React / Next.js</span>
+              <a class="skill-btn skill-btn--primary" href="https://nextjs.org/docs" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+              <a class="skill-btn" href="projects/clearo.html">Clearo <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <i class="fab fa-windows"></i>
-          <span>.NET / WPF</span>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fab fa-windows"></i>
+              <span>.NET / WPF</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">.NET / WPF</span>
+              <a class="skill-btn skill-btn--primary" href="https://learn.microsoft.com/en-us/dotnet/desktop/wpf/" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <i class="fas fa-cloud"></i>
-          <span>Azure / CI/CD</span>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fas fa-cloud"></i>
+              <span>Azure / CI/CD</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">Azure / CI/CD</span>
+              <a class="skill-btn skill-btn--primary" href="https://learn.microsoft.com/en-us/azure/devops/pipelines/" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <i class="fas fa-robot"></i>
-          <span>AI Tools</span>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fas fa-robot"></i>
+              <span>AI Tools</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">AI Tools</span>
+              <a class="skill-btn skill-btn--primary" href="https://docs.claude.com/" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+              <a class="skill-btn" href="projects/career-center.html">Career Center App <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <i class="fas fa-flask"></i>
-          <span>Flask / FastAPI</span>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fas fa-flask"></i>
+              <span>Flask / FastAPI</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">Flask / FastAPI</span>
+              <a class="skill-btn skill-btn--primary" href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+              <a class="skill-btn" href="projects/casita-hub.html">Casita Hub <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="skill-card">
-          <i class="fas fa-database"></i>
-          <span>SQL / NoSQL</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Game -->
-  <section id="game" class="section">
-    <div class="container">
-      <div class="reveal">
-        <span class="section-label"><span class="label-num">03</span> - Just for fun</span>
-        <h2>Debug Mode 🐛</h2>
-        <p class="section-sub">Catch the bugs before they hit production.</p>
-      </div>
-      <div class="game-wrapper reveal">
-        <div class="game-hud">
-          <span class="game-stat">Score <strong id="game-score">0</strong></span>
-          <span class="game-stat" id="game-lives">♥ ♥ ♥</span>
-        </div>
-        <canvas id="game-canvas"></canvas>
-        <div class="game-footer">
-          <span class="game-hint" id="game-hint">Press <kbd>Space</kbd> to start &nbsp;·&nbsp; or tap the canvas</span>
-          <span class="game-controls-hint">← → or A D to move</span>
-        </div>
-        <div class="game-result" id="game-result"></div>
-        <div class="game-mobile-btns">
-          <button class="game-btn" id="btn-left"><i class="fas fa-chevron-left"></i></button>
-          <button class="game-btn" id="btn-right"><i class="fas fa-chevron-right"></i></button>
+        <div class="skill-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="skill-card-inner">
+            <div class="skill-card-front">
+              <i class="fas fa-database"></i>
+              <span>SQL / NoSQL</span>
+            </div>
+            <div class="skill-card-back">
+              <span class="skill-card-back-name">SQL / NoSQL</span>
+              <a class="skill-btn skill-btn--primary" href="https://www.sqlite.org/docs.html" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+              <a class="skill-btn" href="projects/chorewars.html">ChoreWars <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Projects -->
-  <section id="projects" class="section section-alt">
+  <section id="projects" class="section">
     <div class="container">
       <div class="reveal">
-        <span class="section-label"><span class="label-num">04</span> - Work</span>
+        <span class="section-label"><span class="label-num">03</span> - Work</span>
         <h2>Projects</h2>
       </div>
       <div class="projects-grid">
@@ -557,11 +633,11 @@
   </section>
 
   <!-- Resume -->
-  <section id="resume" class="section">
+  <section id="resume" class="section section-alt">
     <div class="container">
       <div class="resume-header reveal">
         <div>
-          <span class="section-label"><span class="label-num">05</span> - Resume</span>
+          <span class="section-label"><span class="label-num">04</span> - Resume</span>
           <h2>Experience & Education</h2>
         </div>
         <a href="images/resume-JC-08-2026.pdf" class="btn btn-primary" target="_blank">
@@ -709,6 +785,33 @@
         </div>
       </div>
 
+    </div>
+  </section>
+
+  <!-- Game -->
+  <section id="game" class="section">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label"><span class="label-num">05</span> - Just for fun</span>
+        <h2>Debug Mode 🐛</h2>
+        <p class="section-sub">Catch the bugs before they hit production.</p>
+      </div>
+      <div class="game-wrapper reveal">
+        <div class="game-hud">
+          <span class="game-stat">Score <strong id="game-score">0</strong></span>
+          <span class="game-stat" id="game-lives">♥ ♥ ♥</span>
+        </div>
+        <canvas id="game-canvas"></canvas>
+        <div class="game-footer">
+          <span class="game-hint" id="game-hint">Press <kbd>Space</kbd> to start &nbsp;·&nbsp; or tap the canvas</span>
+          <span class="game-controls-hint">← → or A D to move</span>
+        </div>
+        <div class="game-result" id="game-result"></div>
+        <div class="game-mobile-btns">
+          <button class="game-btn" id="btn-left"><i class="fas fa-chevron-left"></i></button>
+          <button class="game-btn" id="btn-right"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
     </div>
   </section>
 

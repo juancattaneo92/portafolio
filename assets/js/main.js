@@ -50,3 +50,38 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Skills: flip a card to reveal its docs + project links
+const skillCards = document.querySelectorAll('.skill-card');
+
+function resetSkillCards(except) {
+  skillCards.forEach(card => {
+    if (card !== except) {
+      card.classList.remove('is-flipped');
+      card.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+skillCards.forEach(card => {
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('a')) return; // let the back-face links work
+    const flipped = card.classList.toggle('is-flipped');
+    card.setAttribute('aria-expanded', flipped ? 'true' : 'false');
+    resetSkillCards(card);
+  });
+  card.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      card.click();
+    }
+  });
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.skill-card')) resetSkillCards(null);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') resetSkillCards(null);
+});
