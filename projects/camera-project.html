@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Camera Project. JC Cattaneo</title>
+  <meta name="description" content="A C# console app for driving Raspberry Pi camera modules - capture, burst, timelapse, and motion detection." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="../images/favicon_io/site.webmanifest">
+
+  <link rel="stylesheet" href="../assets/css/main.css" />
+  <link rel="stylesheet" href="../assets/css/project.css" />
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G2YN7DLE06"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G2YN7DLE06');
+</script>
+
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav id="nav" class="scrolled">
+    <a href="../index.html" class="nav-logo">JC</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#game">Game</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#resume">Resume</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <div id="mobile-menu" class="mobile-menu">
+    <button class="mobile-menu-close" id="mobile-menu-close" aria-label="Close menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="mobile-menu-links">
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#game">Game</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#resume">Resume</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+
+  <article class="project-detail">
+
+    <header class="pd-hero reveal">
+      <div class="container">
+        <a href="../index.html#projects" class="pd-breadcrumb"><i class="fas fa-arrow-left"></i> All projects</a>
+        <span class="section-label"><span class="label-num">/</span> Hardware tooling</span>
+        <h1>Camera Project</h1>
+        <p class="pd-tagline">A C# console app for driving Raspberry Pi camera modules, capture, burst, timelapse, and motion detection.</p>
+        <div class="pd-tags">
+          <span>C#</span>
+          <span>.NET</span>
+          <span>OpenCV</span>
+          <span>Raspberry Pi</span>
+        </div>
+        <div class="pd-actions">
+          <a href="https://github.com/juancattaneo92/CameraProject" class="btn btn-ghost" target="_blank" rel="noopener"><i class="fab fa-github"></i> View repo</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="pd-shot container reveal">
+      <img src="../images/raspberry_pi_camera.png" alt="Camera Project screenshot" />
+    </div>
+
+    <section class="pd-section reveal">
+      <div class="container">
+        <div class="pd-grid">
+          <div class="pd-block">
+            <h2>What I built &amp; why</h2>
+            <!-- PLACEHOLDER: replace with the real story. -->
+            <p>I wanted a single command-line tool to exercise every mode of a Raspberry Pi camera module without a GUI in the way, single shots, burst sequences, timelapse runs, and continuous motion detection. It grew out of the hardware-integration work I do day to day.</p>
+            <p>The app wraps the camera stack in a clean C# interface and pipes frames through OpenCV for processing. Each capture mode is its own isolated component so a new mode is an addition, not a rewrite.</p>
+          </div>
+          <aside class="pd-block pd-facts">
+            <h3>At a glance</h3>
+            <!-- PLACEHOLDER: fill in real values. -->
+            <dl>
+              <div><dt>Role</dt><dd>Solo build</dd></div>
+              <div><dt>Timeline</dt><dd>1 Week</dd></div>
+              <div><dt>Value</dt><dd>Personal Project</dd></div>
+            </dl>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="pd-section reveal">
+      <div class="container">
+        <h2>Why this stack</h2>
+        <!-- PLACEHOLDER: tighten each reason to what actually drove the choice. -->
+        <ul class="pd-stack">
+          <li><span class="pd-stack-name">C#</span><span class="pd-stack-why">Strong typing and a mature standard library made the hardware control flow easy to reason about and test.</span></li>
+          <li><span class="pd-stack-name">.NET</span><span class="pd-stack-why">Cross-platform runtime meant the same code ran on a dev laptop and on the Pi with no changes.</span></li>
+          <li><span class="pd-stack-name">OpenCV</span><span class="pd-stack-why">Battle-tested primitives for capture, filtering, and motion detection - no need to reinvent image processing.</span></li>
+          <li><span class="pd-stack-name">Raspberry Pi</span><span class="pd-stack-why">Fun, GPIO-friendly hardware that is a realistic target for a small always-on device.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="pd-section reveal">
+      <div class="container">
+        <h2>Live demo</h2>
+        <!-- PLACEHOLDER: paste a YouTube / Loom embed <iframe> here, or drop in a <video> tag. -->
+        <div class="pd-frame pd-frame--placeholder">
+          <div class="pd-placeholder">
+            <i class="fas fa-circle-play"></i>
+            <span>Demo video coming soon</span>
+          </div>
+        </div>
+        <p class="pd-demo-note">Walkthrough video is on the way. Screenshot below in the meantime.</p>
+      </div>
+    </section>
+
+    <div class="pd-back container">
+      <a href="../index.html#projects" class="btn btn-ghost"><i class="fas fa-arrow-left"></i> Back to all projects</a>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">JC</span>
+        <ul class="social-links">
+          <li>
+            <a href="https://www.linkedin.com/in/juan-carlos-cattaneo-450a3b97/" target="_blank" aria-label="LinkedIn">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/juancattaneo92" target="_blank" aria-label="GitHub">
+              <i class="fab fa-github"></i>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/juan.cattaneo/" target="_blank" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+          </li>
+          <li>
+            <a href="https://mail.google.com/mail/u/0/?view=cm&fs=1&to=juancattaneo92@gmail.com&tf=1" target="_blank" aria-label="Email">
+              <i class="fas fa-paper-plane"></i>
+            </a>
+          </li>
+        </ul>
+        <p class="footer-copy">&copy; 2026 Juan Carlos Cattaneo</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

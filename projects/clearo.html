@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clearo. JC Cattaneo</title>
+  <meta name="description" content="Invoicing and accounting app - snap an invoice, get a clean, categorized accounting record with dashboards and exports." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon_io/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon_io/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon_io/favicon-16x16.png">
+  <link rel="manifest" href="../images/favicon_io/site.webmanifest">
+
+  <link rel="stylesheet" href="../assets/css/main.css" />
+  <link rel="stylesheet" href="../assets/css/project.css" />
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-G2YN7DLE06"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G2YN7DLE06');
+</script>
+
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav id="nav" class="scrolled">
+    <a href="../index.html" class="nav-logo">JC</a>
+    <ul class="nav-links">
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#game">Game</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#resume">Resume</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <div id="mobile-menu" class="mobile-menu">
+    <button class="mobile-menu-close" id="mobile-menu-close" aria-label="Close menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="mobile-menu-links">
+      <li><a href="../index.html#about">About</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#game">Game</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#resume">Resume</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+
+  <article class="project-detail">
+
+    <header class="pd-hero reveal">
+      <div class="container">
+        <a href="../index.html#projects" class="pd-breadcrumb"><i class="fas fa-arrow-left"></i> All projects</a>
+        <span class="section-label"><span class="label-num">/</span> Invoicing &amp; accounting app</span>
+        <h1>Clearo</h1>
+        <p class="pd-tagline">Snap an invoice, get a clean accounting record - capture, a review workflow, dashboards, and accountant-ready exports.</p>
+        <div class="pd-tags">
+          <span>Next.js 16</span>
+          <span>React 19</span>
+          <span>TypeScript</span>
+          <span>SQLite + Drizzle</span>
+          <span>better-auth</span>
+          <span>Tailwind CSS v4</span>
+          <span>Recharts</span>
+        </div>
+        <div class="pd-actions">
+          <a href="https://clearo.netlify.app/" class="btn btn-primary" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> Open live site</a>
+          <a href="https://clearo.netlify.app/dashboard" class="btn btn-ghost" target="_blank" rel="noopener"><i class="fas fa-table-columns"></i> Open the demo</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="pd-shot container reveal">
+      <!-- PLACEHOLDER: swap for a wide (~1200px) screenshot of the dashboard. Current file is 300x150 and will look soft. -->
+      <img src="../images/clearo.png" alt="Clearo dashboard screenshot" />
+    </div>
+
+    <section class="pd-section reveal">
+      <div class="container">
+        <div class="pd-grid">
+          <div class="pd-block">
+            <h2>What I built &amp; why</h2>
+            <p>Clearo takes a photo or PDF of an invoice and turns it into a structured accounting record. It pulls out the line items, you review and correct them, assign categories, and approve. The same flow handles both purchase and sales invoices, so it covers money going out and coming in.</p>
+            <p>On top of that sits a dashboard - sales, purchases, net, and a pending-review count, with monthly and by-category charts - plus PDF and Excel export for handing off to an accountant, and a full English / Spanish interface. I built it to see how close a small, focused project could get to a genuinely useful accounting tool.</p>
+          </div>
+          <aside class="pd-block pd-facts">
+            <h3>At a glance</h3>
+            <dl>
+              <div><dt>Role</dt><dd>Solo - design &amp; build</dd></div>
+              <div><dt>Type</dt><dd>Personal project</dd></div>
+              <div><dt>Status</dt><dd>Live demo</dd></div>
+            </dl>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="pd-section reveal">
+      <div class="container">
+        <h2>Why this stack</h2>
+        <p class="pd-lead">Clearo is a demo product, so each choice favored shipping a complete, believable app quickly over infrastructure I'd only need at scale.</p>
+        <ul class="pd-stack">
+          <li><span class="pd-stack-name">Next.js 16 &amp; React 19</span><span class="pd-stack-why">Server components render the marketing pages and the dashboard from one codebase, and the App Router keeps public and auth-gated routes cleanly separated.</span></li>
+          <li><span class="pd-stack-name">SQLite + Drizzle ORM</span><span class="pd-stack-why">A single-file database is plenty for a demo, and Drizzle's typed schema keeps the queries and the TypeScript types from drifting apart.</span></li>
+          <li><span class="pd-stack-name">better-auth</span><span class="pd-stack-why">Session and account handling out of the box, without standing up a third-party auth service for what is still a demo.</span></li>
+          <li><span class="pd-stack-name">Tailwind CSS v4</span><span class="pd-stack-why">The config-less setup got the UI moving fast, and utility classes kept the dashboard's dense layout manageable.</span></li>
+          <li><span class="pd-stack-name">Recharts</span><span class="pd-stack-why">Composable React chart components covered the monthly and by-category breakdowns without a custom charting layer.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="pd-section reveal">
+      <div class="container">
+        <h2>Live demo</h2>
+        <div class="pd-frame">
+          <iframe src="https://clearo.netlify.app/" title="Clearo live site" loading="lazy"></iframe>
+        </div>
+        <p class="pd-demo-note">Embedded preview of the Clearo site.
+          <a href="https://clearo.netlify.app/dashboard" target="_blank" rel="noopener">Open the interactive demo dashboard</a> for the full app with sample data.</p>
+      </div>
+    </section>
+
+    <div class="pd-back container">
+      <a href="../index.html#projects" class="btn btn-ghost"><i class="fas fa-arrow-left"></i> Back to all projects</a>
+    </div>
+
+  </article>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">JC</span>
+        <ul class="social-links">
+          <li>
+            <a href="https://www.linkedin.com/in/juan-carlos-cattaneo-450a3b97/" target="_blank" aria-label="LinkedIn">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/juancattaneo92" target="_blank" aria-label="GitHub">
+              <i class="fab fa-github"></i>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/juan.cattaneo/" target="_blank" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+          </li>
+          <li>
+            <a href="https://mail.google.com/mail/u/0/?view=cm&fs=1&to=juancattaneo92@gmail.com&tf=1" target="_blank" aria-label="Email">
+              <i class="fas fa-paper-plane"></i>
+            </a>
+          </li>
+        </ul>
+        <p class="footer-copy">&copy; 2026 Juan Carlos Cattaneo</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../assets/js/main.js"></script>
+</body>
+</html>

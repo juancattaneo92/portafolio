@@ -212,7 +212,45 @@
       </div>
       <div class="projects-grid">
 
-        <div class="project-card reveal">
+        <a class="project-card reveal" href="projects/clearo.html">
+          <div class="project-img">
+            <img src="images/clearo.png" alt="Clearo" />
+          </div>
+          <div class="project-body">
+            <h3>Clearo</h3>
+            <p>Invoicing and accounting app - snap an invoice and get a clean, categorized accounting record, with dashboards for purchases and sales and PDF/Excel export.</p>
+            <div class="project-tags">
+              <span>Next.js</span>
+              <span>React</span>
+              <span>TypeScript</span>
+              <span>Drizzle ORM</span>
+            </div>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+
+        <a class="project-card reveal" href="projects/chorewars.html">
+          <div class="project-img">
+            <img src="images/chorewars.png" alt="Chores and HabitsTracker" />
+          </div>
+          <div class="project-body">
+            <h3>ChoreWars</h3>
+            <p>Touchscreen kiosk app for a Raspberry Pi, tracks and displays chores completion streaks, monthly counts, and history for two people. Auto-resets at midnight.</p>
+            <div class="project-tags">
+              <span>Python</span>
+              <span>Flask</span>
+              <span>SQLite</span>
+              <span>Raspberry Pi</span>
+            </div>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+
+        <a class="project-card reveal" href="projects/bruma.html">
           <div class="project-img">
             <img src="images/Bruma-Restaurant.png" alt="Bruma Restaurant" />
           </div>
@@ -225,13 +263,13 @@
               <span>TypeScript</span>
               <span>Tailwind CSS</span>
             </div>
-            <a href="https://brumaec.netlify.app/" class="project-link" target="_blank">
-              View Live <i class="fas fa-arrow-up-right-from-square"></i>
-            </a>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
           </div>
-        </div>
+        </a>
 
-        <div class="project-card reveal">
+        <a class="project-card reveal" href="projects/canalla.html">
           <div class="project-img">
             <img src="images/canalla.png" alt="Canalla SF" />
           </div>
@@ -244,13 +282,13 @@
               <span>TypeScript</span>
               <span>Tailwind CSS</span>
             </div>
-            <a href="https://canallasf.com" class="project-link" target="_blank">
-              View Live <i class="fas fa-arrow-up-right-from-square"></i>
-            </a>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
           </div>
-        </div>
+        </a>
 
-        <div class="project-card reveal">
+        <a class="project-card reveal" href="projects/camera-project.html">
           <div class="project-img">
             <img src="images/raspberry_pi_camera.png" alt="Raspberry Pi Camera" />
           </div>
@@ -263,13 +301,13 @@
               <span>OpenCV</span>
               <span>Raspberry Pi</span>
             </div>
-            <a href="https://github.com/juancattaneo92/CameraProject" class="project-link" target="_blank">
-              View Repo <i class="fas fa-arrow-up-right-from-square"></i>
-            </a>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
           </div>
-        </div>
+        </a>
 
-        <div class="project-card reveal">
+        <a class="project-card reveal" href="projects/invoice-scanner.html">
           <div class="project-img">
             <img src="images/invoice_scanner.png" alt="InvoiceScanner" />
           </div>
@@ -282,32 +320,91 @@
               <span>PaddleOCR</span>
               <span>Llama</span>
             </div>
-            <a href="https://github.com/juancattaneo92/invoice-scanner" class="project-link" target="_blank">
-              View Repo <i class="fas fa-arrow-up-right-from-square"></i>
-            </a>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
           </div>
-        </div>
+        </a>
 
-        <div class="project-card reveal">
+        <div class="project-card project-card--soon reveal">
           <div class="project-img">
-            <img src="images/ChoreWars.png" alt="Litter Box Tracker" />
+            <img src="images/careerCenter.png" alt="Career Center app" />
           </div>
           <div class="project-body">
-            <h3>ChoreWars</h3>
-            <p>Touchscreen kiosk app for a Raspberry Pi, tracks and displays chores completion streaks, monthly counts, and history for two people. Auto-resets at midnight.</p>
+            <h3>Career Center App</h3>
+            <!-- <p>A phone-friendly web app for running mock interviews with a voiced AI interviewer and getting rubric-based feedback. 
+              Questions come from a curated bank (never model-invented); grading is deterministic-first, a validity gate rejects non-answers 
+              with no model call, then one comparative LLM call per rubric criteria. Runs local-first on Ollama (Claude optional), with a framework-free eval harness that gates CI on junk-leak and mode-violation rates.</p> -->
+            
+            <p>A phone-friendly web app for running mock interviews with a voiced AI interviewer (Piper TTS). 
+              Questions come from a curated bank. Runs local-first on Ollama (Claude optional), 
+              with a framework-free eval harness that gates CI on junk-leak and mode-violation rates.
+            </p>  
             <div class="project-tags">
-              <span>Python</span>
-              <span>Flask</span>
-              <span>SQLite</span>
-              <span>Raspberry Pi</span>
+              <span>Python FastAPI</span>
+              <span>Anthropic Claude / Ollama</span>
+              <span>RAG</span>
+              <span>Custom Eval Harness</span>
+              <span>Docker</span>
             </div>
-            <a href="https://github.com/juancattaneo92/ChoreWars" class="project-link" target="_blank">
-              View Repo <i class="fas fa-arrow-up-right-from-square"></i>
-            </a>
+            <span class="project-link project-link--soon" aria-disabled="true">
+              Coming soon <i class="fas fa-hourglass-half"></i>
+            </span>
           </div>
         </div>
 
-        <div class="project-card reveal">
+        <div class="project-card project-card--soon reveal">
+          <div class="project-img">
+            <img src="images/casita-hub.png" alt="Casita Hub" />
+          </div>
+          <div class="project-body">
+            <h3>Casita hub</h3>
+            <p>Household hub web app/mobile (PWA). 
+              Shared shopping lists with categorized items, drag-to-reorder, and price-history tracking; 
+              shared to-do lists with due dates and per-person assignment; a weekly planner board; and a cross-module stats dashboard with 
+              personal and family charts.</p>
+            <div class="project-tags">
+              <span>React 19</span>
+              <span>Next.js 16</span>
+              <span>TypeScript</span>
+              <span>Tanstack Query</span>
+              <span>Flask</span>
+              <span>SQLite</span>
+              <span>PWA</span>
+            </div>
+            <span class="project-link project-link--soon" aria-disabled="true">
+              Coming soon <i class="fas fa-hourglass-half"></i>
+            </span>
+          </div>
+        </div>
+
+
+
+        <div class="project-card project-card--soon reveal">
+          <div class="project-img">
+            <img src="images/calibrate.png" alt="Calibrate Tool" />
+          </div>
+          <div class="project-body">
+            <h3>Calibrate Tool.</h3>
+            <p>Calibrate your resume to the role. Upload your resume and the job description. 
+              We'll measure the fit by a match report, then in an inline-editable side-by-side view, AI will tune it to your tone, 
+              keeping formatting, and your experience. Finally, export to DOCX or PDF.</p>
+            <div class="project-tags">
+              <span>React 19</span>
+              <span>Next.js 16</span>
+              <span>TypeScript</span>
+              <span>Python FastAPI</span>
+              <span>PyMuPDF</span>
+              <span>Ollama</span>
+
+            </div>
+            <span class="project-link project-link--soon" aria-disabled="true">
+              Coming soon <i class="fas fa-hourglass-half"></i>
+            </span>
+          </div>
+        </div>
+
+        <!-- <a class="project-card reveal" href="projects/sellsy.html">
           <div class="project-img">
             <img src="images/sellsy.png" alt="Sellsy" />
           </div>
@@ -320,13 +417,13 @@
               <span>Redux</span>
               <span>PostgreSQL</span>
             </div>
-            <a href="https://github.com/juancattaneo92/Sellsy" class="project-link" target="_blank">
-              View Repo <i class="fas fa-arrow-up-right-from-square"></i>
-            </a>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
           </div>
-        </div>
+        </a>
 
-        <div class="project-card reveal">
+        <a class="project-card reveal" href="projects/penalty-kicker.html">
           <div class="project-img">
             <img src="images/penaltyKicker.png" alt="Penalty Kicker" />
           </div>
@@ -337,13 +434,13 @@
               <span>JavaScript</span>
               <span>Canvas API</span>
             </div>
-            <a href="https://github.com/juancattaneo92/PenaltyKicker" class="project-link" target="_blank">
-              View Repo <i class="fas fa-arrow-up-right-from-square"></i>
-            </a>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
           </div>
-        </div>
+        </a>
 
-        <div class="project-card reveal">
+        <a class="project-card reveal" href="projects/toadtoken.html">
           <div class="project-img">
             <img src="images/toadToken.png" alt="ToadToken" />
           </div>
@@ -355,13 +452,13 @@
               <span>CSS3</span>
               <span>HTML5</span>
             </div>
-            <a href="https://github.com/juancattaneo92/ToadToken" class="project-link" target="_blank">
-              View Repo <i class="fas fa-arrow-up-right-from-square"></i>
-            </a>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
           </div>
-        </div>
+        </a>
 
-        <div class="project-card reveal">
+        <a class="project-card reveal" href="projects/catzilla.html">
           <div class="project-img">
             <img src="images/small-catzilla.png" alt="Catzilla" />
           </div>
@@ -373,13 +470,13 @@
               <span>CSS3</span>
               <span>HTML5</span>
             </div>
-            <a href="https://github.com/juancattaneo92/catzilla" class="project-link" target="_blank">
-              View Repo <i class="fas fa-arrow-up-right-from-square"></i>
-            </a>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
           </div>
-        </div>
+        </a>
 
-        <div class="project-card reveal">
+        <a class="project-card reveal" href="projects/postrain.html">
           <div class="project-img">
             <img src="images/posTrain.png" alt="Postrain" />
           </div>
@@ -390,10 +487,13 @@
               <span>JavaScript</span>
               <span>CSS Animations</span>
             </div>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
           </div>
-        </div>
+        </a>
 
-        <div class="project-card reveal">
+        <a class="project-card reveal" href="projects/pooch.html">
           <div class="project-img">
             <img src="images/pooch.png" alt="Pooch" />
           </div>
@@ -405,14 +505,13 @@
               <span>React</span>
               <span>Node.js</span>
             </div>
-            <a href="https://github.com/paulobocanegra/Pooch-MERN-project" class="project-link" target="_blank">
-              View Repo <i class="fas fa-arrow-up-right-from-square"></i>
-            </a>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
           </div>
-        </div>
+        </a> -->
 
       </div>
-      <p class="projects-note reveal">* Postrain repo is private.</p>
     </div>
   </section>
 

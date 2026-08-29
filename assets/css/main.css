@@ -731,6 +731,39 @@ h2 {
   opacity: 0.8;
 }
 
+/* Whole card is a link to the project detail page */
+.project-card:hover .project-link {
+  gap: 10px;
+}
+
+/* "Coming soon" cards — not linked, not interactive yet */
+.project-card--soon {
+  cursor: default;
+  opacity: 0.62;
+}
+
+.project-card--soon:hover {
+  border-color: var(--border);
+  transform: none;
+}
+
+.project-card--soon:hover .project-img img {
+  transform: none;
+}
+
+.project-link--soon {
+  color: var(--text-subtle);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  pointer-events: none;
+}
+
+.project-card--soon:hover .project-link--soon {
+  gap: 6px;
+}
+
 .projects-note {
   font-size: 0.78rem;
   color: var(--text-subtle);

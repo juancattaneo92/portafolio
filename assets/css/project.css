@@ -1,0 +1,292 @@
+/* ============================================================
+   Juan Carlos Cattaneo — Portfolio
+   Project detail pages
+============================================================ */
+
+.project-detail {
+  padding-top: 116px;
+}
+
+/* ---------- Hero ---------- */
+.pd-hero {
+  padding-bottom: 44px;
+}
+
+.pd-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 30px;
+  transition: gap var(--t) var(--ease), color var(--t) var(--ease);
+}
+
+.pd-breadcrumb:hover {
+  gap: 12px;
+  color: var(--text);
+}
+
+.pd-hero .section-label {
+  margin-bottom: 10px;
+}
+
+.pd-hero h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.3rem, 5.5vw, 3.9rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin-bottom: 18px;
+}
+
+.pd-tagline {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 620px;
+  line-height: 1.7;
+  margin-bottom: 26px;
+}
+
+.pd-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.pd-tags span {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+.pd-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pd-btn-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.pd-btn-disabled:hover {
+  transform: none;
+}
+
+/* ---------- Lead screenshot ---------- */
+.pd-shot {
+  margin-bottom: 8px;
+}
+
+.pd-shot img {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+/* ---------- Sections ---------- */
+.pd-section {
+  padding: 56px 0;
+  border-top: 1px solid var(--border);
+}
+
+.pd-section h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin-bottom: 24px;
+}
+
+/* ---------- What I built ---------- */
+.pd-grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 48px;
+  align-items: start;
+}
+
+.pd-block p {
+  color: var(--text-muted);
+  line-height: 1.85;
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.pd-block p:last-child {
+  margin-bottom: 0;
+}
+
+.pd-facts {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.pd-facts h3 {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 18px;
+}
+
+.pd-facts dl {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pd-facts dt {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-subtle);
+  margin-bottom: 3px;
+}
+
+.pd-facts dd {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+/* ---------- Why this stack ---------- */
+.pd-lead {
+  max-width: 640px;
+  color: var(--text-muted);
+  line-height: 1.8;
+  font-size: 1rem;
+  margin-bottom: 24px;
+}
+
+.pd-stack {
+  border-top: 1px solid var(--border);
+}
+
+.pd-stack li {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: 24px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.pd-stack-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.pd-stack-why {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+/* ---------- Demo ---------- */
+.pd-frame {
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.pd-frame iframe {
+  display: block;
+  width: 100%;
+  height: 640px;
+  border: 0;
+}
+
+.pd-frame--placeholder {
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pd-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: var(--text-subtle);
+}
+
+.pd-placeholder i {
+  font-size: 2.6rem;
+  color: var(--accent);
+}
+
+.pd-placeholder span {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pd-demo-note {
+  font-size: 0.82rem;
+  color: var(--text-subtle);
+  line-height: 1.65;
+  margin-top: 14px;
+}
+
+.pd-demo-note a {
+  color: var(--accent);
+  border-bottom: 1px solid var(--accent);
+}
+
+.pd-demo-shot {
+  width: 100%;
+  margin-top: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+/* ---------- Back ---------- */
+.pd-back {
+  padding: 44px 0 96px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .pd-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .pd-stack li {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+
+  .pd-frame iframe {
+    height: 460px;
+  }
+}
+
+@media (max-width: 900px) {
+  .project-detail {
+    padding-top: 96px;
+  }
+
+  .pd-section {
+    padding: 44px 0;
+  }
+}
