@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PiCam Security</title>
-<meta name="description" content="A .NET Raspberry Pi security-camera stack — motion alerts, capture pipeline, and architecture, demoed with mock data.">
+<meta name="description" content="A .NET Raspberry Pi security-camera stack: motion alerts, capture pipeline, and architecture, demoed with mock data.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='10' width='88' height='84' rx='24' fill='%23181214'/%3E%3Ccircle cx='50' cy='54' r='33' fill='%23fff'/%3E%3Ccircle cx='50' cy='54' r='26' fill='%23e13a5c'/%3E%3Ccircle cx='44' cy='49' r='13' fill='%23181214'/%3E%3Ccircle cx='39' cy='43' r='4.5' fill='%23fff'/%3E%3C/svg%3E">
 <style>
   *, *::before, *::after { box-sizing: border-box; }
@@ -464,10 +464,10 @@
     <p class="eyebrow">Home security &nbsp;·&nbsp; Raspberry Pi &nbsp;·&nbsp; C# / .NET</p>
     <h1>A Raspberry Pi security camera that runs without the Raspberry Pi.</h1>
     <p class="lede">
-      PiCam Security turns a Pi and a camera module into a surveillance node &mdash; continuous
+      PiCam Security turns a Pi and a camera module into a surveillance node: continuous
       capture, timelapse, OpenCV filtering, and frame-diff <b>motion alerts</b>. The whole
       pipeline sits behind a small set of interfaces, so it develops, tests, and demos on any
-      laptop against a synthetic <b>mock camera</b> &mdash; no hardware in the loop.
+      laptop against a synthetic <b>mock camera</b>, no hardware in the loop.
     </p>
 
     <ul class="chips">
@@ -488,7 +488,7 @@
     <div class="card terminal">
       <div class="term-bar">
         <span class="dot"></span><span class="dot"></span><span class="dot live"></span>
-        dotnet run &nbsp;&mdash;&nbsp; RpiCamera.Functionality
+        dotnet run &nbsp;·&nbsp; RpiCamera.Functionality
         <span id="termState">mock feed</span>
       </div>
       <div class="term-body" id="termBody" aria-label="Recorded console session"></div>
@@ -499,12 +499,12 @@
   </section>
 
   <section id="service">
-    <p class="eyebrow">Architecture &mdash; service view <span class="roadmap-tag">roadmap</span></p>
+    <p class="eyebrow">Architecture: service view <span class="roadmap-tag">roadmap</span></p>
     <h2>Module boundaries drawn for extraction into services.</h2>
     <p class="section-intro">
       Today it runs as one .NET process. The seams are deliberate: each capability owns its
       logic behind an interface, so it can be lifted into an independently deployable service
-      that talks over a broker &mdash; a natural fit for the intermittent, event-driven traffic
+      that talks over a broker, a natural fit for the intermittent, event-driven traffic
       of a camera node (a frame captured, motion detected, an image stored).
     </p>
     <div class="card" style="padding:16px">
@@ -540,17 +540,17 @@
   </section>
 
   <section id="layers">
-    <p class="eyebrow">Architecture &mdash; what runs today</p>
+    <p class="eyebrow">Architecture: what runs today</p>
     <h2>Dependencies point inward, at interfaces.</h2>
     <p class="section-intro">
       Consumers depend on <code>ICamera</code>, <code>ICameraController</code>, and
-      <code>IImageProcessor</code> &mdash; never on a concrete class. Swapping hardware for the
+      <code>IImageProcessor</code>, never on a concrete class. Swapping hardware for the
       mock, or adding a service host on top, touches nothing in the middle.
     </p>
     <div class="stack">
       <div class="layer">
         <div class="lname">Consumers</div>
-        <div class="lbody">Console app &mdash; 5 demo modes &nbsp;·&nbsp; <span style="color:var(--muted)">future: REST / gRPC host</span></div>
+        <div class="lbody">Console app &nbsp;·&nbsp; 5 demo modes &nbsp;·&nbsp; <span style="color:var(--muted)">future: REST / gRPC host</span></div>
       </div>
       <div class="arrow" aria-hidden="true">&#9660; depends on</div>
       <div class="layer">
@@ -570,7 +570,7 @@
       <div class="arrow" aria-hidden="true">&nbsp;</div>
       <div class="layer tests">
         <div class="lname">RpiCamera.Tests &middot; NUnit + Moq</div>
-        <div class="lbody">14 tests against the mock and the controller &mdash; no camera, no filesystem assumptions, CI-safe.</div>
+        <div class="lbody">14 tests against the mock and the controller. No camera, no filesystem assumptions, CI-safe.</div>
       </div>
     </div>
   </section>
@@ -597,7 +597,7 @@
       </div>
       <div class="card mode">
         <div class="idx">04</div><h3>Image Processing</h3>
-        <p>OpenCV pipeline &mdash; grayscale, Gaussian blur, Canny edge detection, resize, timestamp overlay.</p>
+        <p>OpenCV pipeline: grayscale, Gaussian blur, Canny edge detection, resize, timestamp overlay.</p>
       </div>
       <div class="card mode" style="border-color:var(--accent)">
         <div class="idx" style="color:var(--accent)">05 &middot; core feature</div><h3>Motion Detection</h3>
@@ -611,7 +611,7 @@
     <h2>Synthetic frames, real algorithms.</h2>
     <p class="section-intro">
       <code>MockCamera</code> paints a random background, drops a handful of coloured shapes, and
-      burns in a frame counter and device string &mdash; the same <code>Mat</code> shape a real
+      burns in a frame counter and device string, the same <code>Mat</code> shape a real
       capture returns. Below, the actual motion-detection routine runs on two of them.
     </p>
     <div class="frames">
@@ -627,8 +627,8 @@
         <canvas id="fdiff" width="360" height="270"></canvas>
         <div class="meta">
           <b>Absdiff &rarr; threshold(25)</b><br>
-          changed pixels <span id="ratioOut">&mdash;</span> &nbsp;vs&nbsp; threshold <b>5.0%</b><br>
-          <span class="verdict" id="verdictOut">&mdash;</span>
+          changed pixels <span id="ratioOut">-</span> &nbsp;vs&nbsp; threshold <b>5.0%</b><br>
+          <span class="verdict" id="verdictOut">-</span>
         </div>
       </div>
       <div class="card frame">
@@ -640,7 +640,7 @@
 
   <section id="code">
     <p class="eyebrow">The seam</p>
-    <h2>One interface, two implementations &mdash; the pipeline never knows which.</h2>
+    <h2>One interface, two implementations. The pipeline never knows which.</h2>
     <div class="split">
       <pre class="code" aria-label="C# source excerpt"><span class="com">// RpiCamera.Core/Interfaces/ICamera.cs</span>
 <span class="kw">public interface</span> <span class="typ">ICamera</span> : <span class="typ">IDisposable</span>
@@ -664,7 +664,7 @@ controller.CaptureSequence(count: <span class="num">10</span>, delayMS: <span cl
         <li><b>Hardware abstraction.</b> Real Pi camera and synthetic mock implement the same <code style="font-size:12px;font-family:var(--font-mono)">ICamera</code>; the choice is a boolean at startup.</li>
         <li><b>Dependency inversion.</b> Controllers and demos are constructed with interfaces, so implementations are injected and mocked.</li>
         <li><b>Testable without hardware.</b> 14 NUnit tests, Moq for collaborators, deterministic, runs in CI on any OS.</li>
-        <li><b>Computer vision.</b> OpenCV via OpenCvSharp &mdash; grayscale, Gaussian blur, Canny, resize, frame-diff motion.</li>
+        <li><b>Computer vision.</b> OpenCV via OpenCvSharp: grayscale, Gaussian blur, Canny, resize, frame-diff motion.</li>
         <li><b>Cross-platform .NET.</b> <code style="font-size:12px;font-family:var(--font-mono)">netstandard2.1</code> core library; Linux runtime for the Pi, Windows for dev.</li>
         <li><b>Focused modules.</b> Core / Functionality / Tests, each with a single responsibility and a clear public surface.</li>
       </ul>
@@ -675,7 +675,7 @@ controller.CaptureSequence(count: <span class="num">10</span>, delayMS: <span cl
 
 <footer>
   <div class="wrap">
-    <span class="fmeta"><b>PiCam Security</b> &mdash; portfolio project</span>
+    <span class="fmeta"><b>PiCam Security</b> &nbsp;·&nbsp; portfolio project</span>
     <span class="fmeta">.NET 9 &middot; netstandard2.1 &middot; OpenCvSharp 4.13 &middot; NUnit 4 &middot; Moq</span>
     <span class="fmeta"><b>14</b> unit tests &middot; <b>5</b> capture modes &middot; <b>2</b> camera backends</span>
   </div>
@@ -826,7 +826,7 @@ controller.CaptureSequence(count: <span class="num">10</span>, delayMS: <span cl
     paintFrame(c1.getContext("2d"), W, H, 70701, 7);
     paintFrame(c2.getContext("2d"), W, H, 99811, 8);
 
-    // motion diff — the real DetectMotion algorithm
+    // motion diff: the real DetectMotion algorithm
     var a = offscreen(W, H), b = offscreen(W, H);
     paintFrame(a.getContext("2d"), W, H, 70701, 7);
     paintFrame(b.getContext("2d"), W, H, 99811, 8);
@@ -862,7 +862,7 @@ controller.CaptureSequence(count: <span class="num">10</span>, delayMS: <span cl
       ratio > 5 ? "ratio > threshold  →  MOTION EVENT, frame saved"
                 : "ratio < threshold  →  no event";
 
-    // edge detection sketch — strokes on black
+    // edge detection sketch: strokes on black
     var e = document.getElementById("fedge").getContext("2d");
     e.fillStyle = "#0a0a0a"; e.fillRect(0, 0, W, H);
     var re = rng(70701), s = W / 640;

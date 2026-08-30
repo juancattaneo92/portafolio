@@ -85,3 +85,36 @@ document.addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') resetSkillCards(null);
 });
+
+// Project pages: "View repo" opens a "repo is private" modal instead of a link
+const repoBtns = document.querySelectorAll('.pd-repo-btn');
+if (repoBtns.length) {
+  const modal = document.createElement('div');
+  modal.className = 'pd-modal';
+  modal.innerHTML =
+    '<div class="pd-modal-backdrop" data-close></div>' +
+    '<div class="pd-modal-card" role="dialog" aria-modal="true" aria-labelledby="pd-modal-title">' +
+      '<button class="pd-modal-x" data-close aria-label="Close">&times;</button>' +
+      '<h3 id="pd-modal-title">Repo is private</h3>' +
+      '<p>The source for this project isn\'t public. If you\'re interested in it, reach out and I\'ll be glad to walk you through it.</p>' +
+      '<a class="btn btn-primary" href="../index.html#contact" data-close>Get in touch</a>' +
+    '</div>';
+  document.body.appendChild(modal);
+
+  function openRepoModal() {
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeRepoModal() {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  repoBtns.forEach(btn => btn.addEventListener('click', openRepoModal));
+  modal.addEventListener('click', (e) => {
+    if (e.target.closest('[data-close]')) closeRepoModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeRepoModal();
+  });
+}

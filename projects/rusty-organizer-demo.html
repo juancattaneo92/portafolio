@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>RustyOrganizer · Demo</title>
+<meta name="description" content="A Rust command-line tool that sorts a messy folder into category directories, finds duplicate files, and shows every move before it happens. This page runs one organize pass end to end." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M3 8.5A2.5 2.5 0 0 1 5.5 6h5l3 3h8A2.5 2.5 0 0 1 29 11.5v13A2.5 2.5 0 0 1 26.5 27h-21A2.5 2.5 0 0 1 3 24.5z' fill='%23bd4a1e'/%3E%3Cpath d='M12 19h8m0 0-3-3m3 3-3 3' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --rust:       #bd4a1e;
+    --rust-deep:  #973813;
+    --rust-tint:  #f7e9df;
+    --iron:       #40515e;
+    --iron-deep:  #2c3a45;
+    --patina:     #2b8a7e;
+    --patina-tint:#e0f0ec;
+    --amber:      #d99a2b;
+    --danger:     #c0392b;
+
+    --bg:      #ffffff;
+    --bg-soft: #f7f3ec;
+    --card:    #ffffff;
+    --ink:     #211a15;
+    --ink-soft:#6a5f55;
+    --line:    #e9e1d5;
+
+    --term-bg:  #1b1915;
+    --term-ink: #e8e2d6;
+    --term-dim: #8a8073;
+
+    --shadow:    0 4px 20px rgba(33, 26, 21, .07), 0 1px 3px rgba(33, 26, 21, .05);
+    --shadow-lg: 0 16px 46px rgba(33, 26, 21, .13);
+
+    --display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    --body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+    --radius: 14px;
+    --radius-sm: 9px;
+  }
+
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --rust:       #e2683a;
+      --rust-deep:  #c2521f;
+      --rust-tint:  #3a2417;
+      --iron:       #8ea3b0;
+      --iron-deep:  #aebfc9;
+      --patina:     #4fb3a3;
+      --patina-tint:#12312c;
+      --amber:      #edb95a;
+      --danger:     #e0685a;
+
+      --bg:      #171310;
+      --bg-soft: #1f1a15;
+      --card:    #221c17;
+      --ink:     #ece5db;
+      --ink-soft:#a99c8d;
+      --line:    #33291f;
+
+      --shadow:    0 4px 20px rgba(0, 0, 0, .3), 0 1px 3px rgba(0, 0, 0, .32);
+      --shadow-lg: 0 18px 48px rgba(0, 0, 0, .44);
+    }
+  }
+  :root[data-theme="dark"] {
+    --rust:       #e2683a;
+    --rust-deep:  #c2521f;
+    --rust-tint:  #3a2417;
+    --iron:       #8ea3b0;
+    --iron-deep:  #aebfc9;
+    --patina:     #4fb3a3;
+    --patina-tint:#12312c;
+    --amber:      #edb95a;
+    --danger:     #e0685a;
+
+    --bg:      #171310;
+    --bg-soft: #1f1a15;
+    --card:    #221c17;
+    --ink:     #ece5db;
+    --ink-soft:#a99c8d;
+    --line:    #33291f;
+
+    --shadow:    0 4px 20px rgba(0, 0, 0, .3), 0 1px 3px rgba(0, 0, 0, .32);
+    --shadow-lg: 0 18px 48px rgba(0, 0, 0, .44);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+
+  section { padding: clamp(46px, 8vw, 88px) 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: 0; }
+
+  /* ---------- shared type ---------- */
+  .eyebrow {
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--rust-deep);
+    margin: 0 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 22px; height: 14px;
+    background: var(--rust);
+    /* folder-tab silhouette, the page motif */
+    clip-path: polygon(0 100%, 0 22%, 42% 22%, 55% 0, 100% 0, 100% 100%);
+    flex-shrink: 0;
+  }
+  :root[data-theme="dark"] .eyebrow::before { background: var(--rust); }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(34px, 6.4vw, 60px);
+    line-height: 1.03;
+    letter-spacing: -.02em;
+    margin: 0 0 22px;
+  }
+  h1 .rust { color: var(--rust); }
+
+  .thesis {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(19px, 2.9vw, 26px);
+    line-height: 1.38;
+    letter-spacing: -.008em;
+    max-width: 24ch;
+    margin: 0 0 24px;
+  }
+  .thesis em { font-style: normal; color: var(--patina); }
+
+  .lede { max-width: 62ch; color: var(--ink-soft); margin: 0 0 26px; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; list-style: none; padding: 0; margin: 0; }
+  .tags li {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+  .wordmark .glyph {
+    width: 42px; height: 42px;
+    border-radius: 11px;
+    background: var(--rust);
+    display: grid; place-items: center;
+    box-shadow: 0 6px 16px rgba(189, 74, 30, .28);
+  }
+  .wordmark .glyph svg { width: 24px; height: 24px; }
+  .wordmark .name {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: -.01em;
+  }
+
+  h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(23px, 3.6vw, 31px);
+    letter-spacing: -.015em;
+    margin: 0 0 8px;
+  }
+  .section-note {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin: 0 0 30px;
+    line-height: 1.7;
+  }
+  .section-note code { color: var(--rust-deep); }
+
+  /* ================= ORGANIZE (signature) ================= */
+  .run-bar {
+    display: flex; align-items: center; gap: 15px; flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .run-btn {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 13.5px;
+    letter-spacing: .02em;
+    color: #fff;
+    background: var(--rust);
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 24px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(189, 74, 30, .26);
+    transition: background .15s ease, transform .1s ease;
+  }
+  .run-btn:hover { background: var(--rust-deep); }
+  .run-btn:active { transform: translateY(1px); }
+  .run-btn:disabled { opacity: .5; cursor: default; box-shadow: none; }
+  .run-btn.ghost {
+    background: transparent;
+    color: var(--rust-deep);
+    border: 1.5px solid var(--rust);
+    box-shadow: none;
+  }
+  .run-btn.ghost:hover { background: var(--rust-tint); }
+  .run-btn:focus-visible { outline: 3px solid var(--iron); outline-offset: 3px; }
+
+  .run-status {
+    font-family: var(--mono); font-size: 12.5px; color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .run-status b { color: var(--patina); font-weight: 600; }
+
+  /* stage rail */
+  .rail {
+    display: flex; align-items: stretch; gap: 0;
+    margin-bottom: 26px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .rail-step {
+    display: flex; align-items: center; gap: 9px;
+    flex-shrink: 0;
+    font-family: var(--mono); font-size: 11.5px; font-weight: 500;
+    color: var(--ink-soft);
+    padding-right: 14px;
+  }
+  .rail-step::before {
+    content: "";
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--line);
+    border: 2px solid var(--line);
+    transition: background .3s ease, border-color .3s ease;
+    flex-shrink: 0;
+  }
+  .rail-step::after {
+    content: "";
+    width: 22px; height: 2px;
+    background: var(--line);
+    margin-left: 5px;
+  }
+  .rail-step:last-child::after { display: none; }
+  .rail-step.on { color: var(--ink); }
+  .rail-step.on::before { background: var(--patina); border-color: var(--patina); }
+
+  /* two panes */
+  .panes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 720px) { .panes { grid-template-columns: 1fr; } }
+
+  .pane {
+    position: relative;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    min-height: 320px;
+  }
+  .pane-head {
+    font-family: var(--mono); font-size: 12px; font-weight: 600;
+    color: var(--ink-soft);
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .pane-head .count { color: var(--rust-deep); }
+
+  .file-list { display: flex; flex-direction: column; }
+  .file {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 9px;
+    margin-bottom: 5px;
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    border: 1px solid var(--line);
+    font-size: 13px;
+    transition: opacity .35s ease, transform .35s ease, max-height .35s ease, padding .35s ease, margin .35s ease, border-width .35s ease;
+    max-height: 60px;
+    overflow: hidden;
+  }
+  .file .ext {
+    font-family: var(--mono); font-size: 9.5px; font-weight: 600;
+    letter-spacing: .04em;
+    color: var(--iron-deep);
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 2px 5px;
+    flex-shrink: 0;
+    min-width: 40px; text-align: center;
+  }
+  .file .fname {
+    flex: 1; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .file .fsize { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); flex-shrink: 0; }
+  .file .badge {
+    font-family: var(--mono); font-size: 9.5px; font-weight: 600;
+    padding: 2px 6px; border-radius: 999px;
+    flex-shrink: 0;
+  }
+  .file .badge.cat  { background: var(--patina-tint); color: var(--patina); }
+  .file .badge.dupe { background: var(--rust-tint); color: var(--rust-deep); }
+  .file .badge.stay { background: var(--bg-soft); color: var(--ink-soft); border: 1px solid var(--line); }
+
+  .file.deleting { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 12%, var(--card)); }
+  .file.gone {
+    opacity: 0; transform: translateX(-12px);
+    max-height: 0; padding-top: 0; padding-bottom: 0; margin: 0; border-width: 0;
+  }
+
+  /* right pane buckets */
+  .buckets { display: flex; flex-direction: column; gap: 8px; }
+  .bucket {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 9px 11px;
+    opacity: .5;
+    transition: opacity .3s ease;
+  }
+  .bucket.filled { opacity: 1; }
+  .bucket-head {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11.5px; font-weight: 600;
+  }
+  .bucket-head .dot { width: 7px; height: 7px; border-radius: 2px; background: var(--rust); flex-shrink: 0; }
+  .bucket-head .bcount {
+    margin-left: auto;
+    font-size: 10px; color: var(--ink-soft);
+    background: var(--bg-soft); border: 1px solid var(--line);
+    border-radius: 999px; padding: 1px 7px;
+  }
+  .bucket-items { display: flex; flex-direction: column; gap: 3px; margin-top: 6px; }
+  .bucket-items:empty { display: none; }
+  .bfile {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-soft);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding-left: 15px;
+    animation: slidein .3s ease both;
+  }
+  @keyframes slidein { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: none; } }
+
+  .loose-note {
+    margin-top: 10px; padding-top: 10px;
+    border-top: 1px dashed var(--line);
+    font-family: var(--mono); font-size: 11px; color: var(--ink-soft);
+  }
+
+  /* terminal */
+  .term {
+    background: var(--term-bg);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--term-ink);
+    overflow-x: auto;
+    white-space: pre;
+    min-height: 132px;
+    box-shadow: var(--shadow);
+  }
+  .term .prompt { color: var(--patina); }
+  .term .mv  { color: #e8934f; }
+  .term .del { color: #e0685a; }
+  .term .arw { color: var(--term-dim); }
+  .term .cat { color: #6fc7b8; }
+  .term .dim { color: var(--term-dim); }
+  .term .ok  { color: #8bc98b; }
+  .term .cursor {
+    display: inline-block; width: 8px; height: 15px;
+    background: var(--term-ink); vertical-align: -3px;
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .term .cursor { animation: none; } }
+
+  /* ================= TUI recreation ================= */
+  .tui-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tui-tab {
+    font-family: var(--mono); font-size: 12px; font-weight: 500;
+    padding: 7px 15px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .tui-tab[aria-selected="true"] {
+    background: var(--iron-deep); color: var(--bg);
+    border-color: var(--iron-deep);
+  }
+  :root[data-theme="dark"] .tui-tab[aria-selected="true"] { color: #171310; }
+  .tui-tab:focus-visible { outline: 3px solid var(--rust); outline-offset: 2px; }
+
+  .tui {
+    background: var(--term-bg);
+    border-radius: var(--radius);
+    padding: 4px;
+    box-shadow: var(--shadow);
+  }
+  .tui-frame {
+    border: 1px solid #4a4136;
+    border-radius: 9px;
+    padding: 12px 14px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: var(--term-ink);
+    overflow-x: auto;
+  }
+  .tui-title { color: var(--term-dim); border-bottom: 1px solid #342e26; padding-bottom: 7px; margin-bottom: 8px; white-space: pre; }
+  .tui-title b { color: #e8934f; font-weight: 600; }
+  .tui-row { white-space: pre; }
+  .tui-row .chk { color: #6fc7b8; }
+  .tui-row .off { color: var(--term-dim); }
+  .tui-row .mv  { color: #e8934f; }
+  .tui-row .del { color: #e0685a; }
+  .tui-row .arw { color: var(--term-dim); }
+  .tui-row .tag { color: var(--term-dim); }
+  .tui-row.sel { background: #e8e2d6; color: #1b1915; }
+  .tui-row.sel .chk, .tui-row.sel .mv, .tui-row.sel .del, .tui-row.sel .arw, .tui-row.sel .tag { color: #1b1915; }
+  .tui-foot { color: var(--term-dim); border-top: 1px solid #342e26; padding-top: 7px; margin-top: 8px; white-space: pre; }
+  .tui-grp { color: var(--amber); }
+  .tui-keep { color: #8bc98b; }
+
+  /* ================= rules ================= */
+  .rules-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 720px) { .rules-grid { grid-template-columns: 1fr; } }
+  .code-card {
+    background: var(--term-bg);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.75;
+    color: var(--term-ink);
+    overflow-x: auto; white-space: pre;
+    box-shadow: var(--shadow);
+  }
+  .code-card .c { color: var(--term-dim); }
+  .code-card .k { color: #6fc7b8; }
+  .code-card .s { color: #e8934f; }
+  .rule-reads { display: flex; flex-direction: column; gap: 10px; }
+  .rule-read {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius-sm); padding: 13px 15px;
+    box-shadow: var(--shadow);
+  }
+  .rule-read b { font-family: var(--mono); font-size: 12px; color: var(--rust-deep); }
+  .rule-read p { margin: 3px 0 0; font-size: 13.5px; color: var(--ink-soft); }
+
+  /* ================= safety notes ================= */
+  .notes { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+  @media (max-width: 720px) { .notes { grid-template-columns: 1fr; } }
+  .note {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .note::after {
+    content: "";
+    position: absolute; top: 0; right: 0;
+    width: 26px; height: 26px;
+    background: var(--rust-tint);
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+  }
+  .note h3 {
+    font-family: var(--display); font-weight: 600; font-size: 15px;
+    margin: 0 0 5px;
+  }
+  .note p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+  .note code { font-family: var(--mono); font-size: 12px; color: var(--rust-deep); }
+
+  /* ================= architecture ================= */
+  .arch-wrap {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: clamp(18px, 4vw, 30px);
+  }
+  .arch { width: 100%; height: auto; display: block; overflow: visible; }
+  .arch text { font-family: var(--mono); }
+  .arch .box { fill: var(--card); stroke: var(--line); stroke-width: 2; }
+  .arch .box-exec { stroke: var(--rust); stroke-width: 2.5; }
+  .arch .lbl { font-size: 12px; font-weight: 600; fill: var(--ink); }
+  .arch .sub { font-size: 10px; fill: var(--ink-soft); }
+  .arch .flow { stroke: var(--iron); stroke-width: 1.8; fill: none; }
+  .arch .flow-lbl { font-size: 9.5px; fill: var(--ink-soft); }
+  .arch .fe { font-size: 11px; font-weight: 600; fill: var(--rust-deep); }
+
+  .arch-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 11px;
+    margin-top: 18px;
+  }
+  .arch-legend div {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius-sm); padding: 13px 15px;
+    font-size: 13px; color: var(--ink-soft);
+    box-shadow: var(--shadow);
+  }
+  .arch-legend b { font-family: var(--mono); font-size: 11.5px; color: var(--ink); display: block; margin-bottom: 3px; }
+
+  /* ================= commands table ================= */
+  .table-scroll { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--line); }
+  table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12.5px; background: var(--card); }
+  th, td { text-align: left; padding: 12px 15px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th {
+    font-family: var(--display); font-weight: 600;
+    font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink-soft); background: var(--bg-soft);
+  }
+  td code { color: var(--rust-deep); }
+  .td-desc { font-family: var(--body); font-size: 14px; color: var(--ink); }
+  tr:last-child td { border-bottom: 0; }
+
+  /* ================= why ================= */
+  .prose { max-width: 64ch; }
+  .prose p { color: var(--ink-soft); margin: 0 0 16px; }
+  .prose strong { color: var(--ink); font-weight: 600; }
+  .prose code { font-family: var(--mono); font-size: 13px; color: var(--rust-deep); }
+  .tradeoff {
+    margin-top: 22px;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--amber);
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    padding: 17px 20px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    box-shadow: var(--shadow);
+  }
+  .tradeoff b {
+    font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink); display: block; margin-bottom: 6px;
+  }
+
+  /* ================= footer ================= */
+  footer { padding: clamp(42px, 8vw, 68px) 0 88px; }
+  .foot-row { display: flex; flex-wrap: wrap; gap: 13px 24px; align-items: center; }
+  .repo-link {
+    font-family: var(--display); font-weight: 600; font-size: 13px;
+    color: #fff; background: var(--iron-deep);
+    border-radius: 999px; padding: 11px 22px;
+    text-decoration: none;
+    transition: background .15s ease;
+  }
+  :root[data-theme="dark"] .repo-link { background: var(--rust); color: #fff; }
+  .repo-link:hover { background: var(--rust-deep); }
+  .repo-link:focus-visible { outline: 3px solid var(--iron); outline-offset: 3px; }
+  .foot-stack { font-family: var(--mono); font-size: 12px; color: var(--ink-soft); }
+  .disclaimer {
+    font-family: var(--mono); font-size: 11.5px;
+    color: var(--ink-soft); line-height: 1.75;
+    margin-top: 24px; max-width: 64ch;
+  }
+
+  .theme-toggle {
+    position: fixed; top: 14px; right: 14px; z-index: 20;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .05em;
+    background: var(--card); color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 999px; padding: 7px 13px;
+    cursor: pointer; box-shadow: var(--shadow);
+  }
+  .theme-toggle:hover { color: var(--ink); }
+  .theme-toggle:focus-visible { outline: 3px solid var(--rust); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">light / dark</button>
+
+<div class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <section>
+    <div class="wordmark">
+      <span class="glyph">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h5l3 3h8A2.5 2.5 0 0 1 29 11.5v13A2.5 2.5 0 0 1 26.5 27h-21A2.5 2.5 0 0 1 3 24.5z" fill="#fff" opacity=".92"/>
+          <path d="M12 19h8m0 0-3-3m3 3-3 3" fill="none" stroke="#bd4a1e" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="name">RustyOrganizer</span>
+    </div>
+
+    <p class="eyebrow">Command-line tool · terminal UI · no window</p>
+    <h1>A messy folder in.<br />An <span class="rust">organized</span> one out.</h1>
+    <p class="thesis">And you see <em>every move before it happens</em>. Nothing is touched until you say so.</p>
+    <p class="lede">
+      RustyOrganizer is a Rust CLI that sorts a directory into category folders by rule,
+      finds byte-identical duplicates, and can keep watching for new files. It has no
+      graphical interface, so this page does the thing a screenshot can't: it runs one
+      organize pass, step by step, and shows what the tool hands you at each stage.
+    </p>
+    <ul class="tags">
+      <li>Rust 2024</li>
+      <li>clap</li>
+      <li>ratatui</li>
+      <li>BLAKE3</li>
+      <li>notify</li>
+      <li>serde · toml</li>
+      <li>55 tests</li>
+    </ul>
+  </section>
+
+  <!-- ============ ORGANIZE (signature) ============ -->
+  <section>
+    <h2>Organize a folder</h2>
+    <p class="section-note">A mock <code>~/Downloads</code> with 12 files, two of them identical. Watch it sort, then put it back.</p>
+
+    <div class="run-bar">
+      <button class="run-btn" id="runBtn">Organize the folder</button>
+      <span class="run-status" id="runStatus">12 files, unsorted. Press organize to trace the run.</span>
+    </div>
+
+    <div class="rail" id="rail">
+      <span class="rail-step" data-stage="scan">Scan</span>
+      <span class="rail-step" data-stage="classify">Classify</span>
+      <span class="rail-step" data-stage="dedupe">Dedupe</span>
+      <span class="rail-step" data-stage="plan">Plan</span>
+      <span class="rail-step" data-stage="apply">Apply</span>
+    </div>
+
+    <div class="panes">
+      <div class="pane">
+        <div class="pane-head"><span>~/Downloads</span><span class="count" id="leftCount">12 files</span></div>
+        <div class="file-list" id="leftList"></div>
+      </div>
+      <div class="pane">
+        <div class="pane-head"><span>~/Downloads, sorted</span><span class="count" id="rightCount">0 filed</span></div>
+        <div class="buckets" id="buckets"></div>
+        <div class="loose-note" id="looseNote" hidden></div>
+      </div>
+    </div>
+
+    <div class="term" id="term"><span class="prompt">$</span> organize ~/Downloads --dedupe<span class="cursor"></span></div>
+  </section>
+
+  <!-- ============ TUI ============ -->
+  <section>
+    <h2>The terminal UI</h2>
+    <p class="section-note">Run with <code>-i</code> to review the plan before it runs. <code>Space</code> toggles a change, <code>Enter</code> picks which duplicate to keep, <code>a</code> applies.</p>
+
+    <div class="tui-tabs" role="tablist" aria-label="Terminal UI views">
+      <button class="tui-tab" role="tab" aria-selected="true" id="tab-plan" aria-controls="view-plan">Plan</button>
+      <button class="tui-tab" role="tab" aria-selected="false" id="tab-dupes" aria-controls="view-dupes">Duplicates</button>
+    </div>
+
+    <div class="tui">
+      <div class="tui-frame" role="tabpanel" id="view-plan" aria-labelledby="tab-plan">
+<div class="tui-title"> RustyOrganizer <b>Plan (10/11)</b>   Duplicates (1) </div>
+<div class="tui-row sel">▶ <span class="chk">[x]</span> <span class="del">delete</span> invoice_sept (copy).pdf        <span class="tag">[duplicate of invoice_sept.pdf]</span></div>
+<div class="tui-row">  <span class="chk">[x]</span> <span class="mv">move  </span>IMG_4021.HEIC <span class="arw">→</span> Images/           <span class="tag">[Images]</span></div>
+<div class="tui-row">  <span class="chk">[x]</span> <span class="mv">move  </span>Screenshot 2026-08-14.png <span class="arw">→</span> Images/ <span class="tag">[Images]</span></div>
+<div class="tui-row">  <span class="off">[ ]</span> <span class="off">move  budget.xlsx → Spreadsheets/</span>        <span class="tag">[Spreadsheets]</span></div>
+<div class="tui-row">  <span class="chk">[x]</span> <span class="mv">move  </span>roadtrip.mov <span class="arw">→</span> Video/            <span class="tag">[Video]</span></div>
+<div class="tui-row">  <span class="chk">[x]</span> <span class="mv">move  </span>backup.tar.gz <span class="arw">→</span> Archives/        <span class="tag">[Archives]</span></div>
+<div class="tui-foot"> Tab: switch view   Space: toggle   Enter: keep this copy   a: apply   q: cancel </div>
+      </div>
+
+      <div class="tui-frame" role="tabpanel" id="view-dupes" aria-labelledby="tab-dupes" hidden>
+<div class="tui-title"> RustyOrganizer  Plan (10/11)   <b>Duplicates (1)</b> </div>
+<div class="tui-row"><span class="tui-grp">── 2 copies · 82 KB each · 82 KB reclaimable ──</span></div>
+<div class="tui-row sel">▶   <span class="tui-keep">keep  </span> invoice_sept.pdf</div>
+<div class="tui-row">    <span class="del">delete</span> invoice_sept (copy).pdf</div>
+<div class="tui-row"> </div>
+<div class="tui-row"><span class="dim">   the oldest file is kept by default. press Enter on another to change it</span></div>
+<div class="tui-foot"> Tab: switch view   ↑/↓: move   Enter: keep the highlighted copy   a: apply </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RULES ============ -->
+  <section>
+    <h2>Sorting is a config file</h2>
+    <p class="section-note">No config needed to start. The built-in rules cover the common types. Drop a <code>config.toml</code> next to a folder to change how it sorts, no rebuild.</p>
+
+    <div class="rules-grid">
+      <div class="code-card"><span class="c"># first rule that matches a file wins</span>
+<span class="c"># use_default_rules keeps the built-ins as a fallback</span>
+use_default_rules = <span class="s">true</span>
+
+[[rules]]
+name   = <span class="s">"Screenshots"</span>
+target = <span class="s">"Screenshots"</span>
+<span class="k">match</span>  = { name_contains = <span class="s">"screenshot"</span> }
+
+[[rules]]
+name   = <span class="s">"Photos by month"</span>
+target = <span class="s">"Photos/{year}/{month}"</span>
+<span class="k">match</span>  = { extensions = [<span class="s">"jpg"</span>, <span class="s">"heic"</span>] }
+
+[[rules]]
+name   = <span class="s">"Stale downloads"</span>
+target = <span class="s">"Archive"</span>
+<span class="k">match</span>  = { older_than_days = <span class="s">90</span> }</div>
+
+      <div class="rule-reads">
+        <div class="rule-read"><b>name_contains</b><p>Anything with “screenshot” in the filename goes to <code>Screenshots/</code>, before the image rule can catch it.</p></div>
+        <div class="rule-read"><b>{year}/{month}</b><p>Targets expand from the file’s date, so photos land in <code>Photos/2026/08/</code>.</p></div>
+        <div class="rule-read"><b>older_than_days</b><p>A match can also test size (<code>"200MB"</code>) or age. Conditions combine with AND.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SAFETY ============ -->
+  <section>
+    <h2>It assumes it will be wrong</h2>
+    <p class="section-note">The whole tool is built so a bad run costs you nothing.</p>
+
+    <div class="notes">
+      <div class="note">
+        <h3>Preview is the default</h3>
+        <p>Every run prints the full plan and waits for <code>y</code>. <code>--dry-run</code> stops there; <code>--yes</code> skips the prompt when you mean it.</p>
+      </div>
+      <div class="note">
+        <h3>Nothing is overwritten</h3>
+        <p>A name clash at the destination becomes <code>report (1).pdf</code>, then <code>(2)</code>. Two different files never collapse into one.</p>
+      </div>
+      <div class="note">
+        <h3>Every run is reversible</h3>
+        <p>Applied moves are logged to <code>.rusty-organizer/history.jsonl</code>. <code>organize &lt;dir&gt; --undo</code> walks the last run backwards.</p>
+      </div>
+      <div class="note">
+        <h3>Watch mode won’t delete</h3>
+        <p><code>-w</code> keeps a folder tidy as files arrive, but only ever <em>moves</em>. Duplicate cleanup stays a manual, confirmed step.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ARCHITECTURE ============ -->
+  <section>
+    <h2>How it’s built</h2>
+    <p class="section-note">A pipeline of pure functions with one impure end. The CLI, the TUI, and watch mode are three doors into the same room.</p>
+
+    <div class="arch-wrap">
+      <svg class="arch" viewBox="0 0 700 300" role="img" aria-label="Diagram: the scanner reads the folder and passes file metadata to the planner, which runs the classifier and duplicate detection to produce a Plan. The CLI, TUI, and watch mode each build a Plan and hand it to the executor, which is the only component that changes the filesystem.">
+        <!-- scanner -->
+        <rect class="box" x="14" y="120" width="120" height="58" rx="11" />
+        <text class="lbl" x="74" y="145" text-anchor="middle">scanner</text>
+        <text class="sub" x="74" y="162" text-anchor="middle">walk · metadata</text>
+
+        <path class="flow" d="M134 149 H180" marker-end="url(#ah)" />
+        <text class="flow-lbl" x="157" y="142" text-anchor="middle">files</text>
+
+        <!-- planner -->
+        <rect class="box" x="182" y="96" width="150" height="106" rx="11" />
+        <text class="lbl" x="257" y="120" text-anchor="middle">planner</text>
+        <rect class="box" x="198" y="132" width="118" height="24" rx="6" />
+        <text class="sub" x="257" y="148" text-anchor="middle">classifier (rules)</text>
+        <rect class="box" x="198" y="164" width="118" height="24" rx="6" />
+        <text class="sub" x="257" y="180" text-anchor="middle">dedupe (BLAKE3)</text>
+
+        <path class="flow" d="M332 149 H392" marker-end="url(#ah)" />
+        <text class="flow-lbl" x="362" y="142" text-anchor="middle">Plan</text>
+
+        <!-- executor -->
+        <rect class="box box-exec" x="394" y="120" width="140" height="58" rx="11" />
+        <text class="lbl" x="464" y="145" text-anchor="middle">executor</text>
+        <text class="sub" x="464" y="162" text-anchor="middle">the only writer</text>
+
+        <path class="flow" d="M534 149 H628" marker-end="url(#ah)" />
+        <text class="flow-lbl" x="586" y="142" text-anchor="middle">move · delete</text>
+        <text class="lbl" x="664" y="145" text-anchor="middle" font-size="11">disk</text>
+
+        <!-- front ends -->
+        <text class="fe" x="257" y="238" text-anchor="middle">CLI</text>
+        <text class="fe" x="257" y="256" text-anchor="middle">TUI</text>
+        <text class="fe" x="257" y="274" text-anchor="middle">watch</text>
+        <path class="flow" d="M300 258 Q400 258 430 182" stroke-dasharray="4 3" marker-end="url(#ah)" />
+        <text class="flow-lbl" x="392" y="250">build &amp; confirm a Plan</text>
+
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--iron)" />
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="arch-legend">
+      <div><b>scanner</b>Walks the tree with <code>walkdir</code>, returns path, extension, size and mtime. Unreadable entries warn, never abort.</div>
+      <div><b>planner</b>Pure. Duplicate deletes first, then a classification move for every file that isn’t being deleted.</div>
+      <div><b>executor</b>The single place that touches the filesystem. Collision-safe, cross-device aware, dry-run capable.</div>
+      <div><b>history</b>Append-only JSONL log per folder, the backing store for <code>--undo</code>.</div>
+    </div>
+  </section>
+
+  <!-- ============ COMMANDS ============ -->
+  <section>
+    <h2>The commands</h2>
+    <p class="section-note">One positional argument, the directory, plus flags that stack.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Invocation</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>organize ~/Downloads</code></td><td class="td-desc">Preview the plan, then ask before moving anything.</td></tr>
+          <tr><td><code>organize ~/Downloads --dedupe</code></td><td class="td-desc">Also hash contents and fold duplicate copies into the plan for deletion.</td></tr>
+          <tr><td><code>organize ~/Downloads -i</code></td><td class="td-desc">Open the terminal UI to toggle changes and pick which duplicate to keep.</td></tr>
+          <tr><td><code>organize ~/Downloads --dry-run</code></td><td class="td-desc">Print the plan and exit without touching anything.</td></tr>
+          <tr><td><code>organize ~/Downloads --undo</code></td><td class="td-desc">Reverse the most recent run in that folder.</td></tr>
+          <tr><td><code>organize ~/Downloads -w</code></td><td class="td-desc">Stay running and sort new files as they land. Ctrl-C to stop.</td></tr>
+          <tr><td><code>organize ~/Downloads --config rules.toml</code></td><td class="td-desc">Sort by a specific rules file instead of the auto-discovered one.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ WHY ============ -->
+  <section>
+    <h2>Why Rust, and what it taught me</h2>
+    <div class="prose">
+      <p>
+        The job is small, but it moves and deletes your files, so the cost of a bug is real.
+        Rust’s ownership rules made the safety model easier to hold in my head: the
+        <strong>executor</strong> owns the plan while it runs, and it’s the only code in the
+        crate that can call <code>fs::rename</code> or <code>fs::remove_file</code>. Everything
+        else (scanning, classifying, hashing, planning) is pure and returns data, which is
+        also why most of the <strong>55 tests</strong> are plain function calls with no temp
+        directories.
+      </p>
+      <p>
+        The pieces I’d underestimated were the boring ones: resolving name collisions without
+        ever overwriting, making a second run a no-op, and getting cross-device moves to fall
+        back to copy-and-delete. The TUI was its own lesson: an event loop that has to stay
+        responsive while never being the thing that writes to disk.
+      </p>
+      <p class="tradeoff">
+        <b>The honest tradeoff</b>
+        Content-hashing every size-colliding file is slower than trusting names, and the
+        undo log only covers moves, so a deleted duplicate is gone. Both were deliberate: correct
+        over fast for the dangerous part, and don’t pretend deletes are reversible when they
+        aren’t.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="foot-row">
+      <a class="repo-link" href="https://github.com/juancattaneo92/file-organizer">View the repository ↗</a>
+      <span class="foot-stack">Rust · clap · ratatui · BLAKE3 · notify · serde</span>
+    </div>
+    <p class="disclaimer">
+      The run traced on this page is a simulation. The plan format, category names, duplicate
+      report and TUI layout match the real tool’s output; the file list is invented and no
+      command runs in your browser.
+    </p>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------------- theme ---------------- */
+  var root = document.documentElement;
+  var toggle = document.getElementById("themeToggle");
+  var stored = null;
+  try { stored = localStorage.getItem("ro-demo-theme"); } catch (e) {}
+  if (stored === "dark" || stored === "light") root.setAttribute("data-theme", stored);
+
+  toggle.addEventListener("click", function () {
+    var current = root.getAttribute("data-theme");
+    if (!current) {
+      var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      current = prefersDark ? "dark" : "light";
+    }
+    var next = current === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("ro-demo-theme", next); } catch (e) {}
+  });
+
+  /* ---------------- TUI tabs ---------------- */
+  var tabs = [document.getElementById("tab-plan"), document.getElementById("tab-dupes")];
+  var views = [document.getElementById("view-plan"), document.getElementById("view-dupes")];
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener("click", function () {
+      tabs.forEach(function (t, j) {
+        var on = i === j;
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        views[j].hidden = !on;
+      });
+    });
+  });
+
+  /* ---------------- organize simulation ---------------- */
+  var FILES = [
+    { name: "invoice_sept.pdf",           ext: "PDF",  size: "82 KB",  cat: "Documents" },
+    { name: "invoice_sept (copy).pdf",    ext: "PDF",  size: "82 KB",  cat: "Documents", dupe: true },
+    { name: "IMG_4021.HEIC",              ext: "HEIC", size: "2.4 MB", cat: "Images" },
+    { name: "Screenshot 2026-08-14.png",  ext: "PNG",  size: "310 KB", cat: "Images" },
+    { name: "budget.xlsx",                ext: "XLSX", size: "44 KB",  cat: "Spreadsheets" },
+    { name: "roadtrip.mov",               ext: "MOV",  size: "1.1 GB", cat: "Video" },
+    { name: "podcast-ep12.mp3",           ext: "MP3",  size: "58 MB",  cat: "Audio" },
+    { name: "backup.tar.gz",              ext: "GZ",   size: "610 MB", cat: "Archives" },
+    { name: "build.sh",                   ext: "SH",   size: "1 KB",   cat: "Code" },
+    { name: "notes.md",                   ext: "MD",   size: "3 KB",   cat: "Documents" },
+    { name: "TablePlus.dmg",              ext: "DMG",  size: "44 MB",  cat: "Installers" },
+    { name: "random-thing.xyz",           ext: "XYZ",  size: "12 KB",  cat: null }
+  ];
+  var CATS = ["Documents", "Images", "Spreadsheets", "Video", "Audio", "Archives", "Code", "Installers"];
+
+  var btn = document.getElementById("runBtn");
+  var status = document.getElementById("runStatus");
+  var rail = document.getElementById("rail");
+  var leftList = document.getElementById("leftList");
+  var rightCount = document.getElementById("rightCount");
+  var leftCount = document.getElementById("leftCount");
+  var buckets = document.getElementById("buckets");
+  var looseNote = document.getElementById("looseNote");
+  var term = document.getElementById("term");
+
+  var railSteps = {};
+  Array.prototype.forEach.call(rail.children, function (el) { railSteps[el.dataset.stage] = el; });
+
+  var reduceMotion = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var rows = {};       // name -> left row element
+  var bucketEls = {};  // cat  -> { el, items, count }
+  var timers = [];
+  var organized = false;
+
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  function after(ms, fn) { timers.push(setTimeout(fn, reduceMotion ? 0 : ms)); }
+
+  function buildLeft() {
+    leftList.innerHTML = "";
+    rows = {};
+    FILES.forEach(function (f) {
+      var row = document.createElement("div");
+      row.className = "file";
+      row.innerHTML =
+        '<span class="ext">' + f.ext + '</span>' +
+        '<span class="fname">' + f.name + '</span>' +
+        '<span class="fsize">' + f.size + '</span>';
+      leftList.appendChild(row);
+      rows[f.name] = row;
+    });
+    leftCount.textContent = FILES.length + " files";
+  }
+
+  function buildRight() {
+    buckets.innerHTML = "";
+    bucketEls = {};
+    CATS.forEach(function (cat) {
+      var b = document.createElement("div");
+      b.className = "bucket";
+      b.innerHTML =
+        '<div class="bucket-head"><span class="dot"></span>' + cat +
+        '<span class="bcount">0</span></div>' +
+        '<div class="bucket-items"></div>';
+      buckets.appendChild(b);
+      bucketEls[cat] = { el: b, items: b.querySelector(".bucket-items"), count: 0, badge: b.querySelector(".bcount") };
+    });
+    rightCount.textContent = "0 filed";
+    looseNote.hidden = true;
+  }
+
+  function setBadge(name, cls, text) {
+    var row = rows[name];
+    if (!row) return;
+    var old = row.querySelector(".badge");
+    if (old) old.remove();
+    if (!cls) return;
+    var b = document.createElement("span");
+    b.className = "badge " + cls;
+    b.textContent = text;
+    row.insertBefore(b, row.querySelector(".fsize"));
+  }
+
+  function stage(name) {
+    var order = ["scan", "classify", "dedupe", "plan", "apply"];
+    var idx = order.indexOf(name);
+    order.forEach(function (k, i) { railSteps[k].classList.toggle("on", i <= idx); });
+  }
+
+  function termLine(html) {
+    var div = document.createElement("div");
+    div.innerHTML = html;
+    term.appendChild(div);
+    term.scrollTop = term.scrollHeight;
+  }
+
+  function reset(full) {
+    clearTimers();
+    Object.keys(railSteps).forEach(function (k) { railSteps[k].classList.remove("on"); });
+    term.innerHTML = '<span class="prompt">$</span> organize ~/Downloads --dedupe<span class="cursor"></span>';
+    buildLeft();
+    buildRight();
+    organized = false;
+    btn.textContent = "Organize the folder";
+    btn.classList.remove("ghost");
+    if (full) status.textContent = "12 files, unsorted. Press organize to trace the run.";
+  }
+
+  function fileByName(n) { for (var i = 0; i < FILES.length; i++) if (FILES[i].name === n) return FILES[i]; return null; }
+
+  function organize() {
+    clearTimers();
+    btn.disabled = true;
+    term.innerHTML = '<span class="prompt">$</span> organize ~/Downloads --dedupe';
+
+    after(200, function () {
+      stage("scan");
+      status.innerHTML = "<b>1/5</b> &nbsp; Scanning: walk the folder, read metadata.";
+      termLine('Scanned 12 file(s) in ~/Downloads');
+    });
+
+    after(900, function () {
+      stage("classify");
+      status.innerHTML = "<b>2/5</b> &nbsp; Classifying: match each file to a rule.";
+      FILES.forEach(function (f, i) {
+        after(i * 55, function () {
+          setBadge(f.name, f.cat ? "cat" : "stay", f.cat || "stays put");
+        });
+      });
+    });
+
+    after(1900, function () {
+      stage("dedupe");
+      status.innerHTML = "<b>3/5</b> &nbsp; Dedupe: hash contents, group identical files.";
+      setBadge("invoice_sept.pdf", "dupe", "duplicate");
+      setBadge("invoice_sept (copy).pdf", "dupe", "duplicate");
+      termLine('');
+      termLine('Found 1 duplicate group(s), 82 KB reclaimable:');
+      termLine('  <span class="dim">keep  </span> invoice_sept.pdf');
+      termLine('  <span class="del">delete</span> invoice_sept (copy).pdf');
+    });
+
+    after(2900, function () {
+      stage("plan");
+      status.innerHTML = "<b>4/5</b> &nbsp; Plan: one confirmed list of changes.";
+      termLine('');
+      termLine('Planned changes:');
+      termLine('  <span class="del">delete</span>  invoice_sept (copy).pdf   <span class="dim">[duplicate of invoice_sept.pdf]</span>');
+      var moves = FILES.filter(function (f) { return f.cat && !f.dupe; });
+      moves.forEach(function (f, i) {
+        after(i * 90, function () {
+          termLine('  <span class="mv">move</span>  ' + f.name + '  <span class="arw">&rarr;</span>  <span class="cat">' + f.cat + '/</span>');
+        });
+      });
+    });
+
+    after(4100, function () {
+      stage("apply");
+      status.innerHTML = "<b>5/5</b> &nbsp; Applying: move files, log the run.";
+
+      var placeable = FILES.filter(function (f) { return f.cat && !f.dupe; });
+      placeable.forEach(function (f, i) {
+        after(i * 110, function () {
+          rows[f.name].classList.add("gone");
+          var b = bucketEls[f.cat];
+          b.el.classList.add("filled");
+          b.count += 1;
+          b.badge.textContent = b.count;
+          var it = document.createElement("div");
+          it.className = "bfile";
+          it.textContent = f.name;
+          b.items.appendChild(it);
+          var filed = placeable.slice(0, i + 1).length;
+          rightCount.textContent = filed + " filed";
+        });
+      });
+
+      // duplicate: flash then remove, never appears on the right
+      after(placeable.length * 110 + 120, function () {
+        var d = rows["invoice_sept (copy).pdf"];
+        d.classList.add("deleting");
+        after(360, function () { d.classList.add("gone"); });
+      });
+
+      // loose file stays
+      after(placeable.length * 110 + 300, function () {
+        looseNote.hidden = false;
+        looseNote.textContent = "random-thing.xyz: no rule matched, left where it was";
+      });
+    });
+
+    after(5500, function () {
+      leftCount.textContent = "1 file";
+      termLine('');
+      termLine('<span class="ok">Applied 11 change(s).</span> <span class="dim">1 duplicate removed · 82 KB reclaimed</span>');
+      status.innerHTML = "<b>Done</b> &nbsp; 10 files filed into 8 folders, 1 duplicate removed. Nothing else was touched.";
+      btn.disabled = false;
+      btn.textContent = "Undo this run";
+      btn.classList.add("ghost");
+      organized = true;
+    });
+  }
+
+  function undo() {
+    clearTimers();
+    btn.disabled = true;
+    term.innerHTML = '<span class="prompt">$</span> organize ~/Downloads --undo';
+    Object.keys(railSteps).forEach(function (k) { railSteps[k].classList.remove("on"); });
+
+    var moved = FILES.filter(function (f) { return f.cat && !f.dupe; });
+
+    after(250, function () {
+      termLine('Undoing the run from 2026-08-29T16:41:07-07:00:');
+    });
+
+    moved.forEach(function (f, i) {
+      after(350 + i * 100, function () {
+        rows[f.name].classList.remove("gone");
+        setBadge(f.name, null);
+        var b = bucketEls[f.cat];
+        b.count -= 1;
+        b.badge.textContent = b.count;
+        if (b.count <= 0) { b.el.classList.remove("filled"); b.items.innerHTML = ""; }
+        else { b.items.removeChild(b.items.lastChild); }
+        termLine('  <span class="mv">move</span>  ' + f.cat + '/' + f.name.split("/").pop() + '  <span class="arw">&rarr;</span>  ' + f.name);
+      });
+    });
+
+    after(350 + moved.length * 100 + 250, function () {
+      leftCount.textContent = "11 files";
+      rightCount.textContent = "0 filed";
+      looseNote.hidden = true;
+      termLine('');
+      termLine('<span class="ok">Reverted 10 move(s).</span>');
+      termLine('<span class="dim">Note: the removed duplicate is not restored. Deletions are permanent.</span>');
+      status.innerHTML = "Back to 11 files (the duplicate stays gone). Organize again to replay.";
+      btn.disabled = false;
+      btn.textContent = "Organize the folder";
+      btn.classList.remove("ghost");
+      organized = false;
+    });
+  }
+
+  btn.addEventListener("click", function () {
+    if (organized) undo(); else organize();
+  });
+
+  reset(true);
+})();
+</script>
+</body>
+</html>

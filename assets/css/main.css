@@ -1,5 +1,5 @@
 /* ============================================================
-   Juan Carlos Cattaneo — Portfolio
+   Juan Carlos Cattaneo - Portfolio
    Modern redesign 2026
 ============================================================ */
 
@@ -459,10 +459,21 @@ h2 {
 }
 
 .hero-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: max-content max-content;
   gap: 12px;
-  flex-wrap: wrap;
+  width: fit-content;
   animation: fade-up 0.9s 0.4s var(--ease) both;
+}
+
+.hero-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Projects sits on its own row, spanning the width of the two above */
+.hero-actions .btn:last-child {
+  grid-column: 1 / -1;
 }
 
 @keyframes fade-up {
@@ -822,7 +833,7 @@ h2 {
   gap: 10px;
 }
 
-/* "Coming soon" cards — not linked, not interactive yet */
+/* "Coming soon" cards - not linked, not interactive yet */
 .project-card--soon {
   cursor: default;
   opacity: 0.62;
@@ -1306,7 +1317,7 @@ h2 {
 .projects-grid .reveal:nth-child(6) { transition-delay: 0.20s; }
 
 /* ===========================
-   Responsive — Tablet
+   Responsive - Tablet
 =========================== */
 @media (max-width: 960px) {
   .projects-grid {
@@ -1373,7 +1384,7 @@ h2 {
 }
 
 /* ===========================
-   Responsive — Mobile
+   Responsive - Mobile
 =========================== */
 @media (max-width: 900px) {
   #nav {
@@ -1453,6 +1464,10 @@ h2 {
 
   .hero-text {
     max-width: none;
+  }
+
+  .hero-actions {
+    grid-template-columns: max-content;
   }
 
   .hero-bg::after {

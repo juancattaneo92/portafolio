@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sellsy. JC Cattaneo</title>
-  <meta name="description" content="An Etsy-inspired marketplace with auth, search, and a working cart." />
+  <title>Rusty Organizer. JC Cattaneo</title>
+  <meta name="description" content="A Rust command-line tool that sorts a messy folder into category directories by rule, finds byte-identical duplicates, and shows every move before it happens." />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,23 +73,26 @@
     <header class="pd-hero reveal">
       <div class="container">
         <a href="../index.html#projects" class="pd-breadcrumb"><i class="fas fa-arrow-left"></i> All projects</a>
-        <span class="section-label"><span class="label-num">/</span> E-commerce</span>
-        <h1>Sellsy</h1>
-        <p class="pd-tagline">An Etsy-inspired marketplace with auth, search, and a working cart.</p>
+        <span class="section-label"><span class="label-num">/</span> Command-line tool</span>
+        <h1>Rusty Organizer</h1>
+        <p class="pd-tagline">A Rust CLI that sorts a messy folder into category folders by rule, finds byte-identical duplicates, and shows every move before it happens.</p>
         <div class="pd-tags">
-          <span>Ruby on Rails</span>
-          <span>React</span>
-          <span>Redux</span>
-          <span>PostgreSQL</span>
+          <span>Rust 2024</span>
+          <span>clap</span>
+          <span>ratatui</span>
+          <span>BLAKE3</span>
+          <span>notify</span>
+          <span>serde / toml</span>
         </div>
         <div class="pd-actions">
-          <a href="https://github.com/juancattaneo92/Sellsy" class="btn btn-ghost" target="_blank" rel="noopener"><i class="fab fa-github"></i> View repo</a>
+          <button type="button" class="btn btn-ghost pd-repo-btn"><i class="fab fa-github"></i> View repo</button>
+          <a href="rusty-organizer-demo.html" class="btn btn-primary" target="_blank" rel="noopener"><i class="fas fa-arrow-up-right-from-square"></i> How it works</a>
         </div>
       </div>
     </header>
 
     <div class="pd-shot container reveal">
-      <img src="../images/sellsy.png" alt="Sellsy screenshot" />
+      <img src="../images/rustyorganizer.png" alt="Rusty Organizer screenshot" />
     </div>
 
     <section class="pd-section reveal">
@@ -97,17 +100,16 @@
         <div class="pd-grid">
           <div class="pd-block">
             <h2>What I built &amp; why</h2>
-            <!-- PLACEHOLDER: replace with the real story. -->
-            <p>A full-stack marketplace modeled on Etsy: users sign up, browse and search listings, and add items to a cart that persists. It was where I learned to wire a real relational backend to a React front end end to end.</p>
-            <p>Rails handles the API, auth, and data model; React and Redux drive the storefront. The interesting parts were search, cart state, and keeping the two layers honest about what data each owned.</p>
+            <p>A download folder turns into a junk drawer fast, and most "cleanup" tools either move things around silently or need a GUI. Rusty Organizer is a command-line tool that sorts a directory into category folders by rule, finds byte-identical duplicates with a content hash, and can keep watching a folder for new files.</p>
+            <p>The whole tool is built on the assumption that it will sometimes be wrong. Every run prints the full plan and waits for confirmation; <code>--dry-run</code> stops there. Nothing is overwritten, name clashes become <code>report (1).pdf</code>, and applied moves are logged to a per-folder JSONL history so <code>--undo</code> can walk the last run backwards. Watch mode only ever moves, never deletes.</p>
+            <p>Internally it is a pipeline of pure functions with one impure end: a scanner reads the folder, a pure planner runs the classifier and duplicate detection to produce a Plan, and a single executor is the only code that touches the filesystem. The CLI, the terminal UI, and watch mode are three front ends that each build and confirm the same Plan.</p>
           </div>
           <aside class="pd-block pd-facts">
             <h3>At a glance</h3>
-            <!-- PLACEHOLDER: fill in real values. -->
             <dl>
-              <div><dt>Role</dt><dd>Solo build</dd></div>
-              <div><dt>Timeline</dt><dd>PLACEHOLDER</dd></div>
-              <div><dt>Status</dt><dd>PLACEHOLDER</dd></div>
+              <div><dt>Role</dt><dd>Solo - architecture & build</dd></div>
+              <div><dt>Timeline</dt><dd>1 day</dd></div>
+              <div><dt>Value</dt><dd>Personal project</dd></div>
             </dl>
           </aside>
         </div>
@@ -117,28 +119,26 @@
     <section class="pd-section reveal">
       <div class="container">
         <h2>Why this stack</h2>
-        <!-- PLACEHOLDER: tighten each reason to what actually drove the choice. -->
         <ul class="pd-stack">
-          <li><span class="pd-stack-name">Ruby on Rails</span><span class="pd-stack-why">Convention over configuration meant the CRUD and auth scaffolding came together fast.</span></li>
-          <li><span class="pd-stack-name">React</span><span class="pd-stack-why">The component model keeps each piece - menu, event list, gallery - isolated and easy to restyle.</span></li>
-          <li><span class="pd-stack-name">Redux</span><span class="pd-stack-why">Predictable state made the cart and search filters easy to keep in sync across the UI.</span></li>
-          <li><span class="pd-stack-name">PostgreSQL</span><span class="pd-stack-why">Relational integrity for orders, listings, and users, with room to grow into more complex queries.</span></li>
+          <li><span class="pd-stack-name">Rust</span><span class="pd-stack-why">The tool moves and deletes files, so bugs are costly. Ownership rules keep the safety model simple: the executor owns the plan while it runs and is the only code that can call <code>fs::rename</code> or <code>fs::remove_file</code>.</span></li>
+          <li><span class="pd-stack-name">clap</span><span class="pd-stack-why">One positional directory argument plus flags that stack (<code>--dedupe</code>, <code>--dry-run</code>, <code>--undo</code>, <code>-w</code>), with generated help.</span></li>
+          <li><span class="pd-stack-name">ratatui</span><span class="pd-stack-why">Powers the interactive plan review: toggle individual changes, pick which duplicate to keep, then apply. An event loop that stays responsive without ever writing to disk.</span></li>
+          <li><span class="pd-stack-name">BLAKE3</span><span class="pd-stack-why">Fast content hashing to confirm two size-colliding files are actually byte-identical before either is flagged as a duplicate.</span></li>
+          <li><span class="pd-stack-name">notify</span><span class="pd-stack-why">Backs watch mode, which keeps a folder sorted as files arrive, moves only.</span></li>
+          <li><span class="pd-stack-name">serde + toml</span><span class="pd-stack-why">Optional <code>config.toml</code> rules: match on name, extension, size or age; template targets like <code>Photos/{year}/{month}</code>; first match wins.</span></li>
         </ul>
+        <p class="pd-demo-note">The honest tradeoff: content-hashing every size-colliding file is slower than trusting names, and the undo log only covers moves, so a deleted duplicate is gone. Both were deliberate, correct over fast for the dangerous part, and no pretending deletes are reversible.</p>
       </div>
     </section>
 
     <section class="pd-section reveal">
       <div class="container">
-        <h2>Live demo</h2>
-        <!-- PLACEHOLDER: paste a YouTube / Loom embed <iframe> here, or drop in a <video> tag. -->
-        <div class="pd-frame pd-frame--placeholder">
-          <div class="pd-placeholder">
-            <i class="fas fa-circle-play"></i>
-            <span>Demo video coming soon</span>
-          </div>
+        <h2>How it works</h2>
+        <div class="pd-frame">
+          <iframe src="rusty-organizer-demo.html" title="Rusty Organizer demo site" loading="lazy"></iframe>
         </div>
-        <p class="pd-demo-note">Walkthrough video is on the way. Screenshot below in the meantime.</p>
-        <img class="pd-demo-shot" src="../images/sellsy.png" alt="Sellsy screenshot" />
+        <p class="pd-demo-note">Embedded preview of the live how it works demo site.
+          <a href="rusty-organizer-demo.html" target="_blank" rel="noopener">Open it in a new tab</a> if it doesn't load here.</p>
       </div>
     </section>
 

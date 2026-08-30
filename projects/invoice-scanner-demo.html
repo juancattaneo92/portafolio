@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>Invoice Scanner AI — Demo</title>
-<meta name="description" content="A headless microservices pipeline that turns an invoice image into structured data. Follow one document through OCR, an LLM, and storage — four services that never talk to a screen." />
+<title>Invoice Scanner AI - Demo</title>
+<meta name="description" content="A headless microservices pipeline that turns an invoice image into structured data. Follow one document through OCR, an LLM, and storage. Four services that never talk to a screen." />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cg fill='none' stroke='%235cb92e' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M4 11V6a2 2 0 0 1 2-2h5'/%3E%3Cpath d='M21 4h5a2 2 0 0 1 2 2v5'/%3E%3Cpath d='M28 21v5a2 2 0 0 1-2 2h-5'/%3E%3Cpath d='M11 28H6a2 2 0 0 1-2-2v-5'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='3.6' fill='%23f5c518'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -502,7 +502,7 @@
     <p class="eyebrow">Headless service · no UI by design</p>
     <h1>Invoice&nbsp;Scanner&nbsp;<span class="ai">AI</span></h1>
     <p class="thesis">A document goes in. Structured data comes out. <em>Four services that never talk to a screen.</em></p>
-    <p class="lede">There's no front end here &mdash; the project exists to practice the shape of a production system, not to be looked at. So this page does the one thing a screenshot can't: it follows a single invoice through the pipeline, one hop at a time, and shows what each service hands to the next.</p>
+    <p class="lede">There's no front end here. The project exists to practice the shape of a production system, not to be looked at. So this page does the one thing a screenshot can't: it follows a single invoice through the pipeline, one hop at a time, and shows what each service hands to the next.</p>
     <ul class="tags">
       <li>Python 3.12</li>
       <li>FastAPI</li>
@@ -516,16 +516,16 @@
   <!-- ============ THE SCAN ============ -->
   <section>
     <h2>Trace one scan</h2>
-    <p class="section-note">A mock upload &mdash; <code>northwind-INV-2024-0912.png</code> &mdash; followed end to end. Timings are typical for a local run.</p>
+    <p class="section-note">A mock upload, <code>northwind-INV-2024-0912.png</code>, followed end to end. Timings are typical for a local run.</p>
 
     <div class="run-bar">
       <button class="run-btn" id="runBtn">Run the pipeline</button>
-      <span class="run-status" id="runStatus">Idle &mdash; press run to trace the request.</span>
+      <span class="run-status" id="runStatus">Idle. Press run to trace the request.</span>
     </div>
 
     <!-- pipeline map: document + 3 nodes, echoing the logo -->
     <div class="map">
-      <svg viewBox="0 0 620 250" role="img" aria-label="Pipeline map: an invoice document feeds into three connected services — OCR, LLM, and storage.">
+      <svg viewBox="0 0 620 250" role="img" aria-label="Pipeline map: an invoice document feeds into three connected services: OCR, LLM, and storage.">
         <!-- doc -->
         <g>
           <rect class="doc-body" x="272" y="14" width="76" height="92" rx="6" />
@@ -590,7 +590,7 @@
           <span class="st-call">POST /upload</span>
           <span class="st-time">+0.05s</span>
         </div>
-        <p class="st-sub">:8000 &mdash; the only public surface. Validates the file, then orchestrates the three internal calls.</p>
+        <p class="st-sub">:8000, the only public surface. Validates the file, then orchestrates the three internal calls.</p>
         <div class="invoice-doc" aria-label="Mock invoice image">
           <div class="id-name">NORTHWIND TRADERS</div>
           1420 Kettle Creek Rd, Suite 200<br />Portland, OR 97204
@@ -599,7 +599,7 @@
           Date 2024-09-12 · Due 2024-10-12<br />
           Bill to: Juniper Labs LLC
           <hr />
-          <div class="row"><span>Managed hosting — Sept 2024</span><span class="id-amt">1,200.00</span></div>
+          <div class="row"><span>Managed hosting, Sept 2024</span><span class="id-amt">1,200.00</span></div>
           <div class="row"><span>Overage bandwidth (320 GB)</span><span class="id-amt">400.00</span></div>
           <div class="row"><span>SSL certificate renewal</span><span class="id-amt">240.00</span></div>
           <hr />
@@ -619,7 +619,7 @@
           <span class="st-call">POST /extract</span>
           <span class="st-time">+1.87s</span>
         </div>
-        <p class="st-sub">:8001 &mdash; PaddleOCR reads the pixels. Returns raw text, a confidence score, and page count.</p>
+        <p class="st-sub">:8001. PaddleOCR reads the pixels. Returns raw text, a confidence score, and page count.</p>
 <div class="payload">NORTHWIND TRADERS
 1420 Kettle Creek Rd, Suite 200
 Portland, OR 97204
@@ -650,7 +650,7 @@ SSL certificate renewal    1    240.00    240.00
           <span class="st-call">POST /structure</span>
           <span class="st-time">+2.42s</span>
         </div>
-        <p class="st-sub">:8002 &mdash; a local Llama 2 model turns the loose text into JSON that matches the shared schema. The response is parsed and validated before it leaves.</p>
+        <p class="st-sub">:8002. A local Llama 2 model turns the loose text into JSON that matches the shared schema. The response is parsed and validated before it leaves.</p>
 <div class="payload"><span class="c">// prompt: "Extract vendor_name, invoice_date, invoice_number,</span>
 <span class="c">// total_amount, tax_amount, subtotal_amount, line_items..."</span>
 
@@ -662,7 +662,7 @@ SSL certificate renewal    1    240.00    240.00
   <span class="k">"tax_amount"</span>:      156.40,
   <span class="k">"subtotal_amount"</span>: 1840.00,
   <span class="k">"line_items"</span>: [
-    { <span class="k">"description"</span>: <span class="s">"Managed hosting — Sept 2024"</span>,
+    { <span class="k">"description"</span>: <span class="s">"Managed hosting, Sept 2024"</span>,
       <span class="k">"quantity"</span>: 1,   <span class="k">"unit_price"</span>: 1200.00, <span class="k">"line_total"</span>: 1200.00 },
     { <span class="k">"description"</span>: <span class="s">"Overage bandwidth (320 GB)"</span>,
       <span class="k">"quantity"</span>: 320, <span class="k">"unit_price"</span>: 1.25,    <span class="k">"line_total"</span>: 400.00 },
@@ -682,7 +682,7 @@ SSL certificate renewal    1    240.00    240.00
           <span class="st-call">POST /save</span>
           <span class="st-time">+0.04s</span>
         </div>
-        <p class="st-sub">:8003 &mdash; writes the invoice and its line items through SQLAlchemy, returns the new id. The gateway then answers the original caller.</p>
+        <p class="st-sub">:8003. Writes the invoice and its line items through SQLAlchemy, returns the new id. The gateway then answers the original caller.</p>
 <div class="payload"><span class="c">INSERT INTO invoices   -> id 1</span>
 <span class="c">INSERT INTO line_items -> 3 rows</span>
 
@@ -792,7 +792,7 @@ SSL certificate renewal    1    240.00    240.00
   <!-- ============ WHY ============ -->
   <section>
     <h2>Why four services</h2>
-    <p class="section-note">A single script could do this. Splitting it was the exercise &mdash; and it buys real things.</p>
+    <p class="section-note">A single script could do this. Splitting it was the exercise, and it buys real things.</p>
 
     <div class="notes">
       <div class="note-item">
@@ -806,7 +806,7 @@ SSL certificate renewal    1    240.00    240.00
         <span class="note-key">B</span>
         <div>
           <h3>The model is swappable</h3>
-          <p>The LLM service is an HTTP contract, not a library import. Llama 2 today, a hosted model tomorrow &mdash; the OCR and storage services never notice.</p>
+          <p>The LLM service is an HTTP contract, not a library import. Llama 2 today, a hosted model tomorrow, and the OCR and storage services never notice.</p>
         </div>
       </div>
       <div class="note-item">
@@ -820,14 +820,14 @@ SSL certificate renewal    1    240.00    240.00
         <span class="note-key">D</span>
         <div>
           <h3>Failure stays local</h3>
-          <p>If OCR falls over, <code>/health</code> reports it and <code>/upload</code> returns a clean 4xx &mdash; the LLM and storage services keep serving their read endpoints.</p>
+          <p>If OCR falls over, <code>/health</code> reports it and <code>/upload</code> returns a clean 4xx, while the LLM and storage services keep serving their read endpoints.</p>
         </div>
       </div>
     </div>
 
     <p class="tradeoff">
       <b>The honest tradeoff</b>
-      For one user on one machine this is more moving parts than the job needs: five processes to start, network hops between them, and no shared transaction across the write. The point wasn't the smallest thing that works &mdash; it was building it the way a system that has to grow gets built.
+      For one user on one machine this is more moving parts than the job needs: five processes to start, network hops between them, and no shared transaction across the write. The point wasn't the smallest thing that works. It was building it the way a system that has to grow gets built.
     </p>
   </section>
 

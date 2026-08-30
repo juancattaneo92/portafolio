@@ -5,7 +5,7 @@
   const ctx = canvas.getContext('2d');
   const BUGS = ['🐛', '🐞', '🦗', '🕷️'];
 
-  // Dynamic dimensions — recalculated on resize
+  // Dynamic dimensions - recalculated on resize
   let W, H, bugFont, playerW, playerH, playerSpeed, playerY;
 
   function resizeCanvas() {
@@ -39,14 +39,14 @@
     if (n < 5)    return `<strong>${n} bug${n > 1 ? 's' : ''} caught.</strong> Not bad for a first run. Try again?`;
     if (n < 15)   return `<strong>${n} bugs caught.</strong> Solid. Can you beat it? 👀`;
     if (n < 30)   return `<strong>${n} bugs caught.</strong> Nice work. One more round? 🔥`;
-    if (n < 50)   return `<strong>${n} bugs caught.</strong> You're on a roll — keep going! 🚀`;
+    if (n < 50)   return `<strong>${n} bugs caught.</strong> You're on a roll, keep going! 🚀`;
     return        `<strong>${n} bugs caught.</strong> Okay you're just showing off now. 🏆`;
   }
 
-  const cta = '— <em>drop me a message and let me know your score!</em>';
+  const cta = '- <em>drop me a message and let me know your score!</em>';
 
   function bugMessages(n) {
-    if (n === 0)  return `Haven't played yet? Go catch some bugs —<br>Come back and let me know your score!`;
+    if (n === 0)  return `Haven't played yet? Go catch some bugs.<br>Come back and let me know your score!`;
     if (n < 5)    return `<strong>${n} bug${n > 1 ? 's' : ''} caught.</strong> Still in QA. Keep going ${cta}`;
     if (n < 15)   return `<strong>${n} bugs caught.</strong> Getting warmer. PR almost ready ${cta}`;
     if (n < 30)   return `<strong>${n} bugs caught.</strong> Merge approved ✅ ${cta}`;
@@ -327,7 +327,7 @@
 
   function setLives(n) {
     document.getElementById('game-lives').textContent =
-      '♥ '.repeat(Math.max(n, 0)).trim() || '—';
+      '♥ '.repeat(Math.max(n, 0)).trim() || '-';
   }
 
   function roundRect(ctx, x, y, w, h, r) {

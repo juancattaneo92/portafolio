@@ -1,5 +1,5 @@
 /* ============================================================
-   Juan Carlos Cattaneo — Portfolio
+   Juan Carlos Cattaneo - Portfolio
    Project detail pages
 ============================================================ */
 
@@ -196,6 +196,16 @@
   line-height: 1.7;
 }
 
+.project-detail code {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.86em;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.1em 0.4em;
+  white-space: nowrap;
+}
+
 /* ---------- Demo ---------- */
 .pd-frame {
   position: relative;
@@ -263,6 +273,73 @@
 .pd-back {
   padding: 44px 0 96px;
   text-align: center;
+}
+
+/* ---------- Private repo modal ---------- */
+.pd-repo-btn {
+  font-family: var(--font);
+}
+
+.pd-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.pd-modal.is-open {
+  display: flex;
+}
+
+.pd-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(23, 20, 15, 0.55);
+}
+
+.pd-modal-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px 28px;
+  text-align: center;
+}
+
+.pd-modal-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  margin: 0 0 12px;
+}
+
+.pd-modal-card p {
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  margin: 0 0 22px;
+}
+
+.pd-modal-x {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: 0;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--text-subtle);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.pd-modal-x:hover {
+  color: var(--text);
 }
 
 /* ---------- Responsive ---------- */

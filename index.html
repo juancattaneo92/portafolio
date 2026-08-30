@@ -89,6 +89,9 @@
           <a href="#about" class="btn btn-ghost">
             About me <i class="fas fa-arrow-down"></i>
           </a>
+          <a href="#projects" class="btn btn-primary">
+            <i class="fas fa-folder-open"></i> Projects 
+          </a>
         </div>
       </div>
     </div>
@@ -146,6 +149,7 @@
             <div class="skill-card-back">
               <span class="skill-card-back-name">Rust</span>
               <a class="skill-btn skill-btn--primary" href="https://doc.rust-lang.org/book/" target="_blank" rel="noopener">Official docs <i class="fas fa-arrow-up-right-from-square"></i></a>
+              <a class="skill-btn" href="projects/rusty-organizer.html">Rusty Organizer <i class="fas fa-arrow-right"></i></a>
             </div>
           </div>
         </div>
@@ -321,7 +325,7 @@
           </div>
           <div class="project-body">
             <h3>Canalla SF</h3>
-            <p>Website for Peruvian Popup and coming soon restaurant in San Francisco - menu, events, and brand presence.</p>
+            <p>Marketing site for a Peruvian pop-up on its way to becoming a permanent San Francisco restaurant. It covers the menu, upcoming pop-up dates and events, the story behind the kitchen, and a contact and reservation flow, built on the Next.js App Router for fast loads on a phone.</p>
             <div class="project-tags">
               <span>Next.js</span>
               <span>React</span>
@@ -340,7 +344,7 @@
           </div>
           <div class="project-body">
             <h3>Clearo Solutions</h3>
-            <p>Invoicing and accounting app, snap an invoice and get a clean, categorized accounting record, with dashboards for purchases and sales and PDF/Excel export.</p>
+            <p>Invoicing and accounting app for small businesses. Snap a photo of an invoice and it comes back as a clean, categorized accounting record with no manual entry. Dashboards break down purchases and sales over time, every entry stays editable, and any view exports to PDF or Excel for a bookkeeper.</p>
             <div class="project-tags">
               <span>Next.js</span>
               <span>React</span>
@@ -353,120 +357,20 @@
           </div>
         </a>
 
-        <a class="project-card reveal" href="projects/chorewars.html">
+                <a class="project-card reveal" href="projects/rusty-organizer.html">
           <div class="project-img">
-            <img src="images/chore-wars.png" alt="Chores and HabitsTracker" />
+            <img src="images/rustyorganizer.png" alt="Rusty Organizer" />
           </div>
           <div class="project-body">
-            <h3>ChoreWars</h3>
-            <p>Touchscreen kiosk app for a Raspberry Pi, tracks and displays chores and habits completion streaks, monthly counts, and history for two people. Auto-resets at midnight.</p>
+            <h3>Rusty Organizer</h3>
+            <p>A Rust command-line tool that sorts a messy folder into category folders by rule and finds byte-identical duplicates by content hash, previewing every move before it touches a file. Ships with a terminal UI to edit the plan, a watch mode that keeps a folder tidy as files land, and a logged, reversible undo.</p>
             <div class="project-tags">
-              <span>Python</span>
-              <span>Flask</span>
-              <span>SQLite</span>
-              <span>Raspberry Pi</span>
-            </div>
-            <span class="project-link">
-              View project <i class="fas fa-arrow-right"></i>
-            </span>
-          </div>
-        </a>
-
-        <a class="project-card reveal" href="projects/en-lista.html">
-          <div class="project-img">
-            <img src="images/enlista.png" alt="En Lista" />
-          </div>
-          <div class="project-body">
-            <h3>En Lista</h3>
-            <p>Mobile web app for restaurant waitlists. Guests join from their phone, pick a party size, and watch their spot move up the line in real time, with a push notification the moment their table is ready. Staff run the whole queue from a tablet: notify, check in, seat, no-show, with a live table count, service-pace control, daily history and CSV export.</p>
-            <div class="project-tags">
-              <span>Next.js 16</span>
-              <span>React 19</span>
-              <span>TypeScript</span>
-              <span>Supabase</span>
-              <span>Tailwind CSS v4</span>
-              <span>web-push</span>
-            </div>
-            <span class="project-link">
-              View project <i class="fas fa-arrow-right"></i>
-            </span>
-          </div>
-        </a>
-
-        <a class="project-card reveal" href="projects/bruma.html">
-          <div class="project-img">
-            <img src="images/Bruma-Restaurant.png" alt="Bruma Restaurant" />
-          </div>
-          <div class="project-body">
-            <h3>Bruma Restaurant</h3>
-            <p>Website for Bruma Restaurant, in reality for any restauranta, great use as template menu, events, and brand presence.</p>
-            <div class="project-tags">
-              <span>Next.js</span>
-              <span>React</span>
-              <span>TypeScript</span>
-              <span>Tailwind CSS</span>
-            </div>
-            <span class="project-link">
-              View project <i class="fas fa-arrow-right"></i>
-            </span>
-          </div>
-        </a>
-
-        <a class="project-card reveal" href="projects/camera-project.html">
-          <div class="project-img">
-            <img src="images/picamsecurity.png" alt="Raspberry Pi Camera" />
-          </div>
-          <div class="project-body">
-            <h3>PiCamera Sec</h3>
-            <p>C# .NET console app for controlling Raspberry Pi camera modules, image capture, burst sequences, timelapse, OpenCV image processing, and motion detection.</p>
-            <div class="project-tags">
-              <span>C#</span>
-              <span>.NET</span>
-              <span>OpenCV</span>
-              <span>Raspberry Pi</span>
-            </div>
-            <span class="project-link">
-              View project <i class="fas fa-arrow-right"></i>
-            </span>
-          </div>
-        </a>
-
-        <a class="project-card reveal" href="projects/calibrate.html">
-          <div class="project-img">
-            <img src="images/calibrate.png" alt="Calibrate Tool" />
-          </div>
-          <div class="project-body">
-            <h3>Calibrate App.</h3>
-            <p>Calibrate your resume to the role. Upload your resume and the job description. 
-              We'll measure the fit by a match report, then in an inline-editable side-by-side view, AI will tune it to your tone, 
-              keeping formatting, and your experience. Finally, export to DOCX or PDF.</p>
-            <div class="project-tags">
-              <span>React 19</span>
-              <span>Next.js 16</span>
-              <span>TypeScript</span>
-              <span>Python FastAPI</span>
-              <span>PyMuPDF</span>
-              <span>Ollama</span>
-
-            </div>
-            <span class="project-link">
-              View project <i class="fas fa-arrow-right"></i>
-            </span>
-          </div>
-        </a>
-
-        <a class="project-card reveal" href="projects/invoice-scanner.html">
-          <div class="project-img">
-            <img src="images/invoicescanner.png" alt="InvoiceScanner" />
-          </div>
-          <div class="project-body">
-            <h3>Invoice Scanner</h3>
-            <p>Microservices-based invoice processing system, extracts and structures data from PDFs and images using OCR and a local LLM.</p>
-            <div class="project-tags">
-              <span>Python</span>
-              <span>FastAPI</span>
-              <span>PaddleOCR</span>
-              <span>Llama</span>
+              <span>Rust</span>
+              <span>clap</span>
+              <span>ratatui</span>
+              <span>BLAKE3</span>
+              <span>notify</span>
+              <span>serde / toml</span>
             </div>
             <span class="project-link">
               View project <i class="fas fa-arrow-right"></i>
@@ -514,6 +418,127 @@
               <span>Drizzle ORM</span>
               <span>Ollama</span>
               <span>Brave Search API</span>
+            </div>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+
+        <a class="project-card reveal" href="projects/chorewars.html">
+          <div class="project-img">
+            <img src="images/chore-wars.png" alt="Chores and HabitsTracker" />
+          </div>
+          <div class="project-body">
+            <h3>ChoreWars</h3>
+            <p>Touchscreen kiosk app that runs on a Raspberry Pi mounted in the kitchen. It tracks chores and habits for two people, with completion streaks, monthly counts, and full history at a glance. Tap a tile to mark it done; the board auto-resets at midnight and stores everything locally in SQLite.</p>
+            <div class="project-tags">
+              <span>Python</span>
+              <span>Flask</span>
+              <span>SQLite</span>
+              <span>Raspberry Pi</span>
+            </div>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+
+        <a class="project-card reveal" href="projects/en-lista.html">
+          <div class="project-img">
+            <img src="images/enlista.png" alt="En Lista" />
+          </div>
+          <div class="project-body">
+            <h3>En Lista</h3>
+            <p>Mobile web app for restaurant waitlists. Guests join from their phone, pick a party size, and watch their spot move up the line in real time, with a push notification the moment their table is ready. Staff run the whole queue from a tablet: notify, check in, seat, no-show, with a live table count, service-pace control, daily history and CSV export.</p>
+            <div class="project-tags">
+              <span>Next.js 16</span>
+              <span>React 19</span>
+              <span>TypeScript</span>
+              <span>Supabase</span>
+              <span>Tailwind CSS v4</span>
+              <span>web-push</span>
+            </div>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+
+        <a class="project-card reveal" href="projects/bruma.html">
+          <div class="project-img">
+            <img src="images/Bruma-Restaurant.png" alt="Bruma Restaurant" />
+          </div>
+          <div class="project-body">
+            <h3>Bruma Restaurant</h3>
+            <p>Restaurant website built for Bruma and designed to double as a template for any restaurant. It covers the menu with categories and dietary tags, upcoming events, hours and location, and the brand story, themed through a small set of design tokens so colors, type, and photos swap fast.</p>
+            <div class="project-tags">
+              <span>Next.js</span>
+              <span>React</span>
+              <span>TypeScript</span>
+              <span>Tailwind CSS</span>
+            </div>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+
+        <a class="project-card reveal" href="projects/camera-project.html">
+          <div class="project-img">
+            <img src="images/picamsecurity.png" alt="Raspberry Pi Camera" />
+          </div>
+          <div class="project-body">
+            <h3>PiCamera Sec</h3>
+            <p>C# and .NET stack that turns a Raspberry Pi and camera module into a security node: still capture, burst sequences, timelapse, OpenCV filtering, and frame-diff motion alerts. Every piece sits behind an interface, so it builds, tests, and demos on any laptop against a mock camera with no hardware attached.</p>
+            <div class="project-tags">
+              <span>C#</span>
+              <span>.NET</span>
+              <span>OpenCV</span>
+              <span>Raspberry Pi</span>
+            </div>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+
+        <a class="project-card reveal" href="projects/calibrate.html">
+          <div class="project-img">
+            <img src="images/calibrate.png" alt="Calibrate Tool" />
+          </div>
+          <div class="project-body">
+            <h3>Calibrate App.</h3>
+            <p>Calibrate your resume to the role. Upload your resume and the job description. 
+              We'll measure the fit by a match report, then in an inline-editable side-by-side view, AI will tune it to your tone, 
+              keeping formatting, and your experience. Finally, export to DOCX or PDF.</p>
+            <div class="project-tags">
+              <span>React 19</span>
+              <span>Next.js 16</span>
+              <span>TypeScript</span>
+              <span>Python FastAPI</span>
+              <span>PyMuPDF</span>
+              <span>Ollama</span>
+
+            </div>
+            <span class="project-link">
+              View project <i class="fas fa-arrow-right"></i>
+            </span>
+          </div>
+        </a>
+
+        <a class="project-card reveal" href="projects/invoice-scanner.html">
+          <div class="project-img">
+            <img src="images/invoicescanner.png" alt="InvoiceScanner" />
+          </div>
+          <div class="project-body">
+            <h3>Invoice Scanner</h3>
+            <p>Microservices pipeline that turns an invoice PDF or phone photo into structured data. A gateway validates the file, PaddleOCR reads the pixels, a local Llama model shapes the text into schema-checked JSON, and a storage service persists it. The model runs on-device, so documents never leave the machine.</p>
+            <div class="project-tags">
+              <span>Python</span>
+              <span>FastAPI</span>
+              <span>PaddleOCR</span>
+              <span>Llama</span>
             </div>
             <span class="project-link">
               View project <i class="fas fa-arrow-right"></i>
